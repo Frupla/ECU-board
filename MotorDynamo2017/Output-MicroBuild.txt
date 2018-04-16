@@ -1,0 +1,6 @@
+﻿Compiling debug version of 'MotorDynamo2017' for 'Teensy 3.6'
+tunes.cpp: 132:17: warning: 'start_note_time' defined but not used [-Wunused-variable]
+   static uint32_t start_note_time = 0
+Program size: 51,004 bytes (used 5% of a 1,048,576 byte maximum) (7.01 secs)
+Minimum Memory Usage: 8944 bytes (3% of a 262144 byte maximum)
+ 

@@ -133,8 +133,6 @@ void setup() {
 uint32_t speedTiming = 0;
 float lastDist = 0;
 void loop() {
-
-
 	//test for front wheelsensor
 	/*if ((millis() - frontSpeedUpdate) > speedUpdate) {
 		frontSpeedUpdate = millis();

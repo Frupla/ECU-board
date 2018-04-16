@@ -91,6 +91,7 @@ volatile uint32_t wheelcountv2 = 0;
 #define WHEEL_CIRCUMFERENCE WHEEL_DIAMETER * PI
 
 // the setup function runs once when you press reset or power the board
+#include "position.h"
 void setup() {
 	pinMode(EncoderA, INPUT);
 	pinMode(EncoderB, INPUT);

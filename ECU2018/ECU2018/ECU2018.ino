@@ -2,14 +2,15 @@
  Name:		ECU2018.ino
  Created:	4/16/2018 9:52:09 AM
  Author:	Asger, Frederik, Irene og Berk
-*/
+ Based on
+ * MotorDynamo2017.ino
+ *
+ * Description: Main ino file for running the motorboard 2017
+ * Author: Håkon Westh-Hansen
+ * Created: 10/4/2017
+ *
+ */
 
-
-#define EncoderA 29
-#define EncoderB 30
-#define setppulse 28
-#define canbus_TX 33
-#define canbus_RX 34
 
 /*==========*/
 /* Includes */
@@ -30,6 +31,12 @@
 /*=============*/
 /* Definitions */
 /*=============*/
+
+#define A_PULSE 29 //A pulse
+#define B_PULSE 30 //B pulse
+#define Z_PULSE 28 //Z pulse
+#define CANBUS_TX 33
+#define CANBUS_RX 34
 
 // Car ID
 #define DTU_DYNAMO 1
@@ -91,17 +98,135 @@ volatile uint32_t wheelcountv2 = 0;
 #define WHEEL_CIRCUMFERENCE WHEEL_DIAMETER * PI
 
 // the setup function runs once when you press reset or power the board
-#include "position.h"
 void setup() {
-	pinMode(EncoderA, INPUT);
-	pinMode(EncoderB, INPUT);
-	pinMode(setppulse, INPUT);
+	/* Initializations */
+	// Initialize USB communication
+	Serial.begin(9600);
+	// Initialize IO Pins
+	io_init();
+	// Initialize ADC
+	adc_init();
+	// Initialize LEDs
+	LED_init();
+	// Initialize PWM for Gear servo
+	pwm_init();
+	// Initialize Wheel Sensor
+	wheel_sensor_init();
+	// Initialize RS232
+	rs232_init();
+	rs232_set_car(CAR);
+	// Initialize CAN
+	can_init(MOTOR_ID);
+	// Initialize Bluetooth
+	blue_init();
+	// Initialize Buzzer
+	tunes_init(BUZZER_PIN);
+
+	//wheelsensor
+	attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
+
+
+	// Enable global interrupts
+	sei();
+
+	/* Play a song so we know we have started */
+	sing(STARTUP_MELODY_ID);
+	
+	//Set up to read pulses
+	pinMode(A_PULSE, INPUT);
+	pinMode(B_PULSE, INPUT);
+	pinMode(Z_PULSE, INPUT);
 
 }
 
+/*===========*/
+/* Main loop */
+/*===========*/
+uint32_t speedTiming = 0;
+float lastDist = 0;
+
 // the loop function runs over and over again until power down or reset
 void loop() {
+	//test for front wheelsensor
+	/*if ((millis() - frontSpeedUpdate) > speedUpdate) {
+	frontSpeedUpdate = millis();
+	CAN.sendMeasurement(20, 0, MOTOR_SPEED, getSpeedv2());
+	}*/
 
+	//this is bullshit :) #quickfix	
+	static uint32_t speedTiming = 0;
+	if ((millis() - speedTiming) > 20) {
+		speedTiming = millis();
+		//speedSort();
+	}
+
+
+	// Annoy everyone until everything is restarted
+	if (rioHasStopped > RIO_STOPPED_GRACE_VALUE) {
+		if (tunes_is_ready()) {
+			sing(SWEET_HOME_MELODY_ID);
+		}
+		rioHasStopped = 0;
+
+	}
+
+	// RS232 data is received in interrupt
+	if (rio_rx[RIO_RX_ALIVE] != 1) {
+		rioHasStopped++;
+	}
+	else {
+		rioHasStopped = 0;
+	}
+
+	/* EMERGENCY STOP */
+
+	// Read from Battery and external emergency stop sensor (VIN to Mini)
+	measureBatteryVoltage();
+
+	/* COMMUNICATION */
+
+	// Transmit to CAN/update values
+	if (millis() - CANSyncTiming >= CAN_SYNC_PERIOD) {
+		// TODO Fix getspeed() -> Henning, Arek
+		//getSpeed();		// [m/s]
+		motorCAN_sync();
+		//static uint16_t id = 0;
+		//id++;
+		//CAN.sendMeasurement(4,4,id, 1.21);
+
+		if (emergency) { //TODO emergency
+			CAN.emergencyStop(ERROR_EXTERNAL_BUTTON);
+		}
+		CANSyncTiming = millis();
+	}
+
+	// Transmit to RIO over RS232
+	if (millis() - rs232SyncTiming >= RS232_SYNC_PERIOD) {
+		rs232_tx();
+		rs232SyncTiming = millis();
+	}
+
+	// Transmit to Bluetooth
+	if (millis() - blueSyncTiming >= BLUE_SYNC_PERIOD) {
+		blue_tx();
+		blueSyncTiming = millis();
+	}
+
+	if (emergency) {
+		if (tunes_is_ready()) {
+			sing(GAME_MELODY_ID);
+		}
+	}
+
+	if (CAN.getSystemState(STEERING_ID, BUTTON_PARTY)) {
+		if (tunes_is_ready())
+		{
+			sing(SAX_MELODY_ID);
+			//partyAnimation();
+		}
+	}
+
+	LED_toggle(LED3);
 }
 
 // Herfra og ned, skamløst kopieret fra motorboard 2017:

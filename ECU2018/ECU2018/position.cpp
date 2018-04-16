@@ -4,52 +4,57 @@
 
 #include "position.h"
 
-int Encoder::errorcheck()
+int encoder_A, encoder_B, encoder_Z, calibration_variable;
+
+int encoderErrorCheck()
 {
 	return 0;
 }
 
-void Encoder::A_count()
-{
-	encoder_A++;
-}
-
-Encoder::Encoder(int encoder_pin_A, int encoder_pin_B, int encoder_pin_Z, int calibration_variable)
+void initializeEncoder(int encoder_pin_A, int encoder_pin_B, int encoder_pin_Z, int calib_var)
 {
 	pinMode(encoder_pin_A, INPUT);
 	pinMode(encoder_pin_B, INPUT);
 	pinMode(encoder_pin_Z, INPUT);
-	attachInterrupt(digitalPinToInterrupt(encoder_pin_A), A_count, RISING);
-
+	calibration_variable = calib_var;
+	attachInterrupt(digitalPinToInterrupt(encoder_pin_A), encoderInterrupthandlerA, RISING);
+	attachInterrupt(digitalPinToInterrupt(encoder_pin_B), encoderInterrupthandlerB, RISING);
+	attachInterrupt(digitalPinToInterrupt(encoder_pin_Z), encoderInterrupthandlerZ, RISING);
 }
 
-int Encoder::position_A()
+int encoderPosition_A()
+{
+	return encoder_A;
+}
+
+int encoderPosition_B()
+{
+	return encoder_B;
+}
+
+int encoderPosition_Z()
+{
+	return encoder_Z;
+}
+
+int encoderPositionEngine()
 {
 	return 0;
 }
 
-int Encoder::position_B()
+int encoderRPM()
 {
 	return 0;
 }
 
-int Encoder::position_Z()
-{
-	return 0;
+void encoderInterrupthandlerA() {
+	encoder_A++;
 }
 
-int Encoder::position_engine()
-{
-	return 0;
+void encoderInterrupthandlerB() {
+	encoder_B++;
 }
 
-int Encoder::RPM()
-{
-	return 0;
+void encoderInterrupthandlerZ() {
+	encoder_Z++;
 }
-
-void A_interrupthandler() {
-
-}
-
-

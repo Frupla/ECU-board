@@ -4,7 +4,7 @@
  Author:	asger
 */
 
-// the setup function runs once when you press reset or power the board
+
 #include "position.h"
 void setup() {
 

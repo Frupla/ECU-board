@@ -5,7 +5,6 @@
 #include "position.h"
 
 u_int encoder_A, encoder_B, encoder_Z;
-int encoder_position;
 
 int calibration_variable;
 
@@ -48,8 +47,8 @@ int encoderPosition_Z()
 }
 
 int encoderPositionEngine()
-{
-	return 0;
+{	
+	return encode_A - calibration_variable; // correcting to TDC2 is 0
 }
 
 int encoderRPM()

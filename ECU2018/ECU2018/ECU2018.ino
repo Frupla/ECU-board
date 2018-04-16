@@ -27,6 +27,7 @@
 #include "sources/motorCAN.h"
 #include "sources/rs232.h"
 #include "sources/rs232sync.h"
+#include "position.h"
 
 /*=============*/
 /* Definitions */
@@ -97,12 +98,6 @@ volatile uint32_t wheelcountv2 = 0;
 #define NUMBER_OF_EDGES_PER_REVOLUTION 30
 #define WHEEL_CIRCUMFERENCE WHEEL_DIAMETER * PI
 
-<<<<<<< HEAD
-
-#include "position.h"
-=======
-// the setup function runs once when you press reset or power the board
->>>>>>> f26d61fa4603c32be260bf565158d35debc03de4
 void setup() {
 	/* Initializations */
 	// Initialize USB communication

@@ -17,7 +17,7 @@ uint32_t encoder_Z_time_old;
 
 int encoderErrorCheck() // Returnerer EXIT_FAILURE hvis der er forskydning mellem A og B
 {
-	if ((int)encoder_A - (int)encoder_B > 2 || (int)encoder_A - (int)encoder_B < 2) {
+	if ((int)encoder_A - (int)encoder_B > 1 || (int)encoder_A - (int)encoder_B < 1) {
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;

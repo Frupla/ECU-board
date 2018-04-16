@@ -82,7 +82,7 @@ static uint16_t rioHasStopped = 0;
 uint32_t blueSyncTiming = 0;
 uint32_t rs232SyncTiming = 0;
 uint32_t CANSyncTiming = 0;
-
+int encoder_calibration_variable = 0; // Is set from labview
 
 
 //emergency
@@ -124,7 +124,8 @@ void setup() {
 
 	//wheelsensor
 	attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
-
+	//Encoder
+	initializeEncoder(A_PULSE, B_PULSE, Z_PULSE, encoder_calibration_variable);
 
 	// Enable global interrupts
 	sei();

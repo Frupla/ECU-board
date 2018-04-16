@@ -10,9 +10,7 @@
 #endif
 
 // We should probalby move this to the main?
-#define ENCODER_Z_PIN 28
-#define ENCODER_A_PIN 29
-#define ENCODER_B_PIN 30
+
 // Magic numbers
 
 
@@ -22,6 +20,7 @@ int encoderPosition_B();
 int encoderPosition_Z();
 int encoderPositionEngine();
 int encoderRPM();
+int encoderErrorCheck();
 
 #endif
 

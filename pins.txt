@@ -1,0 +1,10 @@
+Canbus forbinder til:
+		pin	
+TX	-	33
+RX	-	34
+
+Encoder forbinder til:
+		pin
+Encoder-A	29
+Encoder-B	30
+setppulse	28

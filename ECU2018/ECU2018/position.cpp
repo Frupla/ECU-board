@@ -9,24 +9,38 @@ int encoder_position;
 
 int calibration_variable;
 
-int encoder_pin_A_intern;
-int encoder_pin_B_intern;
-int encoder_pin_Z_intern;
+uint8_t encoder_pin_A_intern;
+uint8_t encoder_pin_B_intern;
+uint8_t encoder_pin_Z_intern;
 
-int encoderErrorCheck()
+uint32_t encoder_Z_time;
+uint32_t encoder_Z_time_old;
+
+int encoderErrorCheck() // Returnerer EXIT_FAILURE hvis der er forskydning mellem A og B
 {
-	return 0;
+	if ((int)encoder_A - (int)encoder_B > 2 || (int)encoder_A - (int)encoder_B < 2) {
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
 }
 
-void initializeEncoder(int encoder_pin_A, int encoder_pin_B, int encoder_pin_Z, int calib_var)
+void initializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var)
 {
+	// Set pinmode
 	pinMode(encoder_pin_A, INPUT);
 	pinMode(encoder_pin_B, INPUT);
 	pinMode(encoder_pin_Z, INPUT);
+	// Write to intern variables
 	calibration_variable = calib_var;
 	encoder_pin_A_intern = encoder_pin_A;
 	encoder_pin_B_intern = encoder_pin_B;
 	encoder_pin_Z_intern = encoder_pin_Z;
+	// Reset intern variables
+	encoder_A = 0; encoder_B = 0; encoder_Z = 0;
+	encoder_position = 0;
+	encoder_Z_time = 0;
+	encoder_Z_time_old = 0;
+	// Attach interrupts
 	attachInterrupt(digitalPinToInterrupt(encoder_pin_A), encoderInterrupthandlerA, RISING);
 	attachInterrupt(digitalPinToInterrupt(encoder_pin_B), encoderInterrupthandlerB, RISING);
 	attachInterrupt(digitalPinToInterrupt(encoder_pin_Z), encoderInterrupthandlerZ, RISING);
@@ -52,16 +66,26 @@ int encoderPositionEngine()
 	return 0;
 }
 
-int encoderRPM()
-{
-	return 0;
+int encoderRPM() { // Returns the RPM. Returns -1 every ~70min
+	if (encoder_Z_time - encoder_Z_time_old <= 0) {
+		return -1;
+	}
+	int RPM = (int)(60000000 / (float)(encoder_Z_time - encoder_Z_time_old));
+	// T = encoder_Z_time - encoder_Z_time_old // How many µs between 2 ticks
+	// 60 s/min * 10e6 µs/s  /  T µs   =  60000000 / T  rounds/min
+	return RPM;
 }
+
 
 void encoderInterrupthandlerA() {
 	encoder_A++;
 	if (digitalRead(encoder_pin_B_intern)) {
-
+		encoder_position++;
 	}
+	else {
+		encoder_position--;
+	}
+
 }
 
 void encoderInterrupthandlerB() {
@@ -70,5 +94,9 @@ void encoderInterrupthandlerB() {
 
 void encoderInterrupthandlerZ() {
 	encoder_Z++;
-
+	encoder_A = 0;
+	encoder_B = 0;
+	encoder_position = 0;	
+	encoder_Z_time_old = encoder_Z_time;
+	encoder_Z_time = micros();
 }

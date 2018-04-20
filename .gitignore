@@ -1,5 +1,7 @@
 #Jeg ved det ikke
 *.suo
+.suo
+
 
 # Prerequisites
 *.d

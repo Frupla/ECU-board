@@ -7,6 +7,7 @@
 u_int encoder_A, encoder_B, encoder_Z;
 
 int calibration_variable;
+int encoder_position;
 
 uint8_t encoder_pin_A_intern;
 uint8_t encoder_pin_B_intern;
@@ -62,7 +63,7 @@ int encoderPosition_Z()
 
 int encoderPositionEngine()
 {	
-	return encode_A - calibration_variable; // correcting to TDC2 is 0
+	return encoder_A - calibration_variable; // correcting to TDC2 is 0
 }
 
 int encoderRPM() { // Returns the RPM. Returns -1 every ~70min

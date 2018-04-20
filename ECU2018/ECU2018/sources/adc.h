@@ -11,8 +11,8 @@
 #ifndef ADC_H_
 #define ADC_H_
 
-#define BATTERY_SENSOR 23
-#define BRAKE_SENSOR 37
+#define BATTERY_SENSOR 35
+#define BRAKE_SENSOR 15
 
 void adc_init();
 // Perform a read on the ADC. For ADC 5, channel = 5.

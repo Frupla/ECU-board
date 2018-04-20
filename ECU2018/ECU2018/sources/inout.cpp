@@ -22,12 +22,12 @@
 /*=============*/
 
 #define ONBOARD_LED 13
-#define STARTER_PIN 28
-#define HORN_PIN 16
-#define GEAR_SENSOR_PIN 38
-#define WHEEL_SENSOR_PIN_0 39	// A (FLOW, BOTTOM)
-#define WHEEL_SENSOR_PIN_1 14	// B (WHEEL, TOP)
-#define GEAR_SERVO_PIN 30
+#define STARTER_PIN 6
+#define HORN_PIN 7
+#define GEAR_SENSOR_PIN 24
+#define WHEEL_SENSOR_PIN_0 3	// A (FLOW, BOTTOM)
+#define WHEEL_SENSOR_PIN_1 4	// B (WHEEL, TOP)
+#define GEAR_SERVO_PIN 38
 #define WHEEL_DIAMETER 0.5588f		// [m]
 #define NUMBER_OF_EDGES_PER_REVOLUTION 60  // 120 when using both sensors
 #define WHEEL_CIRCUMFERENCE WHEEL_DIAMETER * PI

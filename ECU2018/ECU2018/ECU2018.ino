@@ -39,6 +39,15 @@
 #define CANBUS_TX 33
 #define CANBUS_RX 34
 
+/* Pins jeg ikke ved noget om
+adc.h -> Brake sensor pin    :    Har vi den stadig, og hvad laver den?
+inout.cpp -> Horn_pin   :     Vi har ikke wiret et horn?
+inout.cpp -> GEAR_SENSOR_PIN 24    :     No?
+
+
+*/
+
+
 // Car ID
 #define DTU_DYNAMO 1
 #define CAR DTU_DYNAMO
@@ -270,14 +279,14 @@ static inline void measureBatteryVoltage() {
 		miniVoltageTooLow++;
 		if (miniVoltageTooLow > 5) {
 			rio_tx[RIO_TX_STOP] = 1;
-			LED_on(LED5);
+			LED_on(LED2);
 			emergency = 1;
 		}
 	}
 	else {
 		miniVoltageTooLow = 0;
 		rio_tx[RIO_TX_STOP] = 0;
-		LED_off(LED5);
+		LED_off(LED2);
 	}
 }
 

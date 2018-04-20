@@ -21,6 +21,9 @@ int encoderPosition_Z();
 int encoderPositionEngine();
 float encoderRPM();
 int encoderErrorCheck();
+void encoderInterrupthandlerA();
+void encoderInterrupthandlerB();
+void encoderInterrupthandlerZ();
 
 #endif
 

@@ -18,12 +18,11 @@
 /*===========*/
 
 void LED_init() {
-	// set the five LEDs as output pins
+	// set the four LEDs as output pins
 	pinMode(LED1, OUTPUT);
 	pinMode(LED2, OUTPUT);
 	pinMode(LED3, OUTPUT);
 	pinMode(LED4, OUTPUT);
-	pinMode(LED5, OUTPUT);
 }
 
 void LED_on(uint8_t LED) {
@@ -46,8 +45,6 @@ void LED_toggle(uint8_t LED) {
  ******************************************************************/
 void LED_test() {
 	LED_toggle(LED1);
-	delay(500);
-	LED_toggle(LED5);
 	delay(500);
 	LED_toggle(LED2);
 	delay(500);

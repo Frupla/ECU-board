@@ -54,7 +54,7 @@
     <ClInclude Include="sources\rs232sync.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="altposition.h">
+    <ClInclude Include="injection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -90,9 +90,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\rs232sync.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="altposition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

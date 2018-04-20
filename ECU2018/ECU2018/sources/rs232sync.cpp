@@ -135,7 +135,7 @@ void rs232_autoRecieve(unsigned char data) {
 			if(dataIndex == packetSize){
 				_update_rs232_data();
 				state = RS232_STATE_WAITING;
-				LED_toggle(LED5);
+				LED_toggle(LED4);
 			}
 		}
 		break;

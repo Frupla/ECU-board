@@ -92,8 +92,5 @@
     <ClCompile Include="sources\rs232sync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="injection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>

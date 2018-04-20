@@ -82,7 +82,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="injection.h" />
     <ClInclude Include="position.h" />
     <ClInclude Include="sources\adc.h" />
     <ClInclude Include="sources\autoGear.h" />
@@ -97,7 +96,6 @@
     <ClInclude Include="__vm\.ECU2018.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="injection.cpp" />
     <ClCompile Include="position.cpp" />
     <ClCompile Include="sources\adc.cpp" />
     <ClCompile Include="sources\autoGear.cpp" />

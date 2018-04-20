@@ -60,6 +60,9 @@
     <ClInclude Include="ingAndinjArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ignition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="position.cpp">
@@ -99,6 +102,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ingAndinjArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ignition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -16,6 +16,7 @@
 /* Includes */
 /*==========*/
 
+#include "ignition.h"
 #include "injection.h"
 #include <canbus.h>
 #include <tunes.h>

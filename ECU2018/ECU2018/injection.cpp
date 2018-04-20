@@ -37,7 +37,7 @@ float calcMass(long time){
 	return a * time + b; //calculate mass of fuel based on time
 }
 
-float injectionRun(long time, float RPM, int potentiometer) { //takes us through every step described above
+float injectionRun(float RPM, int potentiometer) { //takes us through every step described above
 	if (canInjectionRun(RPM)) { //Only run if possible to run
 		stop(); //make sure that we are not injecting
 		long time = findTime(RPM, potentiometer); 

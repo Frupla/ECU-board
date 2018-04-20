@@ -66,6 +66,10 @@ typedef struct {
 	int32_t                position;
 } Encoder_internal_state_t;
 
+
+//irene(1): if this doesn't work, let's get hacky and just use the numbers higher than our position can possibly go
+// as flag (possibly flag bits, will need to math this) for wether or not there's an error.
+
 class Encoder
 {
 public:
@@ -74,7 +78,7 @@ public:
 		pinMode(pin1, INPUT_PULLUP);
 		pinMode(pin2, INPUT_PULLUP);
 		#else
-		pinMode(pin1, INPUT);
+		pinMode(pin1, INPUT);  //irene: here he's just doing input pullup in a different way, so it's crossplatform
 		digitalWrite(pin1, HIGH);
 		pinMode(pin2, INPUT);
 		digitalWrite(pin2, HIGH);
@@ -84,6 +88,8 @@ public:
 		encoder.pin2_register = PIN_TO_BASEREG(pin2);
 		encoder.pin2_bitmask = PIN_TO_BITMASK(pin2);
 		encoder.position = 0;
+		//irene(1) delete next line if this doesn't work
+		error = false;
 		// allow time for a passive R-C filter to charge
 		// through the pullup resistors, before reading
 		// the initial state
@@ -97,6 +103,8 @@ public:
 		interrupts_in_use += attach_interrupt(pin2, &encoder);
 #endif
 		//update_finishup();  // to force linker to include the code (does not work)
+		//irene(1): this following sets the error variable to 0
+		
 	}
 
 
@@ -126,8 +134,19 @@ public:
 		encoder.position = p;
 	}
 #endif
+	//irene(1) reading and resetting the error bool. Delete if this doesn't work.
+	void readError() {
+		return error;
+	}
+
+	void resetError() {
+		error = false;
+		return;
+	}
+
 private:
 	Encoder_internal_state_t encoder;
+	bool error; //irene(1) to be set high if there is an error
 #ifdef ENCODER_USE_INTERRUPTS
 	uint8_t interrupts_in_use;
 #endif
@@ -181,12 +200,13 @@ public:
 	}
 */
 
-public:
+public: //irene: this is just assembly, don't even try to get what's happening. Unless of course you already know assembly.
 	// update() is not meant to be called from outside Encoder,
 	// but it is public to allow static interrupt routines.
 	// DO NOT call update() directly from sketches.
 	static void update(Encoder_internal_state_t *arg) {
-#if defined(__AVR__)
+		//irene(1): assembly code deactivated so I can test a theory
+/*#if defined(__AVR__)
 		// The compiler believes this is just 1 line of code, so
 		// it will inline this function into each interrupt
 		// handler.  That's a tiny bit faster, but grows the code.
@@ -270,7 +290,8 @@ public:
 			"st	-X, r22"		"\n\t"
 		"L%=end:"				"\n"
 		: : "x" (arg) : "r22", "r23", "r24", "r25", "r30", "r31");
-#else
+#else */
+
 		uint8_t p1val = DIRECT_PIN_READ(arg->pin1_register, arg->pin1_bitmask);
 		uint8_t p2val = DIRECT_PIN_READ(arg->pin2_register, arg->pin2_bitmask);
 		uint8_t state = arg->state & 3;
@@ -286,12 +307,14 @@ public:
 				return;
 			case 3: case 12:
 				arg->position += 2;
+				error = true;
 				return;
 			case 6: case 9:
 				arg->position -= 2;
+				error = true;
 				return;
 		}
-#endif
+//#endif //irene(1) also uncomment this if theory doens't work
 	}
 private:
 /*

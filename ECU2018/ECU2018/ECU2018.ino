@@ -16,6 +16,7 @@
 /* Includes */
 /*==========*/
 
+#include "altposition.h"
 #include <canbus.h>
 #include <tunes.h>
 #include <ArduinoJson.h>

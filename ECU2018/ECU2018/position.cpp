@@ -7,6 +7,7 @@
 u_int encoder_A, encoder_B, encoder_Z;
 
 int calibration_variable;
+int encoder_position;
 
 uint8_t encoder_pin_A_intern;
 uint8_t encoder_pin_B_intern;

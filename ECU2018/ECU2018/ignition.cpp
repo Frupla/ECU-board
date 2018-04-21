@@ -3,6 +3,7 @@
 // 
 
 #include "ignition.h"
+
 /*
 Name:		Sketch2.ino
 Created:	4/16/2018 9:50:54 AM
@@ -10,7 +11,7 @@ Author:	Ejer
 */
 
 double calculate_ignition_time(double rpm) {
-	INTERPOL IGNITION = Interpolation_map(rpm);
+	INTERPOL IGNITION = interpolation_map(rpm);
 	double xlow = ignition_Array[IGNITION.lower];
 	double xhigh = ignition_Array[IGNITION.upper];
 	double xinc = IGNITION.increment;

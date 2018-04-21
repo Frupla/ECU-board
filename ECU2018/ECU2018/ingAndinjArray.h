@@ -8,6 +8,8 @@
 #else
 	#include "WProgram.h"
 #endif
+
+
 typedef struct INTERPOLATION_CONSTANTS {
 	uint lower;
 	uint upper;
@@ -16,7 +18,7 @@ typedef struct INTERPOLATION_CONSTANTS {
 } INTERPOL;
 extern uint32_t ignitionArray[25];
 extern uint32_t injectionArray[25];
-INTERPOL Interpolation_map(double rpm);
+INTERPOL interpolation_map(double rpm);
 
 #endif
 

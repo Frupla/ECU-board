@@ -162,6 +162,10 @@ void setup() {
 	pinMode(B_PULSE, INPUT);
 	pinMode(Z_PULSE, INPUT);
 
+	setMAXRPM(10);
+	setSlope(19);
+	setInterjection(10);
+
 }
 
 /*===========*/
@@ -255,9 +259,7 @@ void loop() {
 
 	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
 
-	setMAXRPM(10);
-	setSlope(19);
-	setInterjection(10);
+	
 	RPM = encoderRPM();
 	//Find ud af hvornår vi skal starte injection, der er kodet til et start signal, men jeg ved ikke hvad timingen er på det
 	if (canInjectionRun(RPM) && startInjection) { //Start injection if we are below some threshold, and if we ask it to start

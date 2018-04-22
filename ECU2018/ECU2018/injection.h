@@ -11,12 +11,7 @@
 
 #include "ingAndinjArray.h"
 
-//Constants
-//for the calculation of the mass of fuel based on time
-volatile float slope;
-volatile float interjection;
-// m = slope * t + interjection
-volatile float MAXRPM; //Should be given by the mek's
+
 extern INTERPOL injection;
 
 

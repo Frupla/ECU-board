@@ -39,7 +39,6 @@ float calcMass(long time){
 }
 
 float injectionRun(double RPM, float potentiometer) { //takes us through every step described above
-	stop(); //make sure that we are not injecting
 	uint32_t time = findTime(RPM, potentiometer); 
 	start(); //start injection
 	int stay = 1;
@@ -57,6 +56,7 @@ float injectionRun(double RPM, float potentiometer) { //takes us through every s
 	stop(); //stop injection
 	return calcMass(actualTime); //do the math
 }
+// TODO: Make alternate version if the main loop is fast enough
 
 void setSlope(float newSlope) {
 	slope = newSlope;

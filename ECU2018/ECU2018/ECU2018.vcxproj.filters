@@ -13,6 +13,9 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
+    <Filter Include="Header Files\Encoder.h">
+      <UniqueIdentifier>{9c10dbfd-e4f7-4165-897d-13e7b7953ed3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ECU2018.ino" />
@@ -63,6 +66,18 @@
     <ClInclude Include="ignition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sources\Encoder-master\Encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Encoder-master\utility\direct_pin_read.h">
+      <Filter>Header Files\Encoder.h</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Encoder-master\utility\interrupt_config.h">
+      <Filter>Header Files\Encoder.h</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Encoder-master\utility\interrupt_pins.h">
+      <Filter>Header Files\Encoder.h</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="position.cpp">
@@ -105,6 +120,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ignition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Encoder-master\Encoder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

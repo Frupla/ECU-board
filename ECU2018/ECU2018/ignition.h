@@ -8,12 +8,8 @@
 #else
 	#include "WProgram.h"
 #endif
-typedef struct INTERPOLATION_CONSTANTS {
-	uint lower;
-	uint upper;
-	uint close;
-	double increment;
-} INTERPOL;
+
+#include "ingAndinjArray.h"
 
 #define MAX_RPM 7000
 #define DWELL_TIME 5.42
@@ -22,9 +18,9 @@ int RUN_IGNITION;
 int IGNITION_OFF = 0;
 int ignition_Array[25];
 
-double IGNITION_TIMING;
-double IGNITION_DWELL;
-double START_TIME;
+//double IGNITION_TIMING;
+//double IGNITION_DWELL;
+//double START_TIME; //asger - Was defined multiple times
 
 double calculate_ignition_time(double rpm);
 double calculate_ignition_dwell(double rpm);

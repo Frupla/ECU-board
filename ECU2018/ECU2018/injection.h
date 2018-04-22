@@ -9,6 +9,8 @@
 	#include "WProgram.h"
 #endif
 
+#include "ingAndinjArray.h"
+
 //Constants
 //for the calculation of the mass of fuel based on time
 float a;
@@ -20,11 +22,11 @@ INTERPOL injection;
 
 //functioner
 int canInjectionRun(int RPM);
-long findTime(float RPM, int potentiometer);
+uint32_t findTime(float RPM, int potentiometer);
 void start();
 void stop();
 float calcMass(long time);
-float injectionRun(long time, float RPM, int potentiometer);
+float injectionRun(float RPM, int potentiometer);
 
 #endif
 

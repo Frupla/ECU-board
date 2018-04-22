@@ -15,8 +15,8 @@ int canInjectionRun(int RPM) {
 	}
 }
 
-long findTime(float RPM, int potentiometer) {
-	injection = interpolationmap(RPM);
+uint32_t findTime(float RPM, int potentiometer) {
+	injection = interpolation_map(RPM);
 	long time;
 	uint xhigh = (uint)injectionArray[injection.upper];
 	uint xlow = (uint)injectionArray[injection.lower];
@@ -40,11 +40,11 @@ float calcMass(long time){
 float injectionRun(float RPM, int potentiometer) { //takes us through every step described above
 	if (canInjectionRun(RPM)) { //Only run if possible to run
 		stop(); //make sure that we are not injecting
-		long time = findTime(RPM, potentiometer); 
+		uint32_t time = findTime(RPM, potentiometer); 
 		start(); //start injection
 		int stay = 1;
 		long actualTime;
-		long startTime = micros();
+		uint32_t startTime = micros();
 		while (stay) { //wait for time, made so that it can be interrupted
 			if (time <= (micros() - startTime)) {
 				actualTime = micros() - startTime;

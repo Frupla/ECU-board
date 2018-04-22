@@ -19,6 +19,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ECU2018.ino" />
+    <None Include="position.cpp.rej" />
+    <None Include="RCa02928" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.ECU2018.vsarduino.h">

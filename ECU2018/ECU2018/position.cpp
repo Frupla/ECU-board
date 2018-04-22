@@ -128,7 +128,7 @@ int altEncoderPositionEngine()
 
 void AltEncoderInterrupthandlerZ() {
 	encoder_Z++;
-	autoPosition->write = calibration_variable; // hopefully correcting so TDC2 is 0
+	autoPosition->write(calibration_variable); // hopefully correcting so TDC2 is 0
 	encoder_Z_time_old = encoder_Z_time;
 	encoder_Z_time = micros();
 }

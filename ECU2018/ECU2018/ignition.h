@@ -11,8 +11,6 @@
 
 #include "ingAndinjArray.h"
 
-#define MAX_RPM 7000
-#define DWELL_TIME 5.42
 double START_TIME;
 
 

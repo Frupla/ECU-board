@@ -59,10 +59,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Disabled</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ECU2018;$(ProjectDir)..\..\..\Arduino\libraries\Canlib;$(ProjectDir)..\..\..\Arduino\libraries\FlexCAN;$(ProjectDir)..\..\..\Arduino\libraries\Tunes;$(ProjectDir)..\..\..\Arduino\libraries\ArduinoJson\src;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\..\..\Arduino\libraries;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\libraries;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\avr;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\util;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\utils;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\avr;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\tools\arm\arm-none-eabi\include;$(ProjectDir)..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>$(ProjectDir)__vm\.ECU2018.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <PreprocessorDefinitions>__HARDWARE_MK66fx1m0__;__HARDWARE_MK66FX1M0__;__MK66FX1M0__;TEENSYDUINO=141;ARDUINO=10805;F_CPU=180000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -82,10 +86,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ignition.h" />
-    <ClInclude Include="ingAndinjArray.h" />
-    <ClInclude Include="injection.h" />
-    <ClInclude Include="position.h" />
     <ClInclude Include="sources\adc.h" />
     <ClInclude Include="sources\autoGear.h" />
     <ClInclude Include="sources\bluetooth.h" />
@@ -93,6 +93,7 @@
     <ClInclude Include="sources\Encoder-master\Encoder.h" />
     <ClInclude Include="sources\Encoder-master\interrupt_config.h" />
     <ClInclude Include="sources\Encoder-master\interrupt_pins.h" />
+    <ClInclude Include="sources\Encoder-master\utility\direct_pin_read.h" />
     <ClInclude Include="sources\Encoder-master\utility\interrupt_config.h" />
     <ClInclude Include="sources\Encoder-master\utility\interrupt_pins.h" />
     <ClInclude Include="sources\global.h" />
@@ -109,10 +110,6 @@
     <ClInclude Include="__vm\.ECU2018.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ignition.cpp" />
-    <ClCompile Include="ingAndinjArray.cpp" />
-    <ClCompile Include="injection.cpp" />
-    <ClCompile Include="position.cpp" />
     <ClCompile Include="sources\adc.cpp" />
     <ClCompile Include="sources\autoGear.cpp" />
     <ClCompile Include="sources\bluetooth.cpp" />

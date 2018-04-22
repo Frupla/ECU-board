@@ -106,7 +106,9 @@ public:
 		//irene(1): this following sets the error variable to 0
 		
 	}
-
+	// irene(1) to be set high if there is an error
+	static bool error; // asger(1) Det her betyder at vi kun kan have én encoder sluttet til.  irene: kunne vi evt bare lade vaer med at g;re den statisk
+					   // Vi kunne self lave en array: error[num_pins] og så bare kun ændre error for den pin.
 
 #ifdef ENCODER_USE_INTERRUPTS
 	inline int32_t read() {
@@ -142,14 +144,11 @@ public:
 
 	inline void resetError() {
 		error = false;
-		return;
 	}
 private:
 	Encoder_internal_state_t encoder;
 
-	// irene(1) to be set high if there is an error
-	static bool error; // asger(1) Det her betyder at vi kun kan have én encoder sluttet til.  irene: kunne vi evt bare lade vaer med at g;re den statisk
-	// Vi kunne self lave en array: error[num_pins] og så bare kun ændre error for den pin. 
+	 
 	
 
 #ifdef ENCODER_USE_INTERRUPTS
@@ -209,7 +208,7 @@ public: //irene: this is just assembly, don't even try to get what's happening. 
 	// update() is not meant to be called from outside Encoder,
 	// but it is public to allow static interrupt routines.
 	// DO NOT call update() directly from sketches.
-	static void update(Encoder_internal_state_t *arg, bool * error) { // Asger(1) changed from: static void update(Encoder_internal_state_t *arg, bool * error)
+	static void update(Encoder_internal_state_t *arg, bool * error_pointer) { // Asger(1) changed from: static void update(Encoder_internal_state_t *arg, bool * error)
 		//irene(1): assembly code deactivated so I can test a theory
 /*#if defined(__AVR__)
 		// The compiler believes this is just 1 line of code, so
@@ -312,11 +311,11 @@ public: //irene: this is just assembly, don't even try to get what's happening. 
 				return;
 			case 3: case 12:
 				arg->position += 2;
-				*error = true;
+				*error_pointer = true;
 				return;
 			case 6: case 9:
 				arg->position -= 2;
-				*error = true;
+				*error_pointer = true;
 				return;
 		}
 //#endif //irene(1) also uncomment this if theory doesn't work

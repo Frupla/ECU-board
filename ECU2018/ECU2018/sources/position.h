@@ -21,12 +21,14 @@ int encoderPosition_A();
 int encoderPosition_B();
 int encoderPosition_Z();
 int encoderPositionEngine();
-bool friskFlag69; // tak frederik
 float encoderRPM();
 int encoderErrorCheck();
 void encoderInterrupthandlerA();
 void encoderInterrupthandlerB();
 void encoderInterrupthandlerZ();
+
+bool getFriskFlag69();
+void setFriskFlag69(bool what_to_be);
 
 //using Encoder lib
 void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var);

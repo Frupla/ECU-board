@@ -11,7 +11,7 @@
 
 #include "ingAndinjArray.h"
 
-double START_TIME;
+//double START_TIME;
 
 
 //double IGNITION_TIMING;
@@ -22,7 +22,6 @@ double ignition_time_angle(double rpm);
 double ignition_dwell_angle(double rpm);
 void startIgnition();
 void stopIgnition();
-int canIgnitionRun(double RPM);
 void ignitionCheck(double start_angle, double dwell_angle, double pos_angle);
 #endif
 

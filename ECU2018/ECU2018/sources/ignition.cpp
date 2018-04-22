@@ -12,7 +12,6 @@ Created:	4/16/2018 9:50:54 AM
 Author:	Ejer
 */
 
-float MAXRPM;
 float DWELL_TIME = 5.42;
 
 double ignition_time_angle(double rpm) {
@@ -34,15 +33,6 @@ void startIgnition() {
 
 void stopIgnition() {
 	digitalWrite(ignition_pin, LOW); //Sends signal to stop ignition
-}
-
-int canIgnitionRun(double RPM) {
-	if (RPM > MAXRPM) {
-		return 0;
-	}
-	else {
-		return 1;
-	}
 }
 
 void ignitionCheck(double start_angle, double dwell_angle, double pos_angle) {

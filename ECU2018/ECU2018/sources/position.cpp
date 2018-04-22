@@ -9,7 +9,7 @@ u_int encoder_A, encoder_B, encoder_Z;
 
 int calibration_variable;
 int encoder_position;
-//bool friskFlag69; // tak frederik
+bool friskFlag69; // tak frederik
 
 uint8_t encoder_pin_A_intern;
 uint8_t encoder_pin_B_intern;
@@ -148,7 +148,15 @@ int altEncoderErrorCheck()
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
-	}
+}
+
+bool getFriskFlag69() {
+	return friskFlag69;
+}
+
+void setFriskFlag69(bool what_to_be) {
+	friskFlag69 = what_to_be;
+}
 
 /* Uncomment if you comment out all the regular position code
 int encoderPosition_Z()

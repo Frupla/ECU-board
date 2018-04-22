@@ -115,6 +115,9 @@ float fuelMass = 0;
 float potentiometer = 0;
 int startInjection = 0;
 
+//More variables
+float RPM = 0;
+
 void setup() {
 	/* Initializations */
 	// Initialize USB communication
@@ -248,10 +251,13 @@ void loop() {
 
 	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
 
+	setMAXRPM(10);
+	setSlope(19);
+	setInterjection(10);
 	RPM = encoderRPM();
 	//Find ud af hvornår vi skal starte injection, der er kodet til et start signal, men jeg ved ikke hvad timingen er på det
 	if (canInjectionRun(RPM) && startInjection) { //Start injection if we are below some threshold, and if we ask it to start
-		fuelMass = fuelMass + injectionRun(RPM, potentiometer);
+		fuelMass = fuelMass + injectionRun(RPM, CAN.getMeasurement(RIO_POTENTIOMETER)); //How do you get the potentimeter? Is it like this
 		startInjection = 0;
 	}
 	//Print current fuelMass somehow

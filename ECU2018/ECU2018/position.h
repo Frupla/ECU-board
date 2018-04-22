@@ -29,7 +29,7 @@ void encoderInterrupthandlerZ();
 //using Encoder lib
 void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var);
 int altEncoderPositionEngine();
-	void AltEncoderInterrupthandlerZ();
+void AltEncoderInterrupthandlerZ();
 
 #endif
 

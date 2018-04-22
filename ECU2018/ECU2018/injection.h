@@ -13,11 +13,11 @@
 
 //Constants
 //for the calculation of the mass of fuel based on time
-float slope;
-float interjection;
+extern float slope;
+extern float interjection;
 // m = slope * t + interjection
-float MAXRPM; //Should be given by the mek's
-INTERPOL injection;
+extern float MAXRPM; //Should be given by the mek's
+extern INTERPOL injection;
 
 
 //functioner
@@ -27,6 +27,10 @@ void start();
 void stop();
 float calcMass(long time);
 float injectionRun(double RPM, float potentiometer);
+void setSlope(float newSlope);
+void setInterjection(float newInterjection);
+void setMAXRPM(float newMAXRPM);
+
 
 #endif
 

@@ -16,9 +16,9 @@
 /* Includes */
 /*==========*/
 
-#include "ingAndinjArray.h"
-#include "ignition.h"
-#include "injection.h"
+#include "sources/ingAndinjArray.h"
+#include "sources/ignition.h"
+#include "sources/injection.h"
 #include <canbus.h>
 #include <tunes.h>
 #include <ArduinoJson.h>
@@ -30,7 +30,7 @@
 #include "sources/motorCAN.h"
 #include "sources/rs232.h"
 #include "sources/rs232sync.h"
-#include "position.h"
+#include "sources/position.h"
 
 /*=============*/
 /* Definitions */

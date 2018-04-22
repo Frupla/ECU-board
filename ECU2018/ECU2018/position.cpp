@@ -9,6 +9,7 @@ u_int encoder_A, encoder_B, encoder_Z;
 
 int calibration_variable;
 int encoder_position;
+bool friskFlag69; // tak frederik
 
 uint8_t encoder_pin_A_intern;
 uint8_t encoder_pin_B_intern;
@@ -44,6 +45,7 @@ void initializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t enc
 	encoder_position = calib_var;
 	encoder_Z_time = 0;
 	encoder_Z_time_old = 0;
+	friskFlag69 = false;
 	// Attach interrupts
 	attachInterrupt(digitalPinToInterrupt(encoder_pin_A), encoderInterrupthandlerA, RISING);
 	attachInterrupt(digitalPinToInterrupt(encoder_pin_B), encoderInterrupthandlerB, RISING);
@@ -103,6 +105,7 @@ void encoderInterrupthandlerZ() {
 	encoder_position = calibration_variable; // correcting so TDC2 is 0
 	encoder_Z_time_old = encoder_Z_time;
 	encoder_Z_time = micros();
+	friskFlag69 = true;
 }
 
 // code written to use the Encoder library - pls only run either the functions or the alt functions, NOT BOTH!!!!
@@ -119,6 +122,7 @@ void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t 
 	encoder_Z = 0;
 	encoder_Z_time = 0;
 	encoder_Z_time_old = 0;
+	friskFlag69 = true;
 	attachInterrupt(digitalPinToInterrupt(encoder_pin_Z), altEncoderInterrupthandlerZ, RISING);
 }
 
@@ -133,6 +137,9 @@ void altEncoderInterrupthandlerZ()
 	autoPosition->write(calibration_variable); // hopefully correcting so TDC2 is 0
 	encoder_Z_time_old = encoder_Z_time;
 	encoder_Z_time = micros();
+	friskFlag69 = true;
+	//test, delete this if you can get it to compile:
+	autoPosition->resetError();
 }
 
 int altEncoderErrorCheck() 
@@ -142,7 +149,6 @@ int altEncoderErrorCheck()
 	}
 	return EXIT_SUCCESS;
 	}
-}
 
 /* Uncomment if you comment out all the regular position code
 int encoderPosition_Z()

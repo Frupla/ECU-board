@@ -20,6 +20,7 @@ int encoderPosition_A();
 int encoderPosition_B();
 int encoderPosition_Z();
 int encoderPositionEngine();
+bool friskFlag69; // tak frederik
 float encoderRPM();
 int encoderErrorCheck();
 void encoderInterrupthandlerA();

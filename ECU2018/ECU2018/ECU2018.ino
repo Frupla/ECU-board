@@ -273,6 +273,11 @@ void loop() {
 
 	//Print current fuelMass somehow
 
+	if (friskFlag69) {
+		//calcualte ignition & injection stiff
+		friskFlag69 = false;
+	}
+
 	// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib
 	Serial.print("A: ");
 	Serial.println(encoderPosition_A());

@@ -36,43 +36,34 @@ int canInjectionRun(double RPM) {
 }
 
 
-uint32_t findTime(double RPM, float potentiometer) {
+double findAngle_injection(double RPM, float potentiometer) {
 	injection = interpolation_map(RPM);
-	long time;
 	uint xhigh = (uint)injectionArray[injection.upper];
 	uint xlow = (uint)injectionArray[injection.lower];
 	double xinc = injection.increment;
-	time = (long)(xhigh - xlow)*xinc + xlow;
-	return time*potentiometer;
+	double time = (xhigh - xlow)*xinc + xlow;
+	return ((360.0*RPM*time)/60000.0)*potentiometer;
 }
 
-void start(){
+void startInj(){
 	digitalWrite(inject_pin, HIGH); //Sends signal to start injection
 }
 
-void stop() {
+void stopInj() {
 	digitalWrite(inject_pin, LOW); //Sends signal to stop injection
 }
 
-float calcMass(long time){
-	return slope * time + interjection; //calculate mass of fuel based on time
+float calcMass(long angle){
+	return slope * angle + interjection; //calculate mass of fuel based on angle which correlates to time trust me guys
 }
 
-float injectionRun(double RPM, float potentiometer) { //takes us through every step described above
-	uint32_t time = findTime(RPM, potentiometer); 
-	start(); //start injection
-	int stay = 1;
-	long actualTime;
-	uint32_t startTime = micros();
-	while (stay) { //wait for time, made so that it can be interrupted
-		if (time <= (micros() - startTime)) {
-			actualTime = micros() - startTime;
-			stay = 0;
-		}
-		else {
-			stay = stay;
-		}
+float injectionCheck(double startAngle, double stopAngle, double posAngle){
+	if (startAngle <= posAngle && posAngle <= stopAngle) {
+		startInj();
+		return 0;
 	}
-	stop(); //stop injection
-	return calcMass(actualTime); //do the math
+	else {
+		stopInj();
+		return calcMass(posAngle - startAngle);
+	}
 }

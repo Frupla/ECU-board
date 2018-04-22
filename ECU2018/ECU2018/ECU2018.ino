@@ -245,10 +245,11 @@ void loop() {
 	}
 
 	LED_toggle(LED3);
+
 	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
 
 	RPM = encoderRPM();
-
+	//Find ud af hvornår vi skal starte injection, der er kodet til et start signal, men jeg ved ikke hvad timingen er på det
 	if (canInjectionRun(RPM) && startInjection) { //Start injection if we are below some threshold, and if we ask it to start
 		fuelMass = fuelMass + injectionRun(RPM, potentiometer);
 		startInjection = 0;

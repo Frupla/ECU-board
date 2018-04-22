@@ -21,12 +21,12 @@ INTERPOL injection;
 
 
 //functioner
-int canInjectionRun(int RPM);
-uint32_t findTime(float RPM, int potentiometer);
+int canInjectionRun(double RPM);
+uint32_t findTime(double RPM, float potentiometer);
 void start();
 void stop();
 float calcMass(long time);
-float injectionRun(float RPM, int potentiometer);
+float injectionRun(double RPM, float potentiometer);
 
 #endif
 

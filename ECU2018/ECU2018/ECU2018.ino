@@ -113,6 +113,7 @@ volatile uint32_t wheelcountv2 = 0;
 //Fuel consumption
 float fuelMass = 0;
 float potentiometer = 0;
+int startInjection = 0;
 
 void setup() {
 	/* Initializations */
@@ -246,10 +247,11 @@ void loop() {
 	LED_toggle(LED3);
 	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
 
-	//Get RPM with some function here
+	RPM = encoderRPM();
 
-	if (canInjectionRun(RPM)) {
+	if (canInjectionRun(RPM) && startInjection) { //Start injection if we are below some threshold, and if we ask it to start
 		fuelMass = fuelMass + injectionRun(RPM, potentiometer);
+		startInjection = 0;
 	}
 	//Print current fuelMass somehow
 }

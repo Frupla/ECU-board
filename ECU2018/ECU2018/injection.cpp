@@ -6,7 +6,7 @@
 
 #define inject_pin 20//Might be 20, if it is "dyse" which I'm assuming it is
 
-int canInjectionRun(int RPM) {
+int canInjectionRun(double RPM) {
 	if (RPM > MAXRPM){
 		return 0;
 	}
@@ -16,7 +16,7 @@ int canInjectionRun(int RPM) {
 }
 
 
-uint32_t findTime(float RPM, float potentiometer) {
+uint32_t findTime(double RPM, float potentiometer) {
 	injection = interpolation_map(RPM);
 	long time;
 	uint xhigh = (uint)injectionArray[injection.upper];
@@ -38,7 +38,7 @@ float calcMass(long time){
 	return a * time + b; //calculate mass of fuel based on time
 }
 
-float injectionRun(float RPM, float potentiometer) { //takes us through every step described above
+float injectionRun(double RPM, float potentiometer) { //takes us through every step described above
 	stop(); //make sure that we are not injecting
 	uint32_t time = findTime(RPM, potentiometer); 
 	start(); //start injection

@@ -261,6 +261,14 @@ void loop() {
 		startInjection = 0;
 	}
 	//Print current fuelMass somehow
+
+	// test kode til position
+	Serial.print("A: ");
+	Serial.println(encoderPosition_A());
+	Serial.print("B: ");
+	Serial.println(encoderPosition_B());
+	Serial.print("Z: ");
+	Serial.println(encoderPosition_Z());
 }
 
 // Herfra og ned, skamløst kopieret fra motorboard 2017:

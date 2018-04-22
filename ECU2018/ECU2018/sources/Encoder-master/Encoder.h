@@ -319,7 +319,7 @@ public: //irene: this is just assembly, don't even try to get what's happening. 
 				*error = true;
 				return;
 		}
-//#endif //irene(1) also uncomment this if theory doens't work
+//#endif //irene(1) also uncomment this if theory doesn't work
 	}
 private:
 /*

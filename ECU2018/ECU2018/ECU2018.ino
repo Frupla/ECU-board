@@ -259,8 +259,10 @@ void loop() {
 	if (canInjectionRun(RPM) && startInjection) { //Start injection if we are below some threshold, and if we ask it to start
 		fuelMass = fuelMass + injectionRun(RPM, CAN.getMeasurement(RIO_POTENTIOMETER)); //How do you get the potentimeter? Is it like this
 		startInjection = 0;
+		Serial.print("fuel mass: ");
+		Serial.print(fuelMass);
+		Serial.println(" units");
 	}
-	//Print current fuelMass somehow
 
 	// test kode til position
 	Serial.print("A: ");

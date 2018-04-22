@@ -74,10 +74,10 @@ float encoderRPM() { // Returns the RPM. Returns -1 every ~70min
 	if (encoder_Z_time - encoder_Z_time_old <= 0) {
 		return -1;
 	}
-	float RPM = (60000000 / (float)(encoder_Z_time - encoder_Z_time_old));
+	float output_RPM = (60000000 / (float)(encoder_Z_time - encoder_Z_time_old));
 	// T = encoder_Z_time - encoder_Z_time_old // How many µs between 2 ticks
 	// 60 s/min * 10e6 µs/s  /  T µs   =  60000000 / T  rounds/min
-	return RPM;
+	return output_RPM;
 }
 
 

@@ -57,3 +57,15 @@ float injectionRun(double RPM, float potentiometer) { //takes us through every s
 	stop(); //stop injection
 	return calcMass(actualTime); //do the math
 }
+
+void setSlope(float newSlope) {
+	slope = newSlope;
+}
+
+void setInterjection(float newInterjection) {
+	interjection = newInterjection;
+}
+
+void setMAXRPM(float newMAXRPM) {
+	MAXRPM = newMAXRPM;
+}

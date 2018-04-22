@@ -13,10 +13,6 @@
 
 #define MAX_RPM 7000
 #define DWELL_TIME 5.42
-double RPM = 0;
-int RUN_IGNITION;
-int IGNITION_OFF = 0;
-int ignition_Array[25];
 
 //double IGNITION_TIMING;
 //double IGNITION_DWELL;

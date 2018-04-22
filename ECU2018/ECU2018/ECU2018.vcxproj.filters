@@ -13,7 +13,7 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="Header Files\Encoder.h">
+    <Filter Include="Header Files\Encoder_dependencies">
       <UniqueIdentifier>{9c10dbfd-e4f7-4165-897d-13e7b7953ed3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -66,17 +66,17 @@
     <ClInclude Include="ignition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Encoder-master\Encoder.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sources\Encoder-master\utility\direct_pin_read.h">
-      <Filter>Header Files\Encoder.h</Filter>
+      <Filter>Header Files\Encoder_dependencies</Filter>
     </ClInclude>
     <ClInclude Include="sources\Encoder-master\utility\interrupt_config.h">
-      <Filter>Header Files\Encoder.h</Filter>
+      <Filter>Header Files\Encoder_dependencies</Filter>
     </ClInclude>
     <ClInclude Include="sources\Encoder-master\utility\interrupt_pins.h">
-      <Filter>Header Files\Encoder.h</Filter>
+      <Filter>Header Files\Encoder_dependencies</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Encoder-master\Encoder.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

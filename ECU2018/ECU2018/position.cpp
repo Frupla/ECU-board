@@ -26,7 +26,7 @@ int encoderErrorCheck() // Returnerer EXIT_FAILURE hvis der er forskydning melle
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
-}
+} // er det en god ide at returnerer det EXIT_FAILURE? stopper det ikke bare koden?
 
 void initializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var)
 {
@@ -105,7 +105,7 @@ void encoderInterrupthandlerZ() {
 	encoder_Z_time = micros();
 }
 
-// code written to use the Encoder library
+// code written to use the Encoder library - pls only run either the functions or the alt functions, NOT BOTH!!!!
 
 void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var)
 {
@@ -119,6 +119,7 @@ void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t 
 	encoder_Z = 0;
 	encoder_Z_time = 0;
 	encoder_Z_time_old = 0;
+	attachInterrupt(digitalPinToInterrupt(encoder_pin_Z), altEncoderInterrupthandlerZ, RISING);
 }
 
 int altEncoderPositionEngine()
@@ -126,12 +127,32 @@ int altEncoderPositionEngine()
 	return autoPosition->read();
 }	
 
-void AltEncoderInterrupthandlerZ() {
+void altEncoderInterrupthandlerZ() 
+{
 	encoder_Z++;
 	autoPosition->write(calibration_variable); // hopefully correcting so TDC2 is 0
 	encoder_Z_time_old = encoder_Z_time;
 	encoder_Z_time = micros();
 }
+
+int altEncoderErrorCheck() 
+{
+	if (autoPosition->readError()) { //well, that so doesn't work
+		return EXIT_FAILURE;
+	}
+	return EXIT_SUCCESS;
+	}
+}
+
+/* Uncomment if you comment out all the regular position code
+int encoderPosition_Z()
+{
+	return encoder_Z;
+}
+
+*/
+
+
 
 // TODO: errorchecking with the Encoder library, to be done regularily
 // TODO: code to include this in ECU2018 main file 

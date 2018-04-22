@@ -135,15 +135,15 @@ public:
 	}
 #endif
 	//irene(1) reading and resetting the error bool. Delete if this doesn't work.
-	bool readError() {
+
+	inline bool readError() {
 		return error;
 	}
 
-	void resetError() {
+	inline void resetError() {
 		error = false;
 		return;
 	}
-
 private:
 	Encoder_internal_state_t encoder;
 

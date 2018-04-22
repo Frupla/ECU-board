@@ -21,6 +21,9 @@
     <None Include="ECU2018.ino" />
     <None Include="position.cpp.rej" />
     <None Include="RCa02928" />
+    <None Include="sources\Encoder-master\examples\NoInterrupts\NoInterrupts.pde" />
+    <None Include="sources\Encoder-master\examples\SpeedTest\SpeedTest.pde" />
+    <None Include="sources\Encoder-master\examples\TwoKnobs\TwoKnobs.pde" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.ECU2018.vsarduino.h">

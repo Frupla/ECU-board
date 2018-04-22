@@ -261,24 +261,29 @@ void loop() {
 	RPM = encoderRPM();
 	//Find ud af hvornår vi skal starte injection, der er kodet til et start signal, men jeg ved ikke hvad timingen er på det
 	if (canInjectionRun(RPM) && startInjection) { //Start injection if we are below some threshold, and if we ask it to start
-		fuelMass = fuelMass + injectionRun(RPM, CAN.getMeasurement(RIO_POTENTIOMETER)); //How do you get the potentimeter? Is it like this
+		fuelMass = fuelMass + injectionRun(RPM, CAN.getMeasurement(RIO_POTENTIOMETER)); //How do you get the potentimeter? Is it like this?
 		startInjection = 0;
 	}
 	//Print current fuelMass somehow
 
-	// test kode til af vores helt egen position kode
+	// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib
 	Serial.print("A: ");
 	Serial.println(encoderPosition_A());
 	Serial.print("B: ");
 	Serial.println(encoderPosition_B());
 	Serial.print("Z: ");
 	Serial.println(encoderPosition_Z());
+	Serial.print("engine pos: ");
+	Serial.println(encoderPositionEngine());
 	if (millis() - lastRPMprint >= 10000); {
 		Serial.print("RPM: ");
 		Serial.println(RPM);
 	}
 
 	// test kode til position kode der bruger Encoder lib
+	Serial.print("alt engine pos:");
+	Serial.println(altEncoderPositionEngine());
+
 
 }
 

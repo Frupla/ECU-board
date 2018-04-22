@@ -16,7 +16,7 @@ int canInjectionRun(int RPM) {
 }
 
 long findTime(float RPM, int potentiometer) {
-	injection = interpolationmap(RPM);
+	injection = Interpolation_map(RPM);
 	long time;
 	uint xhigh = (uint)injectionArray[injection.upper];
 	uint xlow = (uint)injectionArray[injection.lower];

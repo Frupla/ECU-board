@@ -16,7 +16,7 @@ int canInjectionRun(int RPM) {
 }
 
 
-uint32_t findTime(float RPM, int potentiometer) {
+uint32_t findTime(float RPM, float potentiometer) {
 	injection = interpolation_map(RPM);
 	long time;
 	uint xhigh = (uint)injectionArray[injection.upper];
@@ -38,7 +38,7 @@ float calcMass(long time){
 	return a * time + b; //calculate mass of fuel based on time
 }
 
-float injectionRun(float RPM, int potentiometer) { //takes us through every step described above
+float injectionRun(float RPM, float potentiometer) { //takes us through every step described above
 	stop(); //make sure that we are not injecting
 	uint32_t time = findTime(RPM, potentiometer); 
 	start(); //start injection

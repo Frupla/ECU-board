@@ -110,6 +110,10 @@ volatile uint32_t wheelcountv2 = 0;
 #define NUMBER_OF_EDGES_PER_REVOLUTION 30
 #define WHEEL_CIRCUMFERENCE WHEEL_DIAMETER * PI
 
+//Fuel consumption
+float fuelMass = 0;
+float potentiometer = 0;
+
 void setup() {
 	/* Initializations */
 	// Initialize USB communication
@@ -240,6 +244,14 @@ void loop() {
 	}
 
 	LED_toggle(LED3);
+	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
+
+	//Get RPM with some function here
+
+	if (canInjectionRun(RPM)) {
+		fuelMass = fuelMass + injectionRun(RPM, potentiometer);
+	}
+	//Print current fuelMass somehow
 }
 
 // Herfra og ned, skamløst kopieret fra motorboard 2017:

@@ -269,7 +269,6 @@ void loop() {
 		ignitionCheck(startAngle_ign, stopAngle_ign, posAngle);
 	}
 
-	//Print current fuelMass somehow
 	RPM = encoderRPM();
 	if (getFriskFlag69()) {
 		Serial.print("Fuel burned: ");

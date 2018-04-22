@@ -263,18 +263,21 @@ void loop() {
 
 	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
 
-	setMAXRPM(10);
-	setSlope(19);
-	setInterjection(10);
-	RPM = encoderRPM();
-	//Find ud af hvornår vi skal starte injection, der er kodet til et start signal, men jeg ved ikke hvad timingen er på det
-	
-	fuelMass = fuelMass + injectionCheck(startAngle_inj, stopAngle_inj, posAngle);
+	posAngle = encoderPositionEngine();
+	if (canInjectionRun(RPM)) {
+		fuelMass = fuelMass + injectionCheck(startAngle_inj, stopAngle_inj, posAngle);
+		ignitionCheck(startAngle_ign, stopAngle_ign, posAngle);
+	}
 
 	//Print current fuelMass somehow
-
+	RPM = encoderRPM();
 	if (friskFlag69) {
-		//calcualte ignition & injection stiff
+		Serial.print("Fuel burned: ");
+		Serial.print(fuelMass);
+		Serial.print(" units\n");
+		startAngle_ign = ignition_time_angle(RPM);
+		stopAngle_ign = ignition_dwell_angle(RPM);
+		stopAngle_inj = findAngle_injection(RPM, CAN.getMeasurement(RIO_POTENTIOMETER));
 		friskFlag69 = false;
 	}
 

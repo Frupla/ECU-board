@@ -5,6 +5,26 @@
 #include "injection.h"
 
 #define inject_pin 20//Might be 20, if it is "dyse" which I'm assuming it is
+//Constants
+//for the calculation of the mass of fuel based on time
+float slope;
+float interjection;
+// m = slope * t + interjection
+float MAXRPM; //Should be given by the mek's
+
+INTERPOL injection;
+
+void setSlope(float newSlope) {
+	slope = newSlope;
+}
+
+void setInterjection(float newInterjection) {
+	interjection = newInterjection;
+}
+
+void setMAXRPM(float newMAXRPM) {
+	MAXRPM = newMAXRPM;
+}
 
 int canInjectionRun(double RPM) {
 	if (RPM > MAXRPM){
@@ -39,7 +59,6 @@ float calcMass(long time){
 }
 
 float injectionRun(double RPM, float potentiometer) { //takes us through every step described above
-	stop(); //make sure that we are not injecting
 	uint32_t time = findTime(RPM, potentiometer); 
 	start(); //start injection
 	int stay = 1;
@@ -56,16 +75,4 @@ float injectionRun(double RPM, float potentiometer) { //takes us through every s
 	}
 	stop(); //stop injection
 	return calcMass(actualTime); //do the math
-}
-
-void setSlope(float newSlope) {
-	slope = newSlope;
-}
-
-void setInterjection(float newInterjection) {
-	interjection = newInterjection;
-}
-
-void setMAXRPM(float newMAXRPM) {
-	MAXRPM = newMAXRPM;
 }

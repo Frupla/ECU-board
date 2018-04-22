@@ -10,7 +10,7 @@
 #endif
 
 
-typedef struct INTERPOLATION_CONSTANTS {
+typedef struct INTERPOL {
 	uint lower;
 	uint upper;
 	uint close;

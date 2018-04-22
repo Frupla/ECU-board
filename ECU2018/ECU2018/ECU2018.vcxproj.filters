@@ -19,6 +19,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ECU2018.ino" />
+    <None Include="position.cpp.rej" />
+    <None Include="RCa02928" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.ECU2018.vsarduino.h">
@@ -66,9 +68,6 @@
     <ClInclude Include="ignition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\Encoder-master\utility\direct_pin_read.h">
-      <Filter>Header Files\Encoder_dependencies</Filter>
-    </ClInclude>
     <ClInclude Include="sources\Encoder-master\utility\interrupt_config.h">
       <Filter>Header Files\Encoder_dependencies</Filter>
     </ClInclude>
@@ -76,6 +75,15 @@
       <Filter>Header Files\Encoder_dependencies</Filter>
     </ClInclude>
     <ClInclude Include="sources\Encoder-master\Encoder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Encoder-master\direct_pin_read.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Encoder-master\interrupt_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Encoder-master\interrupt_pins.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

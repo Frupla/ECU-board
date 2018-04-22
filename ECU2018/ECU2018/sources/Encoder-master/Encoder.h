@@ -138,8 +138,8 @@ public:
 #endif
 	//irene(1) reading and resetting the error bool. Delete if this doesn't work.
 
-	inline bool * readError() {
-		return error;
+	inline bool readError() {
+		return *error;
 	}
 
 	inline void resetError() {

@@ -1,8 +1,9 @@
 // 
-// 
+// Asger (s163905) 
 // 
 
 #include "position.h"
+#include "Ëncoder.h"
 
 u_int encoder_A, encoder_B, encoder_Z;
 
@@ -16,6 +17,7 @@ uint8_t encoder_pin_Z_intern;
 uint32_t encoder_Z_time;
 uint32_t encoder_Z_time_old;
 
+// code written all on our lonesome
 int encoderErrorCheck() // Returnerer EXIT_FAILURE hvis der er forskydning mellem A og B
 {
 	if ((int)encoder_A - (int)encoder_B > 1 || (int)encoder_A - (int)encoder_B < 1) {
@@ -37,7 +39,7 @@ void initializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t enc
 	encoder_pin_Z_intern = encoder_pin_Z;
 	// Reset intern variables
 	encoder_A = 0; encoder_B = 0; encoder_Z = 0;
-	encoder_position = 0;
+	encoder_position = calib_var;
 	encoder_Z_time = 0;
 	encoder_Z_time_old = 0;
 	// Attach interrupts
@@ -63,7 +65,7 @@ int encoderPosition_Z()
 
 int encoderPositionEngine()
 {	
-	return encoder_A - calibration_variable; // correcting to TDC2 is 0
+	return encoder_position;
 }
 
 float encoderRPM() { // Returns the RPM. Returns -1 every ~70min
@@ -96,7 +98,38 @@ void encoderInterrupthandlerZ() {
 	encoder_Z++;
 	encoder_A = 0;
 	encoder_B = 0;
-	encoder_position = 0;	
+	encoder_position = calibration_variable; // correcting so TDC2 is 0
 	encoder_Z_time_old = encoder_Z_time;
 	encoder_Z_time = micros();
 }
+
+// code written to use the Encoder library
+
+void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var)
+{
+	// Set pinmode
+	pinMode(encoder_pin_Z, INPUT);
+	// Write to intern variables
+	calibration_variable = calib_var;
+	encoder_pin_Z_intern = encoder_pin_Z;
+	// Reset intern variables
+	Encoder autoPosition(encoder_pin_A, encoder_pin_B);
+	encoder_Z = 0;
+	encoder_Z_time = 0;
+	encoder_Z_time_old = 0;
+}
+
+int altEncoderPositionEngine()
+{
+	return autoPosition.read();
+}	
+
+void AltEncoderInterrupthandlerZ() {
+	encoder_Z++;
+	autoPosition.write = calibration_variable; // hopefully correcting so TDC2 is 0
+	encoder_Z_time_old = encoder_Z_time;
+	encoder_Z_time = micros();
+}
+
+// TODO: errorchecking with the Encoder library, to be done regularily
+// TODO: code to include this in ECU2018 main file 

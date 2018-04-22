@@ -1,9 +1,0 @@
-diff a/ECU2018/ECU2018/position.cpp b/ECU2018/ECU2018/position.cpp	(rejected hunks)
-@@ -3,7 +3,6 @@
- // 
- 
- #include "position.h"
--#include "�ncoder.h"
- #include "�ncoder.h"
- 
- u_int encoder_A, encoder_B, encoder_Z;

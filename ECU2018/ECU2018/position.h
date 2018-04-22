@@ -9,6 +9,7 @@
 #include "WProgram.h"
 #endif
 
+#include "Encoder.h"
 // We should probalby move this to the main?
 
 // Magic numbers

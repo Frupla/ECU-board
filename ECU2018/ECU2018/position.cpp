@@ -3,7 +3,7 @@
 // 
 
 #include "position.h"
-#include "Ëncoder.h"
+
 
 u_int encoder_A, encoder_B, encoder_Z;
 
@@ -16,6 +16,8 @@ uint8_t encoder_pin_Z_intern;
 
 uint32_t encoder_Z_time;
 uint32_t encoder_Z_time_old;
+
+Encoder * autoPosition;
 
 // code written all on our lonesome
 int encoderErrorCheck() // Returnerer EXIT_FAILURE hvis der er forskydning mellem A og B
@@ -113,7 +115,7 @@ void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t 
 	calibration_variable = calib_var;
 	encoder_pin_Z_intern = encoder_pin_Z;
 	// Reset intern variables
-	Encoder autoPosition(encoder_pin_A, encoder_pin_B);
+	autoPosition = new Encoder(encoder_pin_A, encoder_pin_B);
 	encoder_Z = 0;
 	encoder_Z_time = 0;
 	encoder_Z_time_old = 0;
@@ -121,12 +123,12 @@ void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t 
 
 int altEncoderPositionEngine()
 {
-	return autoPosition.read();
+	return autoPosition->read();
 }	
 
 void AltEncoderInterrupthandlerZ() {
 	encoder_Z++;
-	autoPosition.write = calibration_variable; // hopefully correcting so TDC2 is 0
+	autoPosition->write = calibration_variable; // hopefully correcting so TDC2 is 0
 	encoder_Z_time_old = encoder_Z_time;
 	encoder_Z_time = micros();
 }

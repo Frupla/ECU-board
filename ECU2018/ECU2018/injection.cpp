@@ -12,6 +12,8 @@ float interjection;
 // m = slope * t + interjection
 float MAXRPM; //Should be given by the mek's
 
+INTERPOL injection;
+
 void setSlope(float newSlope) {
 	slope = newSlope;
 }

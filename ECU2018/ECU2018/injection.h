@@ -12,8 +12,6 @@
 #include "ingAndinjArray.h"
 
 
-extern INTERPOL injection;
-
 
 //functioner
 int canInjectionRun(double RPM);

@@ -12,6 +12,9 @@ Created:	4/16/2018 9:50:54 AM
 Author:	Ejer
 */
 
+float MAXRPM;
+float DWELL_TIME = 5.42;
+
 double calculate_ignition_time(double rpm) {
 	INTERPOL IGNITION = interpolation_map(rpm);
 	double xlow = ignitionArray[IGNITION.lower];

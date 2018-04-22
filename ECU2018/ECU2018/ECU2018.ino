@@ -16,6 +16,7 @@
 /* Includes */
 /*==========*/
 
+#include "ingAndinjArray.h"
 #include "ignition.h"
 #include "injection.h"
 #include <canbus.h>

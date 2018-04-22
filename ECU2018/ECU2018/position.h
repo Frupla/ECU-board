@@ -13,7 +13,7 @@
 
 // Magic numbers
 
-
+//our own:
 void initializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var);
 int encoderPosition_A();
 int encoderPosition_B();
@@ -24,6 +24,11 @@ int encoderErrorCheck();
 void encoderInterrupthandlerA();
 void encoderInterrupthandlerB();
 void encoderInterrupthandlerZ();
+
+//using Encoder lib
+void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var);
+int altEncoderPositionEngine();
+	void AltEncoderInterrupthandlerZ();
 
 #endif
 

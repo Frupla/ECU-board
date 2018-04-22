@@ -59,7 +59,6 @@ float calcMass(long time){
 }
 
 float injectionRun(double RPM, float potentiometer) { //takes us through every step described above
-	stop(); //make sure that we are not injecting
 	uint32_t time = findTime(RPM, potentiometer); 
 	start(); //start injection
 	int stay = 1;

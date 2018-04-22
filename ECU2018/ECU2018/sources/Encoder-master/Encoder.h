@@ -66,6 +66,10 @@ typedef struct {
 	int32_t                position;
 } Encoder_internal_state_t;
 
+
+//irene(1): if this doesn't work, let's get hacky and just use the numbers higher than our position can possibly go
+// as flag (possibly flag bits, will need to math this) for wether or not there's an error.
+
 class Encoder
 {
 public:
@@ -74,7 +78,7 @@ public:
 		pinMode(pin1, INPUT_PULLUP);
 		pinMode(pin2, INPUT_PULLUP);
 		#else
-		pinMode(pin1, INPUT);
+		pinMode(pin1, INPUT);  //irene: here he's just doing input pullup in a different way, so it's crossplatform
 		digitalWrite(pin1, HIGH);
 		pinMode(pin2, INPUT);
 		digitalWrite(pin2, HIGH);
@@ -84,6 +88,8 @@ public:
 		encoder.pin2_register = PIN_TO_BASEREG(pin2);
 		encoder.pin2_bitmask = PIN_TO_BITMASK(pin2);
 		encoder.position = 0;
+		//irene(1) delete next line if this doesn't work
+		error = false;
 		// allow time for a passive R-C filter to charge
 		// through the pullup resistors, before reading
 		// the initial state
@@ -97,6 +103,8 @@ public:
 		interrupts_in_use += attach_interrupt(pin2, &encoder);
 #endif
 		//update_finishup();  // to force linker to include the code (does not work)
+		//irene(1): this following sets the error variable to 0
+		
 	}
 
 
@@ -104,7 +112,7 @@ public:
 	inline int32_t read() {
 		if (interrupts_in_use < 2) {
 			noInterrupts();
-			update(&encoder);
+			update(&encoder, &error); // Asger(1) changed from update(&encoder);
 		} else {
 			noInterrupts();
 		}
@@ -126,8 +134,24 @@ public:
 		encoder.position = p;
 	}
 #endif
+	//irene(1) reading and resetting the error bool. Delete if this doesn't work.
+	bool readError() {
+		return error;
+	}
+
+	void resetError() {
+		error = false;
+		return;
+	}
+
 private:
 	Encoder_internal_state_t encoder;
+
+	// irene(1) to be set high if there is an error
+	static bool error; // asger(1) Det her betyder at vi kun kan have én encoder sluttet til.
+	// Vi kunne self lave en array: error[num_pins] og så bare kun ændre error for den pin. 
+	
+
 #ifdef ENCODER_USE_INTERRUPTS
 	uint8_t interrupts_in_use;
 #endif
@@ -181,12 +205,13 @@ public:
 	}
 */
 
-public:
+public: //irene: this is just assembly, don't even try to get what's happening. Unless of course you already know assembly.
 	// update() is not meant to be called from outside Encoder,
 	// but it is public to allow static interrupt routines.
 	// DO NOT call update() directly from sketches.
-	static void update(Encoder_internal_state_t *arg) {
-#if defined(__AVR__)
+	static void update(Encoder_internal_state_t *arg, bool * error) { // Asger(1) changed from: static void update(Encoder_internal_state_t *arg, bool * error)
+		//irene(1): assembly code deactivated so I can test a theory
+/*#if defined(__AVR__)
 		// The compiler believes this is just 1 line of code, so
 		// it will inline this function into each interrupt
 		// handler.  That's a tiny bit faster, but grows the code.
@@ -270,7 +295,8 @@ public:
 			"st	-X, r22"		"\n\t"
 		"L%=end:"				"\n"
 		: : "x" (arg) : "r22", "r23", "r24", "r25", "r30", "r31");
-#else
+#else */
+
 		uint8_t p1val = DIRECT_PIN_READ(arg->pin1_register, arg->pin1_bitmask);
 		uint8_t p2val = DIRECT_PIN_READ(arg->pin2_register, arg->pin2_bitmask);
 		uint8_t state = arg->state & 3;
@@ -286,12 +312,14 @@ public:
 				return;
 			case 3: case 12:
 				arg->position += 2;
+				*error = true;
 				return;
 			case 6: case 9:
 				arg->position -= 2;
+				*error = true;
 				return;
 		}
-#endif
+//#endif //irene(1) also uncomment this if theory doens't work
 	}
 private:
 /*
@@ -728,187 +756,187 @@ private:
 	}
 #endif // ENCODER_USE_INTERRUPTS
 
-
+	// Asger(1) - ctrl+h og lav   ", &error)" -> ")"
 #if defined(ENCODER_USE_INTERRUPTS) && !defined(ENCODER_OPTIMIZE_INTERRUPTS)
 	#ifdef CORE_INT0_PIN
-	static void isr0(void) { update(interruptArgs[0]); }
+	static void isr0(void) { update(interruptArgs[0], &error); }
 	#endif
 	#ifdef CORE_INT1_PIN
-	static void isr1(void) { update(interruptArgs[1]); }
+	static void isr1(void) { update(interruptArgs[1], &error); }
 	#endif
 	#ifdef CORE_INT2_PIN
-	static void isr2(void) { update(interruptArgs[2]); }
+	static void isr2(void) { update(interruptArgs[2], &error); }
 	#endif
 	#ifdef CORE_INT3_PIN
-	static void isr3(void) { update(interruptArgs[3]); }
+	static void isr3(void) { update(interruptArgs[3], &error); }
 	#endif
 	#ifdef CORE_INT4_PIN
-	static void isr4(void) { update(interruptArgs[4]); }
+	static void isr4(void) { update(interruptArgs[4], &error); }
 	#endif
 	#ifdef CORE_INT5_PIN
-	static void isr5(void) { update(interruptArgs[5]); }
+	static void isr5(void) { update(interruptArgs[5], &error); }
 	#endif
 	#ifdef CORE_INT6_PIN
-	static void isr6(void) { update(interruptArgs[6]); }
+	static void isr6(void) { update(interruptArgs[6], &error); }
 	#endif
 	#ifdef CORE_INT7_PIN
-	static void isr7(void) { update(interruptArgs[7]); }
+	static void isr7(void) { update(interruptArgs[7], &error); }
 	#endif
 	#ifdef CORE_INT8_PIN
-	static void isr8(void) { update(interruptArgs[8]); }
+	static void isr8(void) { update(interruptArgs[8], &error); }
 	#endif
 	#ifdef CORE_INT9_PIN
-	static void isr9(void) { update(interruptArgs[9]); }
+	static void isr9(void) { update(interruptArgs[9], &error); }
 	#endif
 	#ifdef CORE_INT10_PIN
-	static void isr10(void) { update(interruptArgs[10]); }
+	static void isr10(void) { update(interruptArgs[10], &error); }
 	#endif
 	#ifdef CORE_INT11_PIN
-	static void isr11(void) { update(interruptArgs[11]); }
+	static void isr11(void) { update(interruptArgs[11], &error); }
 	#endif
 	#ifdef CORE_INT12_PIN
-	static void isr12(void) { update(interruptArgs[12]); }
+	static void isr12(void) { update(interruptArgs[12], &error); }
 	#endif
 	#ifdef CORE_INT13_PIN
-	static void isr13(void) { update(interruptArgs[13]); }
+	static void isr13(void) { update(interruptArgs[13], &error); }
 	#endif
 	#ifdef CORE_INT14_PIN
-	static void isr14(void) { update(interruptArgs[14]); }
+	static void isr14(void) { update(interruptArgs[14], &error); }
 	#endif
 	#ifdef CORE_INT15_PIN
-	static void isr15(void) { update(interruptArgs[15]); }
+	static void isr15(void) { update(interruptArgs[15], &error); }
 	#endif
 	#ifdef CORE_INT16_PIN
-	static void isr16(void) { update(interruptArgs[16]); }
+	static void isr16(void) { update(interruptArgs[16], &error); }
 	#endif
 	#ifdef CORE_INT17_PIN
-	static void isr17(void) { update(interruptArgs[17]); }
+	static void isr17(void) { update(interruptArgs[17], &error); }
 	#endif
 	#ifdef CORE_INT18_PIN
-	static void isr18(void) { update(interruptArgs[18]); }
+	static void isr18(void) { update(interruptArgs[18], &error); }
 	#endif
 	#ifdef CORE_INT19_PIN
-	static void isr19(void) { update(interruptArgs[19]); }
+	static void isr19(void) { update(interruptArgs[19], &error); }
 	#endif
 	#ifdef CORE_INT20_PIN
-	static void isr20(void) { update(interruptArgs[20]); }
+	static void isr20(void) { update(interruptArgs[20], &error); }
 	#endif
 	#ifdef CORE_INT21_PIN
-	static void isr21(void) { update(interruptArgs[21]); }
+	static void isr21(void) { update(interruptArgs[21], &error); }
 	#endif
 	#ifdef CORE_INT22_PIN
-	static void isr22(void) { update(interruptArgs[22]); }
+	static void isr22(void) { update(interruptArgs[22], &error); }
 	#endif
 	#ifdef CORE_INT23_PIN
-	static void isr23(void) { update(interruptArgs[23]); }
+	static void isr23(void) { update(interruptArgs[23], &error); }
 	#endif
 	#ifdef CORE_INT24_PIN
-	static void isr24(void) { update(interruptArgs[24]); }
+	static void isr24(void) { update(interruptArgs[24], &error); }
 	#endif
 	#ifdef CORE_INT25_PIN
-	static void isr25(void) { update(interruptArgs[25]); }
+	static void isr25(void) { update(interruptArgs[25], &error); }
 	#endif
 	#ifdef CORE_INT26_PIN
-	static void isr26(void) { update(interruptArgs[26]); }
+	static void isr26(void) { update(interruptArgs[26], &error); }
 	#endif
 	#ifdef CORE_INT27_PIN
-	static void isr27(void) { update(interruptArgs[27]); }
+	static void isr27(void) { update(interruptArgs[27], &error); }
 	#endif
 	#ifdef CORE_INT28_PIN
-	static void isr28(void) { update(interruptArgs[28]); }
+	static void isr28(void) { update(interruptArgs[28], &error); }
 	#endif
 	#ifdef CORE_INT29_PIN
-	static void isr29(void) { update(interruptArgs[29]); }
+	static void isr29(void) { update(interruptArgs[29], &error); }
 	#endif
 	#ifdef CORE_INT30_PIN
-	static void isr30(void) { update(interruptArgs[30]); }
+	static void isr30(void) { update(interruptArgs[30], &error); }
 	#endif
 	#ifdef CORE_INT31_PIN
-	static void isr31(void) { update(interruptArgs[31]); }
+	static void isr31(void) { update(interruptArgs[31], &error); }
 	#endif
 	#ifdef CORE_INT32_PIN
-	static void isr32(void) { update(interruptArgs[32]); }
+	static void isr32(void) { update(interruptArgs[32], &error); }
 	#endif
 	#ifdef CORE_INT33_PIN
-	static void isr33(void) { update(interruptArgs[33]); }
+	static void isr33(void) { update(interruptArgs[33], &error); }
 	#endif
 	#ifdef CORE_INT34_PIN
-	static void isr34(void) { update(interruptArgs[34]); }
+	static void isr34(void) { update(interruptArgs[34], &error); }
 	#endif
 	#ifdef CORE_INT35_PIN
-	static void isr35(void) { update(interruptArgs[35]); }
+	static void isr35(void) { update(interruptArgs[35], &error); }
 	#endif
 	#ifdef CORE_INT36_PIN
-	static void isr36(void) { update(interruptArgs[36]); }
+	static void isr36(void) { update(interruptArgs[36], &error); }
 	#endif
 	#ifdef CORE_INT37_PIN
-	static void isr37(void) { update(interruptArgs[37]); }
+	static void isr37(void) { update(interruptArgs[37], &error); }
 	#endif
 	#ifdef CORE_INT38_PIN
-	static void isr38(void) { update(interruptArgs[38]); }
+	static void isr38(void) { update(interruptArgs[38], &error); }
 	#endif
 	#ifdef CORE_INT39_PIN
-	static void isr39(void) { update(interruptArgs[39]); }
+	static void isr39(void) { update(interruptArgs[39], &error); }
 	#endif
 	#ifdef CORE_INT40_PIN
-	static void isr40(void) { update(interruptArgs[40]); }
+	static void isr40(void) { update(interruptArgs[40], &error); }
 	#endif
 	#ifdef CORE_INT41_PIN
-	static void isr41(void) { update(interruptArgs[41]); }
+	static void isr41(void) { update(interruptArgs[41], &error); }
 	#endif
 	#ifdef CORE_INT42_PIN
-	static void isr42(void) { update(interruptArgs[42]); }
+	static void isr42(void) { update(interruptArgs[42], &error); }
 	#endif
 	#ifdef CORE_INT43_PIN
-	static void isr43(void) { update(interruptArgs[43]); }
+	static void isr43(void) { update(interruptArgs[43], &error); }
 	#endif
 	#ifdef CORE_INT44_PIN
-	static void isr44(void) { update(interruptArgs[44]); }
+	static void isr44(void) { update(interruptArgs[44], &error); }
 	#endif
 	#ifdef CORE_INT45_PIN
-	static void isr45(void) { update(interruptArgs[45]); }
+	static void isr45(void) { update(interruptArgs[45], &error); }
 	#endif
 	#ifdef CORE_INT46_PIN
-	static void isr46(void) { update(interruptArgs[46]); }
+	static void isr46(void) { update(interruptArgs[46], &error); }
 	#endif
 	#ifdef CORE_INT47_PIN
-	static void isr47(void) { update(interruptArgs[47]); }
+	static void isr47(void) { update(interruptArgs[47], &error); }
 	#endif
 	#ifdef CORE_INT48_PIN
-	static void isr48(void) { update(interruptArgs[48]); }
+	static void isr48(void) { update(interruptArgs[48], &error); }
 	#endif
 	#ifdef CORE_INT49_PIN
-	static void isr49(void) { update(interruptArgs[49]); }
+	static void isr49(void) { update(interruptArgs[49], &error); }
 	#endif
 	#ifdef CORE_INT50_PIN
-	static void isr50(void) { update(interruptArgs[50]); }
+	static void isr50(void) { update(interruptArgs[50], &error); }
 	#endif
 	#ifdef CORE_INT51_PIN
-	static void isr51(void) { update(interruptArgs[51]); }
+	static void isr51(void) { update(interruptArgs[51], &error); }
 	#endif
 	#ifdef CORE_INT52_PIN
-	static void isr52(void) { update(interruptArgs[52]); }
+	static void isr52(void) { update(interruptArgs[52], &error); }
 	#endif
 	#ifdef CORE_INT53_PIN
-	static void isr53(void) { update(interruptArgs[53]); }
+	static void isr53(void) { update(interruptArgs[53], &error); }
 	#endif
 	#ifdef CORE_INT54_PIN
-	static void isr54(void) { update(interruptArgs[54]); }
+	static void isr54(void) { update(interruptArgs[54], &error); }
 	#endif
 	#ifdef CORE_INT55_PIN
-	static void isr55(void) { update(interruptArgs[55]); }
+	static void isr55(void) { update(interruptArgs[55], &error); }
 	#endif
 	#ifdef CORE_INT56_PIN
-	static void isr56(void) { update(interruptArgs[56]); }
+	static void isr56(void) { update(interruptArgs[56], &error); }
 	#endif
 	#ifdef CORE_INT57_PIN
-	static void isr57(void) { update(interruptArgs[57]); }
+	static void isr57(void) { update(interruptArgs[57], &error); }
 	#endif
 	#ifdef CORE_INT58_PIN
-	static void isr58(void) { update(interruptArgs[58]); }
+	static void isr58(void) { update(interruptArgs[58], &error); }
 	#endif
 	#ifdef CORE_INT59_PIN
-	static void isr59(void) { update(interruptArgs[59]); }
+	static void isr59(void) { update(interruptArgs[59], &error); }
 	#endif
 #endif
 };

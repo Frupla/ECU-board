@@ -1,0 +1,1 @@
+Slet FlexCAN.h + FlexCAN.cpp fra standard arduino libraries (Program files eller noget), og benyt istedet det fra ecocar's git.

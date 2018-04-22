@@ -148,7 +148,7 @@ private:
 	Encoder_internal_state_t encoder;
 
 	// irene(1) to be set high if there is an error
-	static bool error; // asger(1) Det her betyder at vi kun kan have én encoder sluttet til.
+	static bool error; // asger(1) Det her betyder at vi kun kan have én encoder sluttet til.  irene: kunne vi evt bare lade vaer med at g;re den statisk
 	// Vi kunne self lave en array: error[num_pins] og så bare kun ændre error for den pin. 
 	
 

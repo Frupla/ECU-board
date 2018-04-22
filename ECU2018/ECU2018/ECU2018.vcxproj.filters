@@ -19,8 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ECU2018.ino" />
-    <None Include="position.cpp.rej" />
-    <None Include="RCa02928" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.ECU2018.vsarduino.h">
@@ -86,6 +84,18 @@
     <ClInclude Include="sources\Encoder-master\interrupt_pins.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sources\ignition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\ingAndinjArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\injection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\position.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="position.cpp">
@@ -131,6 +141,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\Encoder-master\Encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\ignition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\ingAndinjArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\injection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

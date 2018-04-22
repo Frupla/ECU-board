@@ -9,7 +9,8 @@
 #include "WProgram.h"
 #endif
 
-#include "Encoder.h"
+#include "Encoder-master/Encoder.h"
+#include "autoGear.h"
 // We should probalby move this to the main?
 
 // Magic numbers

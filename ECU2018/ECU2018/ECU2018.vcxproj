@@ -47,7 +47,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\ECU2018;$(ProjectDir)..\..\..\..\..\..\OneDrive\Dokumenter\Arduino\libraries\Canlib;$(ProjectDir)..\..\..\..\..\..\OneDrive\Dokumenter\Arduino\libraries\FlexCAN;$(ProjectDir)..\..\..\..\..\..\OneDrive\Dokumenter\Arduino\libraries\Tunes;$(ProjectDir)..\..\..\..\..\..\OneDrive\Dokumenter\Arduino\libraries\ArduinoJson\src;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\libraries\Encoder;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\libraries;$(ProjectDir)..\..\..\..\..\..\OneDrive\Dokumenter\Arduino\libraries;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\avr;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\util;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\utils;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\avr;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\tools\arm\arm-none-eabi\include;$(ProjectDir)..\..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\ECU2018;$(ProjectDir)..\..\..\..\Arduino\libraries\ArduinoJson\src;$(ProjectDir)..\..\..\..\Arduino\libraries\Canlib;$(ProjectDir)..\..\..\..\Arduino\libraries\Tunes;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\libraries;$(ProjectDir)..\..\..\..\Arduino\libraries;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\libraries;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\avr;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\util;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\utils;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy\avr\cores\teensy3\avr;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\tools\arm\arm-none-eabi\include;$(ProjectDir)..\..\..\..\..\..\..\Program Files (x86)\Arduino\hardware\teensy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>$(ProjectDir)__vm\.ECU2018.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
       <PreprocessorDefinitions>__HARDWARE_MK66fx1m0__;__HARDWARE_MK66FX1M0__;__MK66FX1M0__;TEENSYDUINO=141;ARDUINO=10805;F_CPU=180000000;USB_SERIAL;LAYOUT_US_ENGLISH;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -80,8 +80,6 @@
     <None Include="ECU2018.ino">
       <FileType>CppCode</FileType>
     </None>
-    <None Include="position.cpp.rej" />
-    <None Include="RCa02928" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ignition.h" />
@@ -98,10 +96,14 @@
     <ClInclude Include="sources\Encoder-master\utility\interrupt_config.h" />
     <ClInclude Include="sources\Encoder-master\utility\interrupt_pins.h" />
     <ClInclude Include="sources\global.h" />
+    <ClInclude Include="sources\ignition.h" />
+    <ClInclude Include="sources\ingAndinjArray.h" />
+    <ClInclude Include="sources\injection.h" />
     <ClInclude Include="sources\inout.h" />
     <ClInclude Include="sources\LEDs.h" />
     <ClInclude Include="sources\motorCAN.h" />
     <ClInclude Include="sources\my_queue.h" />
+    <ClInclude Include="sources\position.h" />
     <ClInclude Include="sources\rs232.h" />
     <ClInclude Include="sources\rs232sync.h" />
     <ClInclude Include="__vm\.ECU2018.vsarduino.h" />
@@ -116,10 +118,14 @@
     <ClCompile Include="sources\bluetooth.cpp" />
     <ClCompile Include="sources\Encoder-master\Encoder.cpp" />
     <ClCompile Include="sources\global.cpp" />
+    <ClCompile Include="sources\ignition.cpp" />
+    <ClCompile Include="sources\ingAndinjArray.cpp" />
+    <ClCompile Include="sources\injection.cpp" />
     <ClCompile Include="sources\inout.cpp" />
     <ClCompile Include="sources\LEDs.cpp" />
     <ClCompile Include="sources\motorCAN.cpp" />
     <ClCompile Include="sources\my_queue.cpp" />
+    <ClCompile Include="sources\position.cpp" />
     <ClCompile Include="sources\rs232.cpp" />
     <ClCompile Include="sources\rs232sync.cpp" />
   </ItemGroup>

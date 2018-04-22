@@ -13,6 +13,8 @@
 
 #define MAX_RPM 7000
 #define DWELL_TIME 5.42
+double START_TIME;
+
 
 //double IGNITION_TIMING;
 //double IGNITION_DWELL;

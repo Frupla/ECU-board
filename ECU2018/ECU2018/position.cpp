@@ -119,6 +119,7 @@ void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t 
 	encoder_Z = 0;
 	encoder_Z_time = 0;
 	encoder_Z_time_old = 0;
+	attachInterrupt(digitalPinToInterrupt(encoder_pin_Z), altEncoderInterrupthandlerZ, RISING);
 }
 
 int altEncoderPositionEngine()
@@ -126,7 +127,7 @@ int altEncoderPositionEngine()
 	return autoPosition->read();
 }	
 
-void AltEncoderInterrupthandlerZ() {
+void altEncoderInterrupthandlerZ() {
 	encoder_Z++;
 	autoPosition->write(calibration_variable); // hopefully correcting so TDC2 is 0
 	encoder_Z_time_old = encoder_Z_time;

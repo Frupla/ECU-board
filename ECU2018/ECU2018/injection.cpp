@@ -58,12 +58,14 @@ float calcMass(long angle){
 }
 
 float injectionCheck(double startAngle, double stopAngle, double posAngle){
-	if (startAngle <= posAngle && posAngle <= stopAngle) {
+	if (!digitalRead(inject_pin) && posAngle >= startAngle) {
 		startInj();
 		return 0;
 	}
-	else {
+	//Check if we've passed the dwell angle, where we discharge the coil
+	if (digitalRead(inject_pin) && posAngle >= stopAngle) {
 		stopInj();
 		return calcMass(posAngle - startAngle);
 	}
+	return 0;
 }

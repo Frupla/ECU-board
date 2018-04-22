@@ -15,6 +15,7 @@
 
 //functioner
 int canInjectionRun(double RPM);
+float injectionCheck(double start, double stop, double pos);
 double findAngle_injection(double RPM, float potentiometer);
 void startInj();
 void stopInj();

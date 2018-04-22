@@ -1,4 +1,4 @@
-// ingAndinjArray.h
+// ingAndinjArray.h, yes this is the optimal name
 
 #ifndef _INGANDINJARRAY_h
 #define _INGANDINJARRAY_h

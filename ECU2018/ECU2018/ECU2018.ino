@@ -115,6 +115,13 @@ float fuelMass = 0;
 float potentiometer = 0;
 int startInjection = 0;
 
+//Postion variables used for ign and inj
+double startAngle_inj = 0;
+double stopAngle_inj = 0;
+double startAngle_ign = 0;
+double stopAngle_ign = 0;
+double posAngle = 0;
+
 //More variables
 float RPM = 0;
 
@@ -169,6 +176,7 @@ void setup() {
 /*===========*/
 uint32_t speedTiming = 0;
 float lastDist = 0;
+int injectionRunning = 0;
 
 // the loop function runs over and over again until power down or reset
 void loop() {
@@ -260,11 +268,15 @@ void loop() {
 	setInterjection(10);
 	RPM = encoderRPM();
 	//Find ud af hvornår vi skal starte injection, der er kodet til et start signal, men jeg ved ikke hvad timingen er på det
-	if (canInjectionRun(RPM) && startInjection) { //Start injection if we are below some threshold, and if we ask it to start
-		fuelMass = fuelMass + injectionRun(RPM, CAN.getMeasurement(RIO_POTENTIOMETER)); //How do you get the potentimeter? Is it like this?
-		startInjection = 0;
-	}
+	
+	fuelMass = fuelMass + injectionCheck(startAngle_inj, stopAngle_inj, posAngle);
+
 	//Print current fuelMass somehow
+
+	if (friskFlag69) {
+		//calcualte ignition & injection stiff
+		friskFlag69 = false;
+	}
 
 	// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib
 	Serial.print("A: ");

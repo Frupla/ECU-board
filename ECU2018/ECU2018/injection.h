@@ -15,11 +15,10 @@
 
 //functioner
 int canInjectionRun(double RPM);
-uint32_t findTime(double RPM, float potentiometer);
-void start();
-void stop();
+double findAngle_injection(double RPM, float potentiometer);
+void startInj();
+void stopInj();
 float calcMass(long time);
-float injectionRun(double RPM, float potentiometer);
 void setSlope(float newSlope);
 void setInterjection(float newInterjection);
 void setMAXRPM(float newMAXRPM);

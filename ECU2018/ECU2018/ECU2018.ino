@@ -118,6 +118,10 @@ int startInjection = 0;
 //More variables
 float RPM = 0;
 
+//variables for tests
+int lastRPMprint = 0;
+
+
 void setup() {
 	/* Initializations */
 	// Initialize USB communication
@@ -262,13 +266,20 @@ void loop() {
 	}
 	//Print current fuelMass somehow
 
-	// test kode til position
+	// test kode til af vores helt egen position kode
 	Serial.print("A: ");
 	Serial.println(encoderPosition_A());
 	Serial.print("B: ");
 	Serial.println(encoderPosition_B());
 	Serial.print("Z: ");
 	Serial.println(encoderPosition_Z());
+	if (millis() - lastRPMprint >= 10000); {
+		Serial.print("RPM: ");
+		Serial.println(RPM);
+	}
+
+	// test kode til position kode der bruger Encoder lib
+
 }
 
 // Herfra og ned, skamløst kopieret fra motorboard 2017:

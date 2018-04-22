@@ -16,6 +16,7 @@ typedef struct INTERPOLATION_CONSTANTS {
 	uint close;
 	double increment;
 } INTERPOL;
+
 extern uint32_t ignitionArray[25];
 extern uint32_t injectionArray[25];
 INTERPOL interpolation_map(double rpm);

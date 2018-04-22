@@ -13,10 +13,10 @@
 
 //Constants
 //for the calculation of the mass of fuel based on time
-float a;
-float b;
-// m = a * t + b
-int MAXRPM; //Should be given by the mek's
+float slope;
+float interjection;
+// m = slope * t + interjection
+float MAXRPM; //Should be given by the mek's
 INTERPOL injection;
 
 

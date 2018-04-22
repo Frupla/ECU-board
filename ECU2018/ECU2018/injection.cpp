@@ -35,7 +35,7 @@ void stop() {
 }
 
 float calcMass(long time){
-	return a * time + b; //calculate mass of fuel based on time
+	return slope * time + interjection; //calculate mass of fuel based on time
 }
 
 float injectionRun(double RPM, float potentiometer) { //takes us through every step described above

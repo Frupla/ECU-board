@@ -15,7 +15,7 @@ Author:	Ejer
 float MAXRPM;
 float DWELL_TIME = 5.42;
 
-double calculate_ignition_time(double rpm) {
+double ignition_time_angle(double rpm) {
 	INTERPOL IGNITION = interpolation_map(rpm);
 	double xlow = ignitionArray[IGNITION.lower];
 	double xhigh = ignitionArray[IGNITION.upper];
@@ -24,7 +24,7 @@ double calculate_ignition_time(double rpm) {
 	return IGNITION_TIME;
 }
 
-double calculate_ignition_dwell(double rpm) {
+double ignition_dwell_angle(double rpm) {
 	double dwell_angle = (360 * rpm*DWELL_TIME) / 60000;
 	return dwell_angle;
 }
@@ -45,28 +45,15 @@ int canIgnitionRun(double RPM) {
 	}
 }
 
-void ignitionRun(double RPM) {
-	if (canIgnitionRun(RPM)) {
-		stopIgnition();		//Stop the ignition
-
-		//Calculate charge start time AFTER the current micros().
-		START_TIME = calculate_ignition_time(RPM) - calculate_ignition_dwell(RPM) + micros();
-		//Wait for charge start
-		while(1!=2){
-			if (micros() >= START_TIME) {
-				break;
-			}
-		}
-		//Turn on ignition
+void ignitionCheck(double start_angle, double dwell_angle, double pos_angle) {
+	//Check if we've reached the start angle, where we start charging the coil
+	if (!digitalRead(ignition_pin) && pos_angle >= start_angle) {
 		startIgnition();
-
-		//Wait for ignition time
-		while (1!=2) {
-			if (micros() >= START_TIME+DWELL_TIME) {
-				break;
-			}
-		}
+	}
+	//Check if we've passed the dwell angle, where we discharge the coil
+	if (digitalRead(ignition_pin) && pos_angle >= dwell_angle) {
 		stopIgnition();
 	}
 }
+
 

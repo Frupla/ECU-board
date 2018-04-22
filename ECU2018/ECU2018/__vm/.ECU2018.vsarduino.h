@@ -63,5 +63,8 @@ typedef void *__builtin_va_list;
 
 #define NEW_H
 #include "ECU2018.ino"
+#include "sources\Encoder-master\examples\NoInterrupts\NoInterrupts.pde"
+#include "sources\Encoder-master\examples\SpeedTest\SpeedTest.pde"
+#include "sources\Encoder-master\examples\TwoKnobs\TwoKnobs.pde"
 #endif
 #endif

@@ -135,7 +135,7 @@ public:
 	}
 #endif
 	//irene(1) reading and resetting the error bool. Delete if this doesn't work.
-	void readError() {
+	bool readError() {
 		return error;
 	}
 

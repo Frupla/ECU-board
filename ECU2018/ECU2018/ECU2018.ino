@@ -32,7 +32,7 @@
 #include "sources/rs232sync.h"
 #include "sources/position.h"
 #include <Adafruit_SSD1306.h>
-#include "TeensyDelay.h"
+
 
 /*=============*/
 /* Definitions */
@@ -121,10 +121,10 @@ int startInjection = 0;
 
 //Postion variables used for ign and inj
 char startAngle_inj = 0;
-double  time_inj = 0;
+double  time_inj = 10;
 char startAngle_ign = 0;
 char stopAngle_ign = 0;
-char posAngle = 0;
+int32_t posAngle = 0;
 
 //More variables
 float RPM = 0;
@@ -201,28 +201,17 @@ void setup() {
 	//Encoder
 	initializeEncoder(A_PULSE, B_PULSE, Z_PULSE, encoder_calibration_variable);
 
+	//Set up timer for injection and ignition
+	TeensyDelay::begin();
+	initializeIgnition();
+	initializeInjection();
+
 	// Enable global interrupts
 	sei();
 
 	/* Play a song so we know we have started */
 	sing(STARTUP_MELODY_ID);
-	
-	//Set up to read pulses
-	pinMode(A_PULSE, INPUT);
-	pinMode(B_PULSE, INPUT);
-	pinMode(Z_PULSE, INPUT);
 
-	//Set up timer for 
-	TeensyDelay::begin();
-	initializeIgnition();
-	initializeInjection();
-}
-// callbackfunctions for ignition and ingection timing
-
-
-void turnOffInjection() {
-	stopIgnition();
-	//digitalWrite(ignition_pin, LOW); //irene: not sure which is best
 }
 
 /*===========*/
@@ -320,22 +309,21 @@ void loop() {
 	posAngle = encoderPositionEngine();
 	RPM = encoderRPM();
 
-	if (canInjectionRun(RPM)) {
-		injectionCheck(startAngle_inj, time_inj, posAngle);
-		ignitionCheck(startAngle_ign, stopAngle_ign, posAngle);
-	}
-	
 	if (getzPulseFlag()) {
 		startAngle_ign = ignition_time_angle(RPM);
-		stopAngle_ign = ignition_dwell_angle(RPM);
 		time_inj = findAngle_injection(RPM, CAN.getMeasurement(RIO_POTENTIOMETER));
-		fuelMass = fuelMass +  calcMass(time_inj);
+		fuelMass = fuelMass + calcMass(time_inj);
 		Serial.print("Fuel burned: ");
 		Serial.print(fuelMass);
 		Serial.print(" units\n");
 		setzPulseFlag(false);
 	}
 
+	if (canInjectionRun(RPM)) {
+		injectionCheck(startAngle_inj, time_inj, posAngle);
+		ignitionCheck(startAngle_ign, posAngle);
+	}
+	
 	//// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib
 	//Serial.print("A: ");
 	//Serial.println(encoderPosition_A());
@@ -355,19 +343,19 @@ void loop() {
 	//Serial.println(altEncoderPositionEngine());
 	loopsSinceOutput++;
 	forMeasuringLoopTime += (micros() - loopBeganAtMicros);
-	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 5000000) {
+	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
 		display.clearDisplay();
 		display.setCursor(0, 0);
-		display.print("AEngPos: ");
+		display.print("EngPos: ");
 		display.println(posAngle);
 		display.print("RPM: ");
 		display.println(RPM);
 		display.print("Loop speed: ");
 		display.println(forMeasuringLoopTime);
-		display.print("Loops/5s: ");
-		display.println(loopsSinceOutput);
+		display.print("B pulses: ");
+		display.println(encoderPosition_B());
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();

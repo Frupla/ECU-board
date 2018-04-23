@@ -8,7 +8,7 @@
 u_int encoder_A, encoder_B, encoder_Z;
 
 int calibration_variable;
-int encoder_position;
+int32_t encoder_position;
 bool zPulseFlag;
 
 uint8_t encoder_pin_A_intern;
@@ -67,7 +67,7 @@ int encoderPosition_Z()
 	return encoder_Z;
 }
 
-int encoderPositionEngine()
+int32_t encoderPositionEngine()
 {	
 	return encoder_position;
 }

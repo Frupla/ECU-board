@@ -3,6 +3,7 @@
 // 
 
 #include "injection.h"
+#define INJECTION_CHANNEL 1
 
 #define inject_pin 20//Might be 20, if it is "dyse" which I'm assuming it is
 //Constants
@@ -15,7 +16,7 @@ float MAXRPM; //Should be given by the mek's
 INTERPOL injection;
 
 void initializeInjection() {
-	TeensyDelay::addDelayChannel(stopInj(), inject_pin);
+	TeensyDelay::addDelayChannel(stopInj, INJECTION_CHANNEL);
 }
 
 void setSlope(float newSlope) {
@@ -31,7 +32,7 @@ void setMAXRPM(float newMAXRPM) {
 }
 
 int canInjectionRun(double RPM) {
-	if (RPM > MAXRPM){
+	if (RPM > MAXRPM || RPM == -1){
 		return 0;
 	}
 	else {
@@ -64,6 +65,6 @@ float calcMass(long angle){
 void injectionCheck(char startAngle, double  time, char posAngle){
 	if (!digitalRead(inject_pin) && posAngle >= startAngle) {
 		startInj();
-		TeensyDelay::trigger(time, inject_pin);
+		TeensyDelay::trigger(time, INJECTION_CHANNEL);
 	}
 }

@@ -270,14 +270,14 @@ void loop() {
 	}
 
 	RPM = encoderRPM();
-	if (getFriskFlag69()) {
+	if (getzPulseFlag()) {
 		Serial.print("Fuel burned: ");
 		Serial.print(fuelMass);
 		Serial.print(" units\n");
 		startAngle_ign = ignition_time_angle(RPM);
 		stopAngle_ign = ignition_dwell_angle(RPM);
 		stopAngle_inj = findAngle_injection(RPM, CAN.getMeasurement(RIO_POTENTIOMETER));
-		setFriskFlag69(false);
+		setzPulseFlag(false);
 	}
 
 	// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib

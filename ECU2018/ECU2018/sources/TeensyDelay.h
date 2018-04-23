@@ -1,5 +1,5 @@
 #pragma once
-#include "config.h"
+#include "TeensyDelayConfig.h"
 
 
 namespace TeensyDelay

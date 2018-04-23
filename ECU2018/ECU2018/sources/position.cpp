@@ -7,9 +7,9 @@
 
 u_int encoder_A, encoder_B, encoder_Z;
 
-char calibration_variable;
-char encoder_position;
-bool zPulseFlag; // tak frederik
+int calibration_variable;
+int encoder_position;
+bool zPulseFlag;
 
 uint8_t encoder_pin_A_intern;
 uint8_t encoder_pin_B_intern;
@@ -67,7 +67,7 @@ int encoderPosition_Z()
 	return encoder_Z;
 }
 
-char encoderPositionEngine()
+int encoderPositionEngine()
 {	
 	return encoder_position;
 }

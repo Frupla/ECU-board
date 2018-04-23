@@ -32,6 +32,7 @@
 #include "sources/rs232sync.h"
 #include "sources/position.h"
 #include <Adafruit_SSD1306.h>
+#include "TeensyDelay.h"
 
 /*=============*/
 /* Definitions */
@@ -120,7 +121,7 @@ int startInjection = 0;
 
 //Postion variables used for ign and inj
 char startAngle_inj = 0;
-char stopAngle_inj = 0;
+double  time_inj = 0;
 char startAngle_ign = 0;
 char stopAngle_ign = 0;
 char posAngle = 0;
@@ -211,6 +212,17 @@ void setup() {
 	pinMode(B_PULSE, INPUT);
 	pinMode(Z_PULSE, INPUT);
 
+	//Set up timer for 
+	TeensyDelay::begin();
+	initializeIgnition();
+	initializeInjection();
+}
+// callbackfunctions for ignition and ingection timing
+
+
+void turnOffInjection() {
+	stopIgnition();
+	//digitalWrite(ignition_pin, LOW); //irene: not sure which is best
 }
 
 /*===========*/
@@ -218,7 +230,6 @@ void setup() {
 /*===========*/
 uint32_t speedTiming = 0;
 float lastDist = 0;
-int injectionRunning = 0;
 
 // the loop function runs over and over again until power down or reset
 void loop() {
@@ -310,17 +321,18 @@ void loop() {
 	RPM = encoderRPM();
 
 	if (canInjectionRun(RPM)) {
-		fuelMass = fuelMass + injectionCheck(startAngle_inj, stopAngle_inj, posAngle);
+		injectionCheck(startAngle_inj, time_inj, posAngle);
 		ignitionCheck(startAngle_ign, stopAngle_ign, posAngle);
 	}
 	
 	if (getzPulseFlag()) {
+		startAngle_ign = ignition_time_angle(RPM);
+		stopAngle_ign = ignition_dwell_angle(RPM);
+		time_inj = findAngle_injection(RPM, CAN.getMeasurement(RIO_POTENTIOMETER));
+		fuelMass = fuelMass +  calcMass(time_inj);
 		Serial.print("Fuel burned: ");
 		Serial.print(fuelMass);
 		Serial.print(" units\n");
-		startAngle_ign = ignition_time_angle(RPM);
-		stopAngle_ign = ignition_dwell_angle(RPM);
-		stopAngle_inj = findAngle_injection(RPM, CAN.getMeasurement(RIO_POTENTIOMETER));
 		setzPulseFlag(false);
 	}
 

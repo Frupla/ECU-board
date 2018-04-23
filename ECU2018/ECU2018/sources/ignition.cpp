@@ -4,6 +4,7 @@
 // Antænd mig
 #include "ignition.h"
 
+
 #define ignition_pin 21 //Under antagelsen at "tænding" er ignition
 
 /*
@@ -13,6 +14,11 @@ Author:	Ejer
 */
 
 float DWELL_TIME = 5.42;
+
+
+void initializeIgnition() {
+	TeensyDelay::addDelayChannel(stopIgnition, ignition_pin);
+}
 
 char ignition_time_angle(double rpm) {
 	INTERPOL IGNITION = interpolation_map(rpm);
@@ -35,15 +41,18 @@ void stopIgnition() {
 	digitalWrite(ignition_pin, LOW); //Sends signal to stop ignition
 }
 
+
+
 void ignitionCheck(char start_angle, char dwell_angle, char pos_angle) {
 	//Check if we've reached the start angle, where we start charging the coil
 	if (!digitalRead(ignition_pin) && pos_angle >= start_angle) {
 		startIgnition();
+		TeensyDelay::trigger(ignition_time, 1); //TODO: involver Berk i hvordan der her goeres
 	}
 	//Check if we've passed the dwell angle, where we discharge the coil
-	if (digitalRead(ignition_pin) && pos_angle >= dwell_angle) {
-		stopIgnition();
-	}
+	//if (digitalRead(ignition_pin) && pos_angle >= dwell_angle) {
+	//	stopIgnition();
+	//}
 }
 
 

@@ -18,6 +18,7 @@
 //double IGNITION_DWELL;
 //double START_TIME; //asger - Was defined multiple times
 
+void initializeIgnition();
 char ignition_time_angle(double rpm);
 char ignition_dwell_angle(double rpm);
 void startIgnition();

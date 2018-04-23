@@ -47,7 +47,7 @@ void ignitionCheck(char start_angle, char dwell_angle, char pos_angle) {
 	//Check if we've reached the start angle, where we start charging the coil
 	if (!digitalRead(ignition_pin) && pos_angle >= start_angle) {
 		startIgnition();
-		TeensyDelay::trigger(ignition_time, 1); //TODO: involver Berk i hvordan der her goeres
+		TeensyDelay::trigger(DWELL_TIME, ignition_pin); 
 	}
 	//Check if we've passed the dwell angle, where we discharge the coil
 	//if (digitalRead(ignition_pin) && pos_angle >= dwell_angle) {

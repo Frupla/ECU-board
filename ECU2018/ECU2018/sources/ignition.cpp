@@ -14,17 +14,17 @@ Author:	Ejer
 
 float DWELL_TIME = 5.42;
 
-double ignition_time_angle(double rpm) {
+char ignition_time_angle(double rpm) {
 	INTERPOL IGNITION = interpolation_map(rpm);
 	double xlow = ignitionArray[IGNITION.lower];
 	double xhigh = ignitionArray[IGNITION.upper];
 	double xinc = IGNITION.increment;
-	double IGNITION_TIME = (xhigh - xlow)*xinc + xlow;
+	char IGNITION_TIME = (xhigh - xlow)*xinc + xlow;
 	return IGNITION_TIME;
 }
 
-double ignition_dwell_angle(double rpm) {
-	double dwell_angle = (360 * rpm*DWELL_TIME) / 60000;
+char ignition_dwell_angle(double rpm) {
+	char dwell_angle = (360 * rpm*DWELL_TIME) / 60000;
 	return dwell_angle;
 }
 void startIgnition() {
@@ -35,7 +35,7 @@ void stopIgnition() {
 	digitalWrite(ignition_pin, LOW); //Sends signal to stop ignition
 }
 
-void ignitionCheck(double start_angle, double dwell_angle, double pos_angle) {
+void ignitionCheck(char start_angle, char dwell_angle, char pos_angle) {
 	//Check if we've reached the start angle, where we start charging the coil
 	if (!digitalRead(ignition_pin) && pos_angle >= start_angle) {
 		startIgnition();

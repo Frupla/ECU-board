@@ -20,7 +20,7 @@ void initializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t enc
 int encoderPosition_A();
 int encoderPosition_B();
 int encoderPosition_Z();
-int encoderPositionEngine();
+char encoderPositionEngine();
 float encoderRPM();
 int encoderErrorCheck();
 void encoderInterrupthandlerA();

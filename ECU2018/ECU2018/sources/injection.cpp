@@ -36,12 +36,12 @@ int canInjectionRun(double RPM) {
 }
 
 
-double findAngle_injection(double RPM, float potentiometer) {
+char findAngle_injection(double RPM, float potentiometer) {
 	injection = interpolation_map(RPM);
 	uint xhigh = (uint)injectionArray[injection.upper];
 	uint xlow = (uint)injectionArray[injection.lower];
 	double xinc = injection.increment;
-	double time = (xhigh - xlow)*xinc + xlow;
+	char time = (xhigh - xlow)*xinc + xlow;
 	return ((360.0*RPM*time)/60000.0)*potentiometer;
 }
 
@@ -57,7 +57,7 @@ float calcMass(long angle){
 	return slope * angle + interjection; //calculate mass of fuel based on angle which correlates to time trust me guys
 }
 
-float injectionCheck(double startAngle, double stopAngle, double posAngle){
+float injectionCheck(char startAngle, char stopAngle, char posAngle){
 	if (!digitalRead(inject_pin) && posAngle >= startAngle) {
 		startInj();
 		return 0;

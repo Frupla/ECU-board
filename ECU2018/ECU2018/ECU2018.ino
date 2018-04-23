@@ -119,11 +119,11 @@ float potentiometer = 0;
 int startInjection = 0;
 
 //Postion variables used for ign and inj
-double startAngle_inj = 0;
-double stopAngle_inj = 0;
-double startAngle_ign = 0;
-double stopAngle_ign = 0;
-double posAngle = 0;
+char startAngle_inj = 0;
+char stopAngle_inj = 0;
+char startAngle_ign = 0;
+char stopAngle_ign = 0;
+char posAngle = 0;
 
 //More variables
 float RPM = 0;

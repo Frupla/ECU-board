@@ -31,6 +31,7 @@
 #include "sources/rs232.h"
 #include "sources/rs232sync.h"
 #include "sources/position.h"
+#include <Adafruit_SSD1306.h>
 
 /*=============*/
 /* Definitions */
@@ -41,6 +42,8 @@
 #define Z_PULSE 28 //Z pulse
 #define CANBUS_TX 33
 #define CANBUS_RX 34
+#define OLED_RESET 4
+
 
 /* Pins jeg ikke ved noget om
 adc.h -> Brake sensor pin    :    Har vi den stadig, og hvad laver den?
@@ -127,6 +130,36 @@ float RPM = 0;
 
 //variables for tests
 int lastRPMprint = 0;
+uint32_t loopBeganAtMicros = 0;
+uint32_t loopsSinceOutput = 0;
+uint32_t timeAtLastDisplayOutput = 0;
+uint32_t forMeasuringLoopTime = 0;
+
+// Display 
+Adafruit_SSD1306 display(OLED_RESET);
+#define LOGO16_GLCD_HEIGHT 16 
+#define LOGO16_GLCD_WIDTH  16 
+static const unsigned char PROGMEM logo16_glcd_bmp[] =
+{ B00000000, B11000000,
+B00000001, B11000000,
+B00000001, B11000000,
+B00000011, B11100000,
+B11110011, B11100000,
+B11111110, B11111000,
+B01111110, B11111111,
+B00110011, B10011111,
+B00011111, B11111100,
+B00001101, B01110000,
+B00011011, B10100000,
+B00111111, B11100000,
+B00111111, B11110000,
+B01111100, B11110000,
+B01110000, B01110000,
+B00000000, B00110000 };
+
+#if (SSD1306_LCDHEIGHT != 32)
+#error("Height incorrect, please fix Adafruit_SSD1306.h!");
+#endif
 
 
 void setup() {
@@ -152,6 +185,15 @@ void setup() {
 	blue_init();
 	// Initialize Buzzer
 	tunes_init(BUZZER_PIN);
+	// Initialize display
+	display.begin(SSD1306_SWITCHCAPVCC, 0x3C);  // initialize with the I2C addr 0x3C (for the 128x32)
+	display.display();
+	display.setTextSize(1);
+	display.setTextColor(WHITE);
+	display.clearDisplay();
+	display.setCursor(0, 0);
+	// Initialize encoder
+	//altInitializeEncoder(A_PULSE, B_PULSE, Z_PULSE, encoder_calibration_variable);
 
 	//wheelsensor
 	attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
@@ -180,6 +222,7 @@ int injectionRunning = 0;
 
 // the loop function runs over and over again until power down or reset
 void loop() {
+	loopBeganAtMicros = micros();
 	//test for front wheelsensor
 	/*if ((millis() - frontSpeedUpdate) > speedUpdate) {
 	frontSpeedUpdate = millis();
@@ -264,12 +307,13 @@ void loop() {
 	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
 
 	posAngle = encoderPositionEngine();
+	RPM = encoderRPM();
+
 	if (canInjectionRun(RPM)) {
 		fuelMass = fuelMass + injectionCheck(startAngle_inj, stopAngle_inj, posAngle);
 		ignitionCheck(startAngle_ign, stopAngle_ign, posAngle);
 	}
-
-	RPM = encoderRPM();
+	
 	if (getzPulseFlag()) {
 		Serial.print("Fuel burned: ");
 		Serial.print(fuelMass);
@@ -280,24 +324,42 @@ void loop() {
 		setzPulseFlag(false);
 	}
 
-	// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib
-	Serial.print("A: ");
-	Serial.println(encoderPosition_A());
-	Serial.print("B: ");
-	Serial.println(encoderPosition_B());
-	Serial.print("Z: ");
-	Serial.println(encoderPosition_Z());
-	Serial.print("engine pos: ");
-	Serial.println(encoderPositionEngine());
-	if (millis() - lastRPMprint >= 10000); {
-		Serial.print("RPM: ");
-		Serial.println(RPM);
-	}
+	//// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib
+	//Serial.print("A: ");
+	//Serial.println(encoderPosition_A());
+	//Serial.print("B: ");
+	//Serial.println(encoderPosition_B());
+	//Serial.print("Z: ");
+	//Serial.println(encoderPosition_Z());
+	//Serial.print("engine pos: ");
+	//Serial.println(encoderPositionEngine());
+	//if (millis() - lastRPMprint >= 10000); {
+	//	Serial.print("RPM: ");
+	//	Serial.println(RPM);
+	//}
 
 	// test kode til position kode der bruger Encoder lib
-	Serial.print("alt engine pos:");
-	Serial.println(altEncoderPositionEngine());
-
+	//Serial.print("alt engine pos:");
+	//Serial.println(altEncoderPositionEngine());
+	loopsSinceOutput++;
+	forMeasuringLoopTime += (micros() - loopBeganAtMicros);
+	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 5000000) {
+		timeAtLastDisplayOutput = loopBeganAtMicros;
+		forMeasuringLoopTime /= loopsSinceOutput;
+		display.clearDisplay();
+		display.setCursor(0, 0);
+		display.print("AEngPos: ");
+		display.println(posAngle);
+		display.print("RPM: ");
+		display.println(RPM);
+		display.print("Loop speed: ");
+		display.println(forMeasuringLoopTime);
+		display.print("Loops/5s: ");
+		display.println(loopsSinceOutput);
+		forMeasuringLoopTime = 0;
+		loopsSinceOutput = 0;
+		display.display();
+	}
 
 }
 

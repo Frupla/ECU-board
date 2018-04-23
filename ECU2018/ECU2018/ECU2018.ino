@@ -16,9 +16,9 @@
 /* Includes */
 /*==========*/
 
-#include "ingAndinjArray.h"
-#include "ignition.h"
-#include "injection.h"
+#include "sources/ingAndinjArray.h"
+#include "sources/ignition.h"
+#include "sources/injection.h"
 #include <canbus.h>
 #include <tunes.h>
 #include <ArduinoJson.h>
@@ -30,7 +30,7 @@
 #include "sources/motorCAN.h"
 #include "sources/rs232.h"
 #include "sources/rs232sync.h"
-#include "position.h"
+#include "sources/position.h"
 
 /*=============*/
 /* Definitions */
@@ -271,14 +271,14 @@ void loop() {
 
 	//Print current fuelMass somehow
 	RPM = encoderRPM();
-	if (friskFlag69) {
+	if (getFriskFlag69()) {
 		Serial.print("Fuel burned: ");
 		Serial.print(fuelMass);
 		Serial.print(" units\n");
 		startAngle_ign = ignition_time_angle(RPM);
 		stopAngle_ign = ignition_dwell_angle(RPM);
 		stopAngle_inj = findAngle_injection(RPM, CAN.getMeasurement(RIO_POTENTIOMETER));
-		friskFlag69 = false;
+		setFriskFlag69(false);
 	}
 
 	// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib

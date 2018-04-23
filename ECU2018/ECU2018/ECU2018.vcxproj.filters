@@ -19,14 +19,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ECU2018.ino" />
-    <None Include="position.cpp.rej" />
-    <None Include="RCa02928" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.ECU2018.vsarduino.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="position.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\adc.h">
@@ -59,15 +54,6 @@
     <ClInclude Include="sources\rs232sync.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="injection.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ingAndinjArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ignition.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sources\Encoder-master\utility\interrupt_config.h">
       <Filter>Header Files\Encoder_dependencies</Filter>
     </ClInclude>
@@ -86,11 +72,23 @@
     <ClInclude Include="sources\Encoder-master\interrupt_pins.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sources\ignition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\ingAndinjArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\injection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\position.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Encoder-master\utility\direct_pin_read.h">
+      <Filter>Header Files\Encoder_dependencies</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="position.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sources\adc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -121,16 +119,19 @@
     <ClCompile Include="sources\rs232sync.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="injection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ingAndinjArray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ignition.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sources\Encoder-master\Encoder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\ignition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\ingAndinjArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\injection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

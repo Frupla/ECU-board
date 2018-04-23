@@ -148,13 +148,22 @@ int altEncoderErrorCheck()
 		return EXIT_FAILURE;
 	}
 	return EXIT_SUCCESS;
-	}
+}
+
+bool getFriskFlag69() {
+	return friskFlag69;
+}
+
+void setFriskFlag69(bool what_to_be) {
+	friskFlag69 = what_to_be;
+}
 
 /* Uncomment if you comment out all the regular position code
 int encoderPosition_Z()
 {
 	return encoder_Z;
 }
+
 
 */
 

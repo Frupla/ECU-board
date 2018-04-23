@@ -129,7 +129,7 @@ public:
 	}
 #else
 	inline int32_t read() {
-		update(&encoder);
+		update(&encoder, error);
 		return encoder.position;
 	}
 	inline void write(int32_t p) {

@@ -199,7 +199,7 @@ void setup() {
 	//wheelsensor
 	attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
 	//Encoder
-	initializeEncoder(A_PULSE, B_PULSE, Z_PULSE, encoder_calibration_variable);
+	initializeEncoder(Z_PULSE, encoder_calibration_variable);
 
 	//Set up timer for injection and ignition
 	TeensyDelay::begin();
@@ -324,23 +324,6 @@ void loop() {
 		ignitionCheck(startAngle_ign, posAngle);
 	}
 	
-	//// test kode til af vores helt egen position kode - pls kør ikke sammen med Encoder lib
-	//Serial.print("A: ");
-	//Serial.println(encoderPosition_A());
-	//Serial.print("B: ");
-	//Serial.println(encoderPosition_B());
-	//Serial.print("Z: ");
-	//Serial.println(encoderPosition_Z());
-	//Serial.print("engine pos: ");
-	//Serial.println(encoderPositionEngine());
-	//if (millis() - lastRPMprint >= 10000); {
-	//	Serial.print("RPM: ");
-	//	Serial.println(RPM);
-	//}
-
-	// test kode til position kode der bruger Encoder lib
-	//Serial.print("alt engine pos:");
-	//Serial.println(altEncoderPositionEngine());
 	loopsSinceOutput++;
 	forMeasuringLoopTime += (micros() - loopBeganAtMicros);
 	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
@@ -355,7 +338,6 @@ void loop() {
 		display.print("Loop speed: ");
 		display.println(forMeasuringLoopTime);
 		display.print("B pulses: ");
-		display.println(encoderPosition_B());
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();

@@ -3,6 +3,7 @@
 // 
 
 #include "injection.h"
+#define INJECTION_CHANNEL 1
 
 #define inject_pin 20//Might be 20, if it is "dyse" which I'm assuming it is
 //Constants
@@ -13,6 +14,12 @@ float interjection;
 float MAXRPM; //Should be given by the mek's
 
 INTERPOL injection;
+
+void initializeInjection() {
+	pinMode(inject_pin, OUTPUT);
+	TeensyDelay::addDelayChannel(stopInj, INJECTION_CHANNEL);
+	stopInj();
+}
 
 void setSlope(float newSlope) {
 	slope = newSlope;
@@ -27,7 +34,7 @@ void setMAXRPM(float newMAXRPM) {
 }
 
 int canInjectionRun(double RPM) {
-	if (RPM > MAXRPM){
+	if (RPM > MAXRPM || RPM == -1){
 		return 0;
 	}
 	else {
@@ -36,13 +43,13 @@ int canInjectionRun(double RPM) {
 }
 
 
-char findAngle_injection(double RPM, float potentiometer) {
+double findAngle_injection(double RPM, float potentiometer) {
 	injection = interpolation_map(RPM);
 	uint xhigh = (uint)injectionArray[injection.upper];
 	uint xlow = (uint)injectionArray[injection.lower];
 	double xinc = injection.increment;
-	char time = (xhigh - xlow)*xinc + xlow;
-	return ((360.0*RPM*time)/60000.0)*potentiometer;
+	double time = (xhigh - xlow)*xinc + xlow;
+	return time*potentiometer;
 }
 
 void startInj(){
@@ -57,15 +64,9 @@ float calcMass(long angle){
 	return slope * angle + interjection; //calculate mass of fuel based on angle which correlates to time trust me guys
 }
 
-float injectionCheck(char startAngle, char stopAngle, char posAngle){
+void injectionCheck(char startAngle, double  time, char posAngle){
 	if (!digitalRead(inject_pin) && posAngle >= startAngle) {
 		startInj();
-		return 0;
+		TeensyDelay::trigger(time, INJECTION_CHANNEL);
 	}
-	//Check if we've passed the dwell angle, where we discharge the coil
-	if (digitalRead(inject_pin) && posAngle >= stopAngle) {
-		stopInj();
-		return calcMass(posAngle - startAngle);
-	}
-	return 0;
 }

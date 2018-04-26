@@ -9,30 +9,36 @@
 #include "WProgram.h"
 #endif
 
-#include "Encoder-master/Encoder.h"
+
 #include "autoGear.h"
+#include "QuadDecodeSimple.h"
+
 // We should probalby move this to the main?
 
 // Magic numbers
 
 //our own:
-void initializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var);
-int encoderPosition_A();
-int encoderPosition_B();
-int encoderPosition_Z();
-char encoderPositionEngine();
+void initializeEncoder(uint8_t encoder_pin_Z, int calib_var);
+int altEncoderPosition_A();
+int altEncoderPosition_B();
+int altEncoderPosition_Z();
+int16_t encoderPositionEngine();
 float encoderRPM();
-int encoderErrorCheck();
-void encoderInterrupthandlerA();
-void encoderInterrupthandlerB();
+int altEncoderErrorCheck();
+void altEncoderInterrupthandlerA();
+void altEncoderInterrupthandlerB();
+void altEncoderInterrupthandlerZ();
 void encoderInterrupthandlerZ();
+
+int16_t encoderPositionWheel();
+void resetEncoderWheel(int16_t reset_to);
 
 bool getzPulseFlag();
 void setzPulseFlag(bool what_to_be);
 
 //using Encoder lib
 void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var);
-int altEncoderPositionEngine();
+int32_t altEncoderPositionEngine();
 void altEncoderInterrupthandlerZ();
 
 #endif

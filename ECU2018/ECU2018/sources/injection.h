@@ -10,13 +10,13 @@
 #endif
 
 #include "ingAndinjArray.h"
-
-
+#include "TeensyDelay.h"
 
 //functioner
+void initializeInjection();
 int canInjectionRun(double RPM);
-float injectionCheck(char start, char stop, char pos);
-char findAngle_injection(double RPM, float potentiometer);
+void injectionCheck(char start, double time, char pos);
+double findAngle_injection(double RPM, float potentiometer);
 void startInj();
 void stopInj();
 float calcMass(long time);

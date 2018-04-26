@@ -87,6 +87,15 @@
     <ClInclude Include="sources\Encoder-master\utility\direct_pin_read.h">
       <Filter>Header Files\Encoder_dependencies</Filter>
     </ClInclude>
+    <ClInclude Include="sources\TeensyDelay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\TeensyDelayConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\QuadDecodeSimple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\adc.cpp">
@@ -132,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\position.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\TeensyDelay.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

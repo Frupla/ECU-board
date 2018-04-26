@@ -344,8 +344,8 @@ void loop() {
 		display.println(posAngle);
 		display.print("RPM: ");
 		display.println(RPM);
-		display.print("Loop speed: ");
-		display.println(forMeasuringLoopTime);
+		display.print("startAngle_ign: ");
+		display.println((int)startAngle_ign);
 		display.print("Inj time:  ");
 		display.println(time_inj);
 		forMeasuringLoopTime = 0;

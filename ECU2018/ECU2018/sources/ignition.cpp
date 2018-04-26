@@ -13,7 +13,7 @@ Created:	4/16/2018 9:50:54 AM
 Author:	Ejer
 */
 
-float DWELL_TIME = 1000;
+float DWELL_TIME = 3000;
 
 
 void initializeIgnition() {

@@ -116,7 +116,7 @@ volatile uint32_t wheelcountv2 = 0;
 
 //Fuel consumption
 float fuelMass = 0;
-float potentiometer = 0;
+float potentiometer = 1;
 int startInjection = 0;
 
 //Postion variables used for ign and inj

@@ -8,10 +8,10 @@
 #define inject_pin 20//Might be 20, if it is "dyse" which I'm assuming it is
 //Constants
 //for the calculation of the mass of fuel based on time
-float slope;
-float interjection;
+float slope = 0.78;
+float interjection = 810.0;
 // m = slope * t + interjection
-float MAXRPM; //Should be given by the mek's
+float MAXRPM = 5000.0; //Should be given by the mek's
 
 INTERPOL injection;
 

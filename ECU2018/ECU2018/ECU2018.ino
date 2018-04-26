@@ -340,8 +340,6 @@ void loop() {
 	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
-		display.clearDisplay();
-		display.setCursor(0, 0);
 		display.print("EngPos: ");
 		display.println(posAngle);
 		display.print("RPM: ");
@@ -351,6 +349,8 @@ void loop() {
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();
+		display.clearDisplay();
+		display.setCursor(0, 0);
 	}
 
 }

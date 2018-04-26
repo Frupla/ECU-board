@@ -65,7 +65,7 @@ float calcMass(long angle){
 }
 
 void injectionCheck(char startAngle, double  time, char posAngle){
-	if (!digitalRead(inject_pin) && posAngle >= startAngle) {
+	if (!digitalRead(inject_pin) && (posAngle >= startAngle && posAngle <= startAngle + 10)) {
 		startInj();
 		TeensyDelay::trigger(time, INJECTION_CHANNEL);
 	}

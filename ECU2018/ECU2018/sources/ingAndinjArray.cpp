@@ -17,12 +17,6 @@ INTERPOL interpolation_map(double rpm) {
 	INTERPOLATION.lower = (int)RPM_DIVIDED;
 	INTERPOLATION.upper = INTERPOLATION.lower + 1;
 	INTERPOLATION.increment = RPM_DIVIDED - INTERPOLATION.lower;
-	Serial.println("lower: ");
-	Serial.println(INTERPOLATION.lower);
-	Serial.println("upper: ");
-	Serial.println(INTERPOLATION.upper);
-	Serial.println("inc: ");
-	Serial.println(INTERPOLATION.increment);
 	/*
 	for (int i = 0; i <= 25; i++) {
 		if (i >= RPM_DIVIDED) {

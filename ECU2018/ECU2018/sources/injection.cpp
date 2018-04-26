@@ -49,16 +49,6 @@ double findTime_injection(double RPM, float potentiometer) {
 	double xlow = injectionArray[injection.lower];
 	double xinc = injection.increment;
 	double time = (xhigh - xlow)*xinc + xlow;
-	Serial.println("Vi finder tiden");
-	Serial.println("lower: ");
-	Serial.println(xlow);
-	Serial.println("upper: ");
-	Serial.println(xhigh);
-	Serial.println("inc: ");
-	Serial.println(xinc);
-	Serial.println("time: ");
-	Serial.print(time/1000);
-	Serial.println("ms");
 	return time*potentiometer;
 }
 

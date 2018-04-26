@@ -23,11 +23,14 @@ QuadDecode_t QuadDecode;
 // coder 2 er motor RPM
 
 int16_t encoderPositionEngine() {
-	return QuadDecode.getCounter2();// % 720; // TODO: Same as the other todo
+	return (QuadDecode.getCounter2()/4) % 720; // TODO: Same as the other todo
+	// Divide by 4, because the hardware encoder counts on change on both channels. (4 counts per pulse)
+	// % by 720 for the calibration variable.
 }
 
 int16_t encoderPositionWheel() {
-	return QuadDecode.getCounter1();
+	return QuadDecode.getCounter1()/4;
+	// Divide by 4, because the hardware encoder counts on change on both channels. (4 counts per pulse)
 }
 
 void resetEncoderWheel(int16_t reset_to) {

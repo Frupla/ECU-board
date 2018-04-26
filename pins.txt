@@ -8,3 +8,6 @@ Encoder forbinder til:
 Encoder-A	29
 Encoder-B	30
 setppulse	28
+
+Injection 	20
+Ignition	21

@@ -13,7 +13,7 @@
 typedef struct INTERPOL {
 	uint lower;
 	uint upper;
-	uint close;
+	//uint close;
 	double increment;
 } INTERPOL;
 

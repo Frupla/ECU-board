@@ -13,7 +13,17 @@ uint32_t injectionArray[25] = {
 };
 INTERPOL interpolation_map(double rpm) {
 	double RPM_DIVIDED = rpm / 250;
-	INTERPOL INTERPOLATION;
+	INTERPOL INTERPOLATION; //Ny og bedre version af gamle kode, vi har optimeret og fjernet close
+	INTERPOLATION.lower = (int)RPM_DIVIDED;
+	INTERPOLATION.upper = INTERPOLATION.lower + 1;
+	INTERPOLATION.increment = RPM_DIVIDED - INTERPOLATION.lower;
+	Serial.println("lower: ");
+	Serial.println(INTERPOLATION.lower);
+	Serial.println("upper: ");
+	Serial.println(INTERPOLATION.upper);
+	Serial.println("inc: ");
+	Serial.println(INTERPOLATION.increment);
+	/*
 	for (int i = 0; i <= 25; i++) {
 		if (i >= RPM_DIVIDED) {
 			INTERPOLATION.lower = i - 1;
@@ -26,6 +36,6 @@ INTERPOL interpolation_map(double rpm) {
 			}
 			INTERPOLATION.increment = RPM_DIVIDED - INTERPOLATION.lower;
 		}
-	}
+	}*/
 	return INTERPOLATION;
 }

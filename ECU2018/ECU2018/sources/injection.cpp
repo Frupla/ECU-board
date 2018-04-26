@@ -43,12 +43,22 @@ int canInjectionRun(double RPM) {
 }
 
 
-double findAngle_injection(double RPM, float potentiometer) {
+double findTime_injection(double RPM, float potentiometer) {
 	injection = interpolation_map(RPM);
-	uint xhigh = (uint)injectionArray[injection.upper];
-	uint xlow = (uint)injectionArray[injection.lower];
+	double xhigh = injectionArray[injection.upper];
+	double xlow = injectionArray[injection.lower];
 	double xinc = injection.increment;
 	double time = (xhigh - xlow)*xinc + xlow;
+	Serial.println("Vi finder tiden");
+	Serial.println("lower: ");
+	Serial.println(xlow);
+	Serial.println("upper: ");
+	Serial.println(xhigh);
+	Serial.println("inc: ");
+	Serial.println(xinc);
+	Serial.println("time: ");
+	Serial.print(time/1000);
+	Serial.println("ms");
 	return time*potentiometer;
 }
 
@@ -66,6 +76,7 @@ float calcMass(long angle){
 
 void injectionCheck(char startAngle, double  time, char posAngle){
 	if (!digitalRead(inject_pin) && (posAngle >= startAngle && posAngle <= startAngle + 10)) {
+		Serial.println("Start af dyse");
 		startInj();
 		TeensyDelay::trigger(time, INJECTION_CHANNEL);
 	}

@@ -184,7 +184,7 @@ double getSpeed() {
 	float speed = speedQueue.getAverage();
 	//Serial.printf("Speed: %f km/h\n", speed * 3.6f);
 	//Serial.printf("DistanceCount: %d\n", distanceCount);
-	Serial.printf("%ld, %lld\n", millis(), distanceCount);
+	//Serial.printf("%ld, %lld\n", millis(), distanceCount);
 	return speed;
 }
 

@@ -167,6 +167,8 @@ void setup() {
 	/* Initializations */
 	// Initialize USB communication
 	Serial.begin(9600);
+	initializeIgnition();
+	initializeInjection();
 	// Initialize IO Pins
 	io_init();
 	// Initialize ADC
@@ -203,8 +205,6 @@ void setup() {
 
 	//Set up timer for injection and ignition
 	TeensyDelay::begin();
-	initializeIgnition();
-	initializeInjection();
 
 
 	// Enable global interrupts
@@ -325,6 +325,7 @@ void loop() {
 		injection_flag = true;
 	}
 
+
 	if (canInjectionRun(RPM) && injection_flag){
 		injectionCheck(startAngle_inj, time_inj, posAngle);
 		injection_flag = false;
@@ -346,6 +347,8 @@ void loop() {
 		display.println(RPM);
 		display.print("Loop speed: ");
 		display.println(forMeasuringLoopTime);
+		display.print("Inj time:  ");
+		display.println(time_inj);
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();

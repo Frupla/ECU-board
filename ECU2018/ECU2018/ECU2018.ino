@@ -220,6 +220,9 @@ void setup() {
 /*===========*/
 uint32_t speedTiming = 0;
 float lastDist = 0;
+bool ignition_flag = false;
+bool injection_flag = false;
+
 
 // the loop function runs over and over again until power down or reset
 void loop() {
@@ -318,11 +321,18 @@ void loop() {
 		Serial.print(fuelMass);
 		Serial.print(" units\n");
 		setzPulseFlag(false);
+		ignition_flag = true;
+		injection_flag = true;
 	}
 
-	if (canInjectionRun(RPM)) {
+	if (canInjectionRun(RPM) && injection_flag){
 		injectionCheck(startAngle_inj, time_inj, posAngle);
+		injection_flag = false;
+	}
+
+	if (canInjectionRun(RPM) && ignition_flag) {
 		ignitionCheck(startAngle_ign, posAngle);
+		ignition_flag = false;
 	}
 	
 	loopsSinceOutput++;

@@ -11,7 +11,7 @@ uint32_t ignitionArray[25] = {
 uint32_t injectionArray[25] = {
 	6000, 4967, 5214, 6000, 6000, 4932, 6000, 4867, 4526, 4597, 4592, 4536, 4365, 4289, 4421, 4446, 4384,	4306, 4460, 4528, 4500,	4500, 4500, 4500, 4500//sample values, choosen based on advanced calculations
 };
-INTERPOL interpolation_map(double rpm) {
+INTERPOL interpolation_map(double rpm) { 
 	double RPM_DIVIDED = rpm / 250;
 	INTERPOL INTERPOLATION; //Ny og bedre version af gamle kode, vi har optimeret og fjernet close
 	INTERPOLATION.lower = (int)RPM_DIVIDED;

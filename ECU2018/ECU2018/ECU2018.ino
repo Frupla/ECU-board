@@ -337,7 +337,6 @@ void loop() {
 		display.println(RPM);
 		display.print("Loop speed: ");
 		display.println(forMeasuringLoopTime);
-		display.print("B pulses: ");
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();

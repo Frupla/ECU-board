@@ -12,6 +12,7 @@
 
 #include "autoGear.h"
 #include "QuadDecodeSimple.h"
+
 // We should probalby move this to the main?
 
 // Magic numbers
@@ -37,7 +38,7 @@ void setzPulseFlag(bool what_to_be);
 
 //using Encoder lib
 void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var);
-int altEncoderPositionEngine();
+int32_t altEncoderPositionEngine();
 void altEncoderInterrupthandlerZ();
 
 #endif

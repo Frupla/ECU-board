@@ -93,7 +93,7 @@
     <ClInclude Include="sources\TeensyDelayConfig.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="QuadDecodeSimple.h">
+    <ClInclude Include="sources\QuadDecodeSimple.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

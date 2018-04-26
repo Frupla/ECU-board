@@ -198,13 +198,15 @@ void setup() {
 	// Initialize encoder
 	//altInitializeEncoder(A_PULSE, B_PULSE, Z_PULSE, encoder_calibration_variable);
 
+	//Set up timer for injection and ignition
+	TeensyDelay::begin();
+
 	//wheelsensor
-	attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
+	//attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
 	//Encoder
 	initializeEncoder(Z_PULSE, encoder_calibration_variable);
 
-	//Set up timer for injection and ignition
-	TeensyDelay::begin();
+	
 
 
 	// Enable global interrupts
@@ -414,7 +416,8 @@ void ISR_WHEEL() {
 }
 
 float getDistancev2() {
-	return (wheelcountv2 * WHEEL_CIRCUMFERENCE) / NUMBER_OF_EDGES_PER_REVOLUTION;
+	//return (wheelcountv2 * WHEEL_CIRCUMFERENCE) / NUMBER_OF_EDGES_PER_REVOLUTION;
+	return ((encoderPositionWheel()/4) * WHEEL_CIRCUMFERENCE) / NUMBER_OF_EDGES_PER_REVOLUTION;
 }
 float getSpeedv2() {
 	static float lastDist = 0;

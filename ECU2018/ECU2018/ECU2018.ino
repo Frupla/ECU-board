@@ -206,9 +206,6 @@ void setup() {
 	//Encoder
 	initializeEncoder(Z_PULSE, encoder_calibration_variable);
 
-	
-
-
 	// Enable global interrupts
 	sei();
 

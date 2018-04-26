@@ -13,11 +13,13 @@ Created:	4/16/2018 9:50:54 AM
 Author:	Ejer
 */
 
-float DWELL_TIME = 5.42;
+float DWELL_TIME = 1000;
 
 
 void initializeIgnition() {
+	pinMode(ignition_pin, OUTPUT);
 	TeensyDelay::addDelayChannel(stopIgnition, IGNITION_CHANNEL);
+	stopIgnition();
 }
 
 char ignition_time_angle(double rpm) {
@@ -45,7 +47,7 @@ void stopIgnition() {
 
 void ignitionCheck(char start_angle, char pos_angle) {
 	//Check if we've reached the start angle, where we start charging the coil
-	if (!digitalRead(ignition_pin) && pos_angle >= start_angle) {
+	if (!digitalRead(ignition_pin) && (pos_angle >= start_angle && pos_angle <= start_angle + 5)) {
 		startIgnition();
 		TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL); 
 	}

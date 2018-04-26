@@ -23,7 +23,7 @@ QuadDecode_t QuadDecode;
 // coder 2 er motor RPM
 
 int16_t encoderPositionEngine() {
-	return QuadDecode.getCounter2() % 720; // TODO: Same as the other todo
+	return QuadDecode.getCounter2();// % 720; // TODO: Same as the other todo
 }
 
 int16_t encoderPositionWheel() {

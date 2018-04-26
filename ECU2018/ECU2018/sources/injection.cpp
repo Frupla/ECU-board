@@ -16,7 +16,9 @@ float MAXRPM; //Should be given by the mek's
 INTERPOL injection;
 
 void initializeInjection() {
+	pinMode(inject_pin, OUTPUT);
 	TeensyDelay::addDelayChannel(stopInj, INJECTION_CHANNEL);
+	stopInj();
 }
 
 void setSlope(float newSlope) {

@@ -120,7 +120,7 @@ float potentiometer = 0;
 int startInjection = 0;
 
 //Postion variables used for ign and inj
-char startAngle_inj = 0;
+char startAngle_inj = 20;
 double  time_inj = 10;
 char startAngle_ign = 0;
 char stopAngle_ign = 0;
@@ -205,6 +205,7 @@ void setup() {
 	TeensyDelay::begin();
 	initializeIgnition();
 	initializeInjection();
+
 
 	// Enable global interrupts
 	sei();
@@ -311,7 +312,7 @@ void loop() {
 
 	if (getzPulseFlag()) {
 		startAngle_ign = ignition_time_angle(RPM);
-		time_inj = findAngle_injection(RPM, CAN.getMeasurement(RIO_POTENTIOMETER));
+		time_inj = findAngle_injection(RPM, 1);//CAN.getMeasurement(RIO_POTENTIOMETER));
 		fuelMass = fuelMass + calcMass(time_inj);
 		Serial.print("Fuel burned: ");
 		Serial.print(fuelMass);

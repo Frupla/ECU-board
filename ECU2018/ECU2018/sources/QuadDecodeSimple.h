@@ -102,18 +102,16 @@ public:
 		// Pin Assignments
 
 		// FTM1 Pins
-		// K20 pin 28,29
+		// K20 pin 3,4
 		// Bit 8-10 is Alt Assignment
 		PORTA_PCR12 = 0x00000710;   //Alt7-QD_FTM1,FilterEnable,Pulldown
 		PORTA_PCR13 = 0x00000710;   //Alt7-QD_FTM1,FilterEnable,Pulldown
 
-									// FTM2 Pins
-									// K20 pin 41,42
-									// Bit 8-10 is Alt Assignment
-									//PORTB_PCR18 = 0x00000612;   //Alt6-QD_FTM2,FilterEnable,Pulldown
-									//PORTB_PCR19 = 0x00000612;   //Alt6-QD_FTM2,FilterEnable,Pulldown
-		PORTB_PCR18 = 0x00000610;
-		PORTB_PCR19 = 0x00000610;
+		// FTM2 Pins
+		// K20 pin 29,30
+		// Bit 8-10 is Alt Assignment							
+		PORTB_PCR18 = 0x00000610;	//Alt6-QD_FTM2,FilterEnable,Pulldown
+		PORTB_PCR19 = 0x00000610;	//Alt6-QD_FTM2,FilterEnable,Pulldown
 
 		//Set FTMEN to be able to write registers
 		FTM1_MODE = 0x04;	    // Write protect disable - reset value

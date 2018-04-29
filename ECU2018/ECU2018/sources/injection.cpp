@@ -66,7 +66,6 @@ float calcMass(long angle){
 
 void injectionCheck(char startAngle, double  time, char posAngle){
 	if (!digitalRead(inject_pin) && (posAngle >= startAngle && posAngle <= startAngle + 10)) {
-		Serial.println("Start af dyse");
 		startInj();
 		TeensyDelay::trigger(time, INJECTION_CHANNEL);
 	}

@@ -20,10 +20,10 @@
 //double START_TIME; //asger - Was defined multiple times
 
 void initializeIgnition();
-char ignition_time_angle(double rpm);
-char ignition_dwell_angle(double rpm);
+double ignition_time_angle(double rpm);
+double ignition_dwell_angle(double rpm);
 void startIgnition();
 void stopIgnition();
-void ignitionCheck(char start_angle, char pos_angle);
+bool ignitionCheck(char start_angle, char pos_angle);
 #endif
 

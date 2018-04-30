@@ -57,10 +57,10 @@ Engine Revolution Limit - RPM	= 5000
 Ignition Map
 --------------------------------------------------------------
 Engine Revolutions - RPM	Ignition Timing - CAD BTDC
-0				20
-250				20
-500				20
-750				20
+0					20
+250					20
+500					20
+750					20
 1000				20
 1250				20
 1500				20
@@ -69,8 +69,8 @@ Engine Revolutions - RPM	Ignition Timing - CAD BTDC
 2250				25
 2500				30
 2750				30
-3000				30
-3250				30
+3000				3
+03250				30
 3500				35
 3750				35
 4000				35
@@ -88,9 +88,9 @@ Gear Control
 --------------------------------------------------------------
 Gear Change Wait - ms		= 150
 Gear Change Limit - RPM		= 2800
-Neutral Gear Position - µs	= 178
-First Gear Position - µs	= 200
-Secondd Gear Position - µs	= 150
+Neutral Gear Position - Âµs	= 178
+First Gear Position - Âµs	= 200
+Secondd Gear Position - Âµs	= 150
 
 --------------------------------------------------------------
 Starter Control
@@ -101,17 +101,17 @@ Starter Limit - RPM	= 900
 Injection Control
 --------------------------------------------------------------
 Injection Timing - CAD BTDC	= 180
-Fuel Conversion Slope - µg/µs	= 0.780000
-Fuel Conversion Intercept - µg	= 810.000000
+Fuel Conversion Slope - Âµg/Âµs	= 0.780000
+Fuel Conversion Intercept - Âµg	= 810.000000
 
 --------------------------------------------------------------
 Injection Map
 --------------------------------------------------------------
-Engine Revolutions - RPM	Injection Length - µs
-0				6000
-250				4967
-500				5214
-750				6000
+Engine Revolutions - RPM	Injection Length - Âµs
+0					6000
+250					4967
+500					5214
+750					6000
 1000				6000
 1250				4932
 1500				6000
@@ -195,7 +195,7 @@ Idle Control
 --------------------------------------------------------------
 Idle low limit - RPM	= 2200
 Idle high limit - RPM	= 2000
-Idle Injection - µs	= 9000
+Idle Injection - Âµs	= 9000
 
 --------------------------------------------------------------
 Speed Calc

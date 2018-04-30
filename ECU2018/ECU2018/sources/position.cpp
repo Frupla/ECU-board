@@ -23,7 +23,12 @@ QuadDecode_t QuadDecode;
 // coder 2 er motor RPM
 
 int16_t encoderPositionEngine() {
-	return (QuadDecode.getCounter2()/4)% 720; // TODO: Same as the other todo
+	if (QuadDecode.getCounter2() < 0) {
+		return (QuadDecode.getCounter2() / 4) + calibration_variable; // TODO: Same as the other todo
+	}
+	else {
+		return (QuadDecode.getCounter2() / 4) - calibration_variable; // TODO: Same as the other todo
+	}
 	// Divide by 4, because the hardware encoder counts on change on both channels. (4 counts per pulse)
 	// % by 720 for the calibration variable.
 }
@@ -48,7 +53,7 @@ int altEncoderErrorCheck() // Returnerer EXIT_FAILURE hvis der er forskydning me
 
 void encoderInterrupthandlerZ() {
 	encoder_Z++;
-	QuadDecode.setCounter2(calibration_variable); // correcting so TDC2 is 0 // TODO: This feels wrong, checkup
+	QuadDecode.setCounter2(0); // correcting so TDC2 is 0 // TODO: This feels wrong, checkup
 	encoder_Z_time_old = encoder_Z_time;
 	encoder_Z_time = micros();
 	zPulseFlag = true;
@@ -117,7 +122,7 @@ float encoderRPM() { // Returns the RPM. Returns -1 if fail, so every ~70min and
 	if (encoder_Z_time - encoder_Z_time_old <= 0) {
 		return -1;
 	}
-	float output_RPM = (60000000 / (float)(encoder_Z_time - encoder_Z_time_old));
+	float output_RPM = (120000000 / (float)(encoder_Z_time - encoder_Z_time_old));
 	// T = encoder_Z_time - encoder_Z_time_old // How many µs between 2 ticks
 	// 60 s/min * 10e6 µs/s  /  T µs   =  60000000 / T  rounds/min
 	return output_RPM;

@@ -14,8 +14,8 @@
 
 //functioner
 void initializeInjection();
-int canInjectionRun(double RPM);
-void injectionCheck(char start, double time, char pos);
+int canRun(double RPM);
+bool injectionCheck(char start, double time, char pos);
 double findTime_injection(double RPM, float potentiometer);
 void startInj();
 void stopInj();

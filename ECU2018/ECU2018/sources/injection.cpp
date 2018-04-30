@@ -11,7 +11,7 @@
 float slope = 0.78;
 float interjection = 810.0;
 // m = slope * t + interjection
-float MAXRPM = 5000.0; //Should be given by the mek's
+float MAXRPM = 4000.0; //Should be given by the mek's
 
 INTERPOL injection;
 
@@ -33,7 +33,7 @@ void setMAXRPM(float newMAXRPM) {
 	MAXRPM = newMAXRPM;
 }
 
-int canInjectionRun(double RPM) {
+int canRun(double RPM) {
 	if (RPM > MAXRPM || RPM == -1){
 		return 0;
 	}
@@ -64,9 +64,13 @@ float calcMass(long angle){
 	return slope * angle + interjection; //calculate mass of fuel based on angle which correlates to time trust me guys
 }
 
-void injectionCheck(char startAngle, double  time, char posAngle){
+bool injectionCheck(char startAngle, double  time, char posAngle){
 	if (!digitalRead(inject_pin) && (posAngle >= startAngle && posAngle <= startAngle + 10)) {
 		startInj();
 		TeensyDelay::trigger(time, INJECTION_CHANNEL);
+		return false;
+	}
+	else {
+		return true;
 	}
 }

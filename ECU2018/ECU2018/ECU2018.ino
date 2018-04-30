@@ -98,7 +98,7 @@ static uint16_t rioHasStopped = 0;
 uint32_t blueSyncTiming = 0;
 uint32_t rs232SyncTiming = 0;
 uint32_t CANSyncTiming = 0;
-int encoder_calibration_variable = 0; // Is set from labview
+int encoder_calibration_variable = 360; // Is set from labview
 
 
 //emergency
@@ -116,13 +116,13 @@ volatile uint32_t wheelcountv2 = 0;
 
 //Fuel consumption
 float fuelMass = 0;
-float potentiometer = 1;
+float potentiometer = 2;
 int startInjection = 0;
 
 //Postion variables used for ign and inj
 char startAngle_inj = 20;
 double  time_inj = 10;
-char startAngle_ign = 0;
+int startAngle_ign = 0;
 char stopAngle_ign = 0;
 int32_t posAngle = 0;
 
@@ -221,7 +221,10 @@ uint32_t speedTiming = 0;
 float lastDist = 0;
 bool ignition_flag = false;
 bool injection_flag = false;
-
+int injDebug = 0;
+int ignDebug = 0;
+int ignAngle = 0;
+int dwellAngle = 0;
 
 // the loop function runs over and over again until power down or reset
 void loop() {
@@ -313,8 +316,10 @@ void loop() {
 	RPM = encoderRPM();
 
 	if (getzPulseFlag()) {
-		startAngle_ign = ignition_time_angle(RPM);
-		time_inj = findTime_injection(RPM, 1);//CAN.getMeasurement(RIO_POTENTIOMETER));
+		ignAngle = ignition_time_angle(RPM);
+		dwellAngle = ignition_dwell_angle(RPM);
+		startAngle_ign =  ignAngle + dwellAngle;
+		time_inj = findTime_injection(RPM, potentiometer);//CAN.getMeasurement(RIO_POTENTIOMETER));
 		fuelMass = fuelMass + calcMass(time_inj);
 		Serial.print("Fuel burned: ");
 		Serial.print(fuelMass);
@@ -325,14 +330,18 @@ void loop() {
 	}
 
 
-	if (canInjectionRun(RPM) && injection_flag){
-		injectionCheck(startAngle_inj, time_inj, posAngle);
-		injection_flag = false;
+	if (canRun(RPM) && injection_flag){
+		injection_flag = injectionCheck(startAngle_inj, time_inj, posAngle);
+		if (!injection_flag) {
+			injDebug++;
+		}
 	}
 
-	if (canInjectionRun(RPM) && ignition_flag) {
-		ignitionCheck(startAngle_ign, posAngle);
-		ignition_flag = false;
+	if (canRun(RPM) && ignition_flag) {
+		ignition_flag = ignitionCheck(startAngle_ign, posAngle);
+		if (!ignition_flag) {
+			ignDebug++;
+		}
 	}
 	
 	loopsSinceOutput++;
@@ -340,14 +349,14 @@ void loop() {
 	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
-		display.print("EngPos: ");
+		display.print("fra interpol: ");
+		display.println(ignAngle);
+		display.print("Dwell angle: ");
+		display.println(dwellAngle);
+		display.print("start angle:  ");
+		display.println(startAngle_ign);
+		display.print("position: ");
 		display.println(posAngle);
-		display.print("RPM: ");
-		display.println(RPM);
-		display.print("startAngle_ign: ");
-		display.println((int)startAngle_ign);
-		display.print("Inj time:  ");
-		display.println(time_inj);
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();

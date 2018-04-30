@@ -316,7 +316,7 @@ void loop() {
 	RPM = encoderRPM();
 
 	if (getzPulseFlag()) {
-		ignAngle = -ignition_time_angle(RPM);
+		ignAngle = ignition_time_angle(RPM);
 		dwellAngle = ignition_dwell_angle(RPM);
 		startAngle_ign =  ignAngle - dwellAngle;
 		time_inj = findTime_injection(RPM, potentiometer);//CAN.getMeasurement(RIO_POTENTIOMETER));
@@ -349,14 +349,14 @@ void loop() {
 	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
+		display.print("start angle:  ");
+		display.println(startAngle_ign);
+		display.print("ign: ");
+		display.println(ignAngle);
 		display.print("inj start: ");
 		display.println((int)startAngle_inj);
 		display.print("inj stop: ");
 		display.println((time_inj*720*RPM)/60000000);
-		display.print("start angle:  ");
-		display.println(startAngle_ign);
-		display.print("position: ");
-		display.println(posAngle);
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();

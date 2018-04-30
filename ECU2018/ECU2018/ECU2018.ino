@@ -349,10 +349,10 @@ void loop() {
 	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
-		display.print("fra interpol: ");
-		display.println(ignAngle);
-		display.print("Dwell angle: ");
-		display.println(dwellAngle);
+		display.print("inj start: ");
+		display.println((int)startAngle_inj);
+		display.print("inj stop: ");
+		display.println((time_inj*720*RPM)/60000000);
 		display.print("start angle:  ");
 		display.println(startAngle_ign);
 		display.print("position: ");

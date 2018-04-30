@@ -316,9 +316,9 @@ void loop() {
 	RPM = encoderRPM();
 
 	if (getzPulseFlag()) {
-		ignAngle = ignition_time_angle(RPM);
+		ignAngle = -ignition_time_angle(RPM);
 		dwellAngle = ignition_dwell_angle(RPM);
-		startAngle_ign =  ignAngle + dwellAngle;
+		startAngle_ign =  ignAngle - dwellAngle;
 		time_inj = findTime_injection(RPM, potentiometer);//CAN.getMeasurement(RIO_POTENTIOMETER));
 		fuelMass = fuelMass + calcMass(time_inj);
 		Serial.print("Fuel burned: ");

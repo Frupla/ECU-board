@@ -5,12 +5,17 @@
 #include "position.h"
 #include <avr\io.h>
 #include <avr\interrupt.h>
+#include "injection.h"
+#include "ignition.h"
+
 
 u_int encoder_A, encoder_B, encoder_Z;
 
 int calibration_variable;
 int32_t encoder_position;
 bool zPulseFlag;
+
+bool is_inj; //if it isn't inj it's ign
 
 uint8_t encoder_pin_A_intern;
 uint8_t encoder_pin_B_intern;
@@ -26,6 +31,17 @@ QuadDecode_t QuadDecode;
 // Interrups service routine for compare interrupt på ftm2
 void ftm2_isr(void) {
 	// Goal: Turn on inj
+	if (is_inj) {
+		startInj();
+		TeensyDelay::trigger(time_injection_is_active, INJECTION_CHANNEL); // time_injection_is_active is a global variable, 
+																		   // and is the delay before the set function activates. 
+		is_inj = false;
+	}
+	else {
+		startIgnition();
+		TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL);
+		is_inj = true;
+	}
 }
 
 

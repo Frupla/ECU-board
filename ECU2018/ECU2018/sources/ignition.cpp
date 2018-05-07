@@ -22,6 +22,7 @@ void initializeIgnition() {
 	stopIgnition();
 }
 
+// Returns the angle from TDC in CCW degrees
 double ignition_time_angle(double rpm) {
 	INTERPOL IGNITION = interpolation_map(rpm);
 	double xlow = ignitionArray[IGNITION.lower];

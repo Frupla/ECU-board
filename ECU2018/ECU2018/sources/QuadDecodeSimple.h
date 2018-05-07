@@ -144,12 +144,21 @@ public:
 		FTM2_MOD = 0xFFFF;	// Maximum value of counter
 		FTM2_CNT = 0;	    	// Updates counter with CNTIN
 
-		
+										//Set Registers for output compare mode - for IRQ? - See ftm2_isr(void)
+		FTM2_COMBINE = 0;	    // Reset value, make sure
+		FTM2_C0SC = 0x10;	      // Bit 4 Channel Mode
+		//FTM2_C0V = (360 - degree_the_ignition_should_activate) + calibration_variable; // Initial Compare Interrupt Value // Shot in the dark
+
+		FTM2_C1SC = 0x10;
+		FTM2_C1V = 360 + 20 + calibration_variable;//startAngle_inj;
+
+												   //  Set channel interrupt
+		FTM2_C0SC = 0x50;     // Enable Channel interrupt and Mode 
+		FTM2_C1SC = 0x50;     // Enable Channel interrupt and Mode 
 
 		FTM1_QDCTRL = 0b11000001;	    // Quadrature control
 		FTM2_QDCTRL = 0b11000001;	    // Quadrature control
 										//        Filter enabled, QUADEN set
-
 										// Write Protect Enable
 		FTM1_FMS = 0x40;		// Write Protect, WPDIS=1
 		FTM2_FMS = 0x40;		// Write Protect, WPDIS=1

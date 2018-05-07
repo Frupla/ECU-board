@@ -8,12 +8,12 @@
 #include "injection.h"
 #include "ignition.h"
 
-
 u_int encoder_A, encoder_B, encoder_Z;
 
 int calibration_variable;
 int32_t encoder_position;
 bool zPulseFlag;
+double time_injection_is_active;
 
 bool is_inj; //if it isn't inj it's ign
 
@@ -81,15 +81,23 @@ void encoderInterrupthandlerZ() {
 	encoder_Z_time = micros();
 	zPulseFlag = true;
 
-	//Set Registers for output compare mode - for IRQ? // TODO: move to z pulse interrupt routine
+	float local_RPM = encoderRPM();
+	time_injection_is_active = findTime_injection(local_RPM, 1);
+	int32_t degree_the_ignition_should_activate = ignition_time_angle(local_RPM);
+
+	//Set Registers for output compare mode - for IRQ? - See ftm2_isr(void)
 	FTM2_COMBINE = 0;	    // Reset value, make sure
 	FTM2_C0SC = 0x10;	      // Bit 4 Channel Mode
-	FTM2_C0V = (120);	    // Initial Compare Interrupt Value // Shot in the dark // needs ign point and calib
+	FTM2_C0V = (360 - degree_the_ignition_should_activate) + calibration_variable; // Initial Compare Interrupt Value // Shot in the dark
 
 	FTM2_C1SC = 0x10;
+	FTM2_C1V = 360+20 + calibration_variable;//startAngle_inj;
 
 							//  Set channel interrupt
 	FTM2_C0SC = 0x50;     // Enable Channel interrupt and Mode 
+	FTM2_C1SC = 0x50;     // Enable Channel interrupt and Mode 
+
+	is_inj = false;
 
 }
 

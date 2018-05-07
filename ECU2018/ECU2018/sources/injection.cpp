@@ -73,4 +73,4 @@ bool injectionCheck(char startAngle, double  time, char posAngle){
 	else {
 		return true;
 	}
-}
+} 

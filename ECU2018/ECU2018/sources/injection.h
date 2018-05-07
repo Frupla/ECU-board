@@ -9,21 +9,16 @@
 	#include "WProgram.h"
 #endif
 
-#include "ingAndinjArray.h"
+#include "motorLUT.h"
 #include "TeensyDelay.h"
 
 //functioner
 void initializeInjection();
-int canRun(double RPM);
-bool injectionCheck(char start, double time, char pos);
-double findTime_injection(double RPM, float potentiometer);
-void startInj();
-void stopInj();
-float calcMass(long time);
-void setSlope(float newSlope);
-void setInterjection(float newInterjection);
-void setMAXRPM(float newMAXRPM);
-
+bool injectionCheck(int injectionStartAngle, double  injectionTime, int currentAngle);
+double calculateInjectionDurationTime(double RPM, float potentiometer);
+inline void startInjection();
+inline void stopInjection();
+float calculateConsumedFuelMass(double injectionTime);
 
 #endif
 

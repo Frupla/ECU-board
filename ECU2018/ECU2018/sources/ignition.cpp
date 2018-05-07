@@ -5,48 +5,40 @@
 #include "ignition.h"
 
 
-#define ignition_pin 21 //Under antagelsen at "tænding" er ignition
+#define IGNITION_PIN 21
 #define IGNITION_CHANNEL 0
-/*
-Name:		Sketch2.ino
-Created:	4/16/2018 9:50:54 AM
-Author:	Ejer
-*/
-
-double DWELL_TIME = 3000;
-
+#define DWELL_TIME 3000	// [us]
 
 void initializeIgnition() {
-	pinMode(ignition_pin, OUTPUT);
+	pinMode(IGNITION_PIN, OUTPUT);
 	TeensyDelay::addDelayChannel(stopIgnition, IGNITION_CHANNEL);
 	stopIgnition();
 }
 
-double ignition_time_angle(double rpm) {
-	INTERPOL IGNITION = interpolation_map(rpm);
-	double xlow = ignitionArray[IGNITION.lower];
-	double xhigh = ignitionArray[IGNITION.upper];
-	double xinc = IGNITION.increment;
-	double IGNITION_TIME = (xhigh - xlow)*xinc + xlow;
-	return IGNITION_TIME;
+double calculateIgnitionStopAngle(double rpm) {
+	INTERPOL_t ignitionInterpol = calculateInterpolation(rpm);
+	double xlow = ignitionArray[ignitionInterpol.lower];
+	double xhigh = ignitionArray[ignitionInterpol.upper];
+	double xinc = ignitionInterpol.increment;
+	double ignitionStopAngle = (xhigh - xlow) * xinc + xlow;
+	return ignitionStopAngle;
 }
 
-double ignition_dwell_angle(double rpm) {
-	return (360*rpm*DWELL_TIME)/60000000;
-}
-void startIgnition() {
-	digitalWrite(ignition_pin, HIGH); //Sends signal to start ignition
+double calculateDwellAngle(double rpm) {
+	return (360 * rpm * DWELL_TIME) / 60000000;
 }
 
-void stopIgnition() {
-	digitalWrite(ignition_pin, LOW); //Sends signal to stop ignition
+inline void startIgnition() {
+	digitalWriteFast(IGNITION_PIN, HIGH); //Sends signal to start ignition
 }
 
+inline void stopIgnition() {
+	digitalWriteFast(IGNITION_PIN, LOW); //Sends signal to stop ignition
+}
 
-
-bool ignitionCheck(char start_angle, char pos_angle) {
-	//Check if we've reached the start angle, where we start charging the coil
-	if (!digitalRead(ignition_pin) && (pos_angle >= start_angle && pos_angle <= start_angle + 5)) {
+bool ignitionCheck(int ignitionStartAngle, int currentAngle) {
+	// Check if we've reached the start angle, where we start charging the coil
+	if (!digitalReadFast(IGNITION_PIN) && (currentAngle >= ignitionStartAngle && currentAngle <= ignitionStartAngle + 5)) {
 		startIgnition();
 		TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL); 
 		return false;

@@ -16,7 +16,7 @@
 /* Includes */
 /*==========*/
 
-#include "sources/ingAndinjArray.h"
+#include "sources/motorLUT.h"
 #include "sources/ignition.h"
 #include "sources/injection.h"
 #include <canbus.h>
@@ -38,23 +38,6 @@
 /* Definitions */
 /*=============*/
 
-#define A_PULSE 29 //A pulse
-#define B_PULSE 30 //B pulse
-#define Z_PULSE 28 //Z pulse
-#define CANBUS_TX 33
-#define CANBUS_RX 34
-#define OLED_RESET 4
-
-
-/* Pins jeg ikke ved noget om
-adc.h -> Brake sensor pin    :    Har vi den stadig, og hvad laver den?
-inout.cpp -> Horn_pin   :     Vi har ikke wiret et horn?
-inout.cpp -> GEAR_SENSOR_PIN 24    :     No?
-
-
-*/
-
-
 // Car ID
 #define DTU_DYNAMO 1
 #define CAR DTU_DYNAMO
@@ -67,10 +50,14 @@ inout.cpp -> GEAR_SENSOR_PIN 24    :     No?
 // The period of RIO synchronization
 #define CAN_SYNC_PERIOD 10
 // Buzzer pin
-#define BUZZER_PIN 2
+#define BUZZER_PIN 36
+// CAN pins
+#define CANBUS_TX_PIN 33
+#define CANBUS_RX_PIN 34
+// OLED display reset pin
+#define OLED_RESET_PIN 4
 
-
-//for party
+// For party
 #define PARTY_ANIMATION_SPEED 400
 //#define PARTY1 lol //pin
 //#define PARTY2 lol //pin
@@ -82,7 +69,7 @@ inout.cpp -> GEAR_SENSOR_PIN 24    :     No?
 // Prototype Functions
 static inline void blue_tx();
 static inline void measureBatteryVoltage();
-void partyAnimation(void);
+//void partyAnimation(void);
 void ISR_WHEEL();
 float getDistancev2();
 float getSpeedv2();
@@ -98,14 +85,11 @@ static uint16_t rioHasStopped = 0;
 uint32_t blueSyncTiming = 0;
 uint32_t rs232SyncTiming = 0;
 uint32_t CANSyncTiming = 0;
-int encoder_calibration_variable = 0; // Is set from labview
 
-
-//emergency
+// Emergency
 uint8_t emergency = 0;
 
-
-//wheelsensor 2.0
+// Wheelsensor 2.0
 #define WHEEL_SENSOR_PIN_V_2 34
 #define speedUpdate 250 //update period
 uint32_t frontSpeedUpdate = 0;
@@ -113,23 +97,33 @@ volatile uint32_t wheelcountv2 = 0;
 #define WHEEL_DIAMETER 0.5588f		// [m]
 #define NUMBER_OF_EDGES_PER_REVOLUTION 30
 #define WHEEL_CIRCUMFERENCE WHEEL_DIAMETER * PI
+uint32_t speedTiming = 0;
+float lastDist = 0;
 
-//Fuel consumption
-float fuelMass = 0;
+////////// ECU ////////////
+// Max RPM
+#define MAX_RPM 4000.0
+
+// Fuel consumption
+float consumedFuelMass = 0;
 float potentiometer = 2;
-int startInjection = 0;
 
-//Postion variables used for ign and inj
-int startAngle_inj = 20;
-double  time_inj = 10;
-int startAngle_ign = 0;
-char stopAngle_ign = 0;
-int32_t posAngle = 0;
+// Postion variables used for ignition and injection
+int injectionStartAngle = 20;
+double injectionDurationTime = 10;
+int ignitionStartAngle = 0;
+int igntionStopAngle = 0;
+int currentAngle = 0;
 
-//More variables
+// More ignition and injection variables
+bool ignitionFlag = false;		// Has ignition run since last Z-Pulse
+bool injectionFlag = false;	// Has injection run since last Z-Pulse
+int dwellAngle = 0;
 float RPM = 0;
 
-//variables for tests
+/////// ECU END ///////
+
+// Variables for tests
 int lastRPMprint = 0;
 uint32_t loopBeganAtMicros = 0;
 uint32_t loopsSinceOutput = 0;
@@ -137,7 +131,7 @@ uint32_t timeAtLastDisplayOutput = 0;
 uint32_t forMeasuringLoopTime = 0;
 
 // Display 
-Adafruit_SSD1306 display(OLED_RESET);
+Adafruit_SSD1306 display(OLED_RESET_PIN);
 #define LOGO16_GLCD_HEIGHT 16 
 #define LOGO16_GLCD_WIDTH  16 
 static const unsigned char PROGMEM logo16_glcd_bmp[] =
@@ -162,7 +156,7 @@ B00000000, B00110000 };
 #error("Height incorrect, please fix Adafruit_SSD1306.h!");
 #endif
 
-
+// SETUP //
 void setup() {
 	/* Initializations */
 	// Initialize USB communication
@@ -195,38 +189,28 @@ void setup() {
 	display.setTextColor(WHITE);
 	display.clearDisplay();
 	display.setCursor(0, 0);
-	// Initialize encoder
-	//altInitializeEncoder(A_PULSE, B_PULSE, Z_PULSE, encoder_calibration_variable);
 
-	//Set up timer for injection and ignition
+	// Set up timer for injection and ignition
 	TeensyDelay::begin();
 
-	//wheelsensor
+	// Wheelsensor
 	//attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
-	//Encoder
-	initializeEncoder(Z_PULSE, encoder_calibration_variable);
+
+	// Initialize Encoders
+	int encoderTdcOffset = 0;	// TODO Get from somewhere
+	initializeEncoder(encoderTdcOffset);
 
 	// Enable global interrupts
 	sei();
 
-	/* Play a song so we know we have started */
+	// Play a song so we know we have started
 	sing(STARTUP_MELODY_ID);
-
 }
 
 /*===========*/
 /* Main loop */
 /*===========*/
-uint32_t speedTiming = 0;
-float lastDist = 0;
-bool ignition_flag = false;
-bool injection_flag = false;
-int injDebug = 0;
-int ignDebug = 0;
-int ignAngle = 0;
-int dwellAngle = 0;
-
-// the loop function runs over and over again until power down or reset
+// The loop function runs over and over again until power down or reset
 void loop() {
 	loopBeganAtMicros = micros();
 	//test for front wheelsensor
@@ -276,7 +260,7 @@ void loop() {
 		//id++;
 		//CAN.sendMeasurement(4,4,id, 1.21);
 
-		if (emergency) { //TODO emergency
+		if (emergency) { // TODO emergency
 			CAN.emergencyStop(ERROR_EXTERNAL_BUTTON);
 		}
 		CANSyncTiming = millis();
@@ -294,12 +278,14 @@ void loop() {
 		blueSyncTiming = millis();
 	}
 
+	// Emergency detection
 	if (emergency) {
 		if (tunes_is_ready()) {
 			sing(GAME_MELODY_ID);
 		}
 	}
 
+	// Part Mode detection
 	if (CAN.getSystemState(STEERING_ID, BUTTON_PARTY)) {
 		if (tunes_is_ready())
 		{
@@ -310,70 +296,50 @@ void loop() {
 
 	LED_toggle(LED3);
 
+	// Ignition and Injection
 	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
-
-	posAngle = encoderPositionEngine();
+	currentAngle = encoderPositionEngine();
 	RPM = encoderRPM();
-
-	if (getzPulseFlag()) {
-		//ignAngle = ignition_time_angle(RPM);
-		//dwellAngle = ignition_dwell_angle(RPM);
-		//startAngle_ign =  ignAngle - dwellAngle;
-		ignAngle = -5;
-		startAngle_ign = -20;
-		//time_inj = findTime_injection(RPM, potentiometer);//CAN.getMeasurement(RIO_POTENTIOMETER));
-		time_inj = 100000;
-		fuelMass = fuelMass + calcMass(time_inj);
-		Serial.print("Fuel burned: ");
-		Serial.print(fuelMass);
-		Serial.print(" units\n");
-		setzPulseFlag(false);
-		ignition_flag = true;
-		injection_flag = true;
+	if(getZPulseFlag()) {
+		igntionStopAngle = -calculateIgnitionStopAngle(RPM);
+		dwellAngle = calculateDwellAngle(RPM);
+		ignitionStartAngle =  igntionStopAngle - dwellAngle;
+		injectionDurationTime = calculateInjectionDurationTime(RPM, potentiometer); // TODO: Make potentiometer variable: CAN.getMeasurement(RIO_POTENTIOMETER));
+		consumedFuelMass += calculateConsumedFuelMass(injectionDurationTime);
+		setZPulseFlag(false);
+		ignitionFlag = true;
+		injectionFlag = true;
 	}
-
-
-	if (canRun(RPM) && injection_flag){
-		injection_flag = injectionCheck(startAngle_inj, time_inj, posAngle);
-		if (!injection_flag) {
-			injDebug++;
-		}
+	if(injectionFlag && (RPM > MAX_RPM || RPM == -1)){
+		injectionFlag = injectionCheck(injectionStartAngle, injectionDurationTime, currentAngle);
 	}
-
-	if (canRun(RPM) && ignition_flag) {
-		ignition_flag = ignitionCheck(startAngle_ign, posAngle);
-		if (!ignition_flag) {
-			ignDebug++;
-		}
+	if(ignitionFlag && (RPM > MAX_RPM || RPM == -1)) {
+		ignitionFlag = ignitionCheck(ignitionStartAngle, currentAngle);
 	}
 	
+	// Debugging for Ignition and Injection
 	loopsSinceOutput++;
 	forMeasuringLoopTime += (micros() - loopBeganAtMicros);
 	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
+		Serial.print("Fuel burned: ");
+		Serial.print(consumedFuelMass);
+		Serial.print(" gram\n");
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
-		//display.print("start angle:  ");
-		display.println(startAngle_ign);
-		display.print("ign: ");
-		display.print(ignAngle);
-		display.print(" RPM: ");
-		display.println(RPM);
+		display.print("loop time:  ");
+		display.println(forMeasuringLoopTime);
 		display.print("pos: ");
-		display.println(posAngle);
+		display.println(currentAngle);
 		display.print("inj stop: ");
-		display.println((720*RPM*time_inj) / 60000000);
+		display.println((720*RPM*injectionDurationTime) / 60000000);
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();
 		display.clearDisplay();
 		display.setCursor(0, 0);
 	}
-
 }
 
-// Herfra og ned, skamløst kopieret fra motorboard 2017:
-//Author: Håkon Westh - Hansen
-// Created : 10 / 4 / 2017
 /*=========*/
 /* Methods */
 /*=========*/

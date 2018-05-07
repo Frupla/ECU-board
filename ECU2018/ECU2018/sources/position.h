@@ -9,37 +9,19 @@
 #include "WProgram.h"
 #endif
 
-
 #include "autoGear.h"
 #include "QuadDecodeSimple.h"
 
-// We should probalby move this to the main?
-
-// Magic numbers
-
-//our own:
-void initializeEncoder(uint8_t encoder_pin_Z, int calib_var);
-int altEncoderPosition_A();
-int altEncoderPosition_B();
-int altEncoderPosition_Z();
-int16_t encoderPositionEngine();
+void initializeEncoder(int _encoderTdcOffset);
+int encoderPositionEngine();
 float encoderRPM();
-int altEncoderErrorCheck();
-void altEncoderInterrupthandlerA();
-void altEncoderInterrupthandlerB();
-void altEncoderInterrupthandlerZ();
-void encoderInterrupthandlerZ();
+void zPulseInterruptHandler();
 
-int16_t encoderPositionWheel();
-void resetEncoderWheel(int16_t reset_to);
+int encoderPositionWheel();
+void resetEncoderWheel(int resetValue);
 
-bool getzPulseFlag();
-void setzPulseFlag(bool what_to_be);
-
-//using Encoder lib
-void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var);
-int32_t altEncoderPositionEngine();
-void altEncoderInterrupthandlerZ();
+bool getZPulseFlag();
+void setZPulseFlag(bool value);
 
 #endif
 

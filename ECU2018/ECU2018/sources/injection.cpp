@@ -4,73 +4,45 @@
 
 #include "injection.h"
 #define INJECTION_CHANNEL 1
-
-#define inject_pin 20//Might be 20, if it is "dyse" which I'm assuming it is
-//Constants
-//for the calculation of the mass of fuel based on time
-float slope = 0.78;
-float interjection = 810.0;
-// m = slope * t + interjection
-float MAXRPM = 4000.0; //Should be given by the mek's
-
-INTERPOL injection;
+#define INJECTION_PIN 20
+//Constants for the calculation of the mass of fuel based on time
+#define SLOPE 0.78
+#define INTERJECTION 810.0
+// Mass i calculated like this: m = slope * t + interjection
 
 void initializeInjection() {
-	pinMode(inject_pin, OUTPUT);
-	TeensyDelay::addDelayChannel(stopInj, INJECTION_CHANNEL);
-	stopInj();
+	pinMode(INJECTION_PIN, OUTPUT);
+	TeensyDelay::addDelayChannel(stopInjection, INJECTION_CHANNEL);
+	stopInjection();
 }
 
-void setSlope(float newSlope) {
-	slope = newSlope;
-}
-
-void setInterjection(float newInterjection) {
-	interjection = newInterjection;
-}
-
-void setMAXRPM(float newMAXRPM) {
-	MAXRPM = newMAXRPM;
-}
-
-int canRun(double RPM) {
-	if (RPM > MAXRPM || RPM == -1){
-		return 0;
-	}
-	else {
-		return 1;
-	}
-}
-
-
-double findTime_injection(double RPM, float potentiometer) {
-	injection = interpolation_map(RPM);
+double calculateInjectionDurationTime(double RPM, float potentiometer) {
+	INTERPOL_t injection = calculateInterpolation(RPM);
 	double xhigh = injectionArray[injection.upper];
 	double xlow = injectionArray[injection.lower];
 	double xinc = injection.increment;
-	double time = (xhigh - xlow)*xinc + xlow;
-	return time*potentiometer;
+	double injectionTime = (xhigh - xlow) * xinc + xlow;
+	return injectionTime * potentiometer;
 }
 
-void startInj(){
-	digitalWrite(inject_pin, HIGH); //Sends signal to start injection
+inline void startInjection(){
+	digitalWriteFast(INJECTION_PIN, HIGH); // Sends signal to start injection
 }
 
-void stopInj() {
-	digitalWrite(inject_pin, LOW); //Sends signal to stop injection
+inline void stopInjection() {
+	digitalWriteFast(INJECTION_PIN, LOW); // Sends signal to stop injection
 }
 
-float calcMass(long angle){
-	return slope * angle + interjection; //calculate mass of fuel based on angle which correlates to time trust me guys
+float calculateConsumedFuelMass(double injectionTime) {
+	return (SLOPE * injectionTime + INTERJECTION)/(1000000); // Calculate mass of fuel based on time, in grams
 }
 
-bool injectionCheck(char startAngle, double  time, char posAngle){
-	if (!digitalRead(inject_pin) && (posAngle >= startAngle && posAngle <= startAngle + 10)) {
-		startInj();
-		TeensyDelay::trigger(time, INJECTION_CHANNEL);
+bool injectionCheck(int injectionStartAngle, double  injectionTime, int currentAngle) {
+	if(!digitalReadFast(INJECTION_PIN) && (currentAngle >= injectionStartAngle && currentAngle <= injectionStartAngle + 10)) {
+		startInjection();
+		TeensyDelay::trigger(injectionTime, INJECTION_CHANNEL);
 		return false;
-	}
-	else {
+	} else {
 		return true;
 	}
 } 

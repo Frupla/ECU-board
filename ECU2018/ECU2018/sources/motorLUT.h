@@ -11,15 +11,14 @@
 
 
 typedef struct INTERPOL {
-	uint lower;
-	uint upper;
-	//uint close;
+	int lower;
+	int upper;
 	double increment;
-} INTERPOL;
+} INTERPOL_t;
 
 extern uint32_t ignitionArray[25];
 extern uint32_t injectionArray[25];
-INTERPOL interpolation_map(double rpm);
+INTERPOL_t calculateInterpolation(double rpm);
 
 #endif
 

@@ -98,7 +98,7 @@ void encoderInterrupthandlerZ() {
 	FTM2_C1SC = 0x50;     // Enable Channel interrupt and Mode 
 
 	is_inj = false;
-
+	Serial.println("Hi from encoderInterupthandlerZ!");
 }
 
 

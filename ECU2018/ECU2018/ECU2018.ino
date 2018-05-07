@@ -195,9 +195,6 @@ void setup() {
 	display.setTextColor(WHITE);
 	display.clearDisplay();
 	display.setCursor(0, 0);
-	// Initialize encoder
-	//altInitializeEncoder(A_PULSE, B_PULSE, Z_PULSE, encoder_calibration_variable);
-
 	//Set up timer for injection and ignition
 	TeensyDelay::begin();
 

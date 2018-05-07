@@ -22,12 +22,12 @@ QuadDecode_t QuadDecode;
 // coder 1 er wheelsensor
 // coder 2 er motor RPM
 
-int16_t encoderPositionEngine() {
-	if (QuadDecode.getCounter2() < 0) {
-		return (QuadDecode.getCounter2() / 4) + calibration_variable; // TODO: Same as the other todo
+int16_t encoderPositionEngine() { // TODO - find ud af om det her virker, design en test & udfoer
+	if (QuadDecode.getCounter2() - calibration_variable  < 0) {
+		return (QuadDecode.getCounter2() / 4) + 360 - calibration_variable; 
 	}
 	else {
-		return (QuadDecode.getCounter2() / 4) - calibration_variable; // TODO: Same as the other todo
+		return (QuadDecode.getCounter2() / 4) - 360 - calibration_variable;
 	}
 	// Divide by 4, because the hardware encoder counts on change on both channels. (4 counts per pulse)
 	// % by 720 for the calibration variable.

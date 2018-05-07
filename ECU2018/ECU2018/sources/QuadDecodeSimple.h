@@ -144,10 +144,7 @@ public:
 		FTM2_MOD = 0xFFFF;	// Maximum value of counter
 		FTM2_CNT = 0;	    	// Updates counter with CNTIN
 
-								// Set Registers for output compare mode - for IRQ?
-								//FTM1_COMBINE=0;	    // Reset value, make sure
-								//FTM1_C0SC=0x10;	      // Bit 4 Channel Mode
-								//FTM1_C0V= COMP_LOW;	    // Initial Compare Interrupt Value
+		
 
 		FTM1_QDCTRL = 0b11000001;	    // Quadrature control
 		FTM2_QDCTRL = 0b11000001;	    // Quadrature control
@@ -156,6 +153,8 @@ public:
 										// Write Protect Enable
 		FTM1_FMS = 0x40;		// Write Protect, WPDIS=1
 		FTM2_FMS = 0x40;		// Write Protect, WPDIS=1
+
+		
 	}
 
 	void setCounter1(int16_t c) {

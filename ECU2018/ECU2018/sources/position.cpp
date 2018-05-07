@@ -3,7 +3,8 @@
 // 
 
 #include "position.h"
-
+#include <avr\io.h>
+#include <avr\interrupt.h>
 
 u_int encoder_A, encoder_B, encoder_Z;
 
@@ -18,9 +19,15 @@ uint8_t encoder_pin_Z_intern;
 uint32_t encoder_Z_time;
 uint32_t encoder_Z_time_old;
 
+// Decoder 1 er wheelsensor
+// Decoder 2 er motor RPM
 QuadDecode_t QuadDecode;
-// coder 1 er wheelsensor
-// coder 2 er motor RPM
+
+// Interrups service routine for compare interrupt på ftm2
+void ftm2_isr(void) {
+	// Goal: Turn on inj
+}
+
 
 int16_t encoderPositionEngine() { // TODO - find ud af om det her virker, design en test & udfoer
 	if (QuadDecode.getCounter2() - calibration_variable  < 0) {
@@ -57,7 +64,19 @@ void encoderInterrupthandlerZ() {
 	encoder_Z_time_old = encoder_Z_time;
 	encoder_Z_time = micros();
 	zPulseFlag = true;
+
+	//Set Registers for output compare mode - for IRQ? // TODO: move to z pulse interrupt routine
+	FTM2_COMBINE = 0;	    // Reset value, make sure
+	FTM2_C0SC = 0x10;	      // Bit 4 Channel Mode
+	FTM2_C0V = (120);	    // Initial Compare Interrupt Value // Shot in the dark // needs ign point and calib
+
+	FTM2_C1SC = 0x10;
+
+							//  Set channel interrupt
+	FTM2_C0SC = 0x50;     // Enable Channel interrupt and Mode 
+
 }
+
 
 void initializeEncoder(uint8_t encoder_pin_Z, int calib_var)
 {

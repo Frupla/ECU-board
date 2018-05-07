@@ -75,9 +75,6 @@
     <ClInclude Include="sources\ignition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\ingAndinjArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sources\injection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -94,6 +91,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sources\QuadDecodeSimple.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\motorLUT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -134,9 +134,6 @@
     <ClCompile Include="sources\ignition.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sources\ingAndinjArray.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sources\injection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -144,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\TeensyDelay.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\motorLUT.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

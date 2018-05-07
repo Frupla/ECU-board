@@ -105,7 +105,9 @@
     <ClInclude Include="sources\motorCAN.h" />
     <ClInclude Include="sources\my_queue.h" />
     <ClInclude Include="sources\position.h" />
+    <ClInclude Include="sources\QuadDecode.h" />
     <ClInclude Include="sources\QuadDecodeSimple.h" />
+    <ClInclude Include="sources\QuadDecode_def.h" />
     <ClInclude Include="sources\rs232.h" />
     <ClInclude Include="sources\rs232sync.h" />
     <ClInclude Include="sources\TeensyDelay.h" />

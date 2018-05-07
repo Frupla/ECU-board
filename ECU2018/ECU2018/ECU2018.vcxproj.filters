@@ -96,6 +96,12 @@
     <ClInclude Include="sources\QuadDecodeSimple.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="sources\QuadDecode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\QuadDecode_def.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\adc.cpp">

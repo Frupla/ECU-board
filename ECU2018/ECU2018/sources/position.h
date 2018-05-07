@@ -18,10 +18,12 @@
 // Magic numbers
 
 //our own:
+int32_t return_debug_variable();
+
 void initializeEncoder(uint8_t encoder_pin_Z, int calib_var);
 int altEncoderPosition_A();
 int altEncoderPosition_B();
-int altEncoderPosition_Z();
+int EncoderPosition_Z();
 int16_t encoderPositionEngine();
 float encoderRPM();
 int altEncoderErrorCheck();

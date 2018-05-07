@@ -354,10 +354,10 @@ void loop() {
 		forMeasuringLoopTime /= loopsSinceOutput;
 		//display.print("start angle:  ");
 		display.println(startAngle_ign);
-		display.print("ign: ");
-		display.print(ignAngle);
-		display.print(" RPM: ");
-		display.println(RPM);
+		display.print("Debug_variable: ");
+		display.println(return_debug_variable());
+		display.print("Z_pulses: ");
+		display.println(EncoderPosition_Z());
 		display.print("pos: ");
 		display.println(posAngle);
 		display.print("inj stop: ");

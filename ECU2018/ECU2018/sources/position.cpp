@@ -10,12 +10,14 @@
 
 u_int encoder_A, encoder_B, encoder_Z;
 
+volatile int32_t debug_variable = 0;
+
 int calibration_variable;
 int32_t encoder_position;
 bool zPulseFlag;
 double time_injection_is_active;
 
-bool is_inj; //if it isn't inj it's ign
+volatile bool is_inj; //if it isn't inj it's ign
 
 uint8_t encoder_pin_A_intern;
 uint8_t encoder_pin_B_intern;
@@ -28,9 +30,14 @@ uint32_t encoder_Z_time_old;
 // Decoder 2 er motor RPM
 QuadDecode_t QuadDecode;
 
+int32_t return_debug_variable() {
+	return debug_variable;
+}
+
 // Interrups service routine for compare interrupt på ftm2
 void ftm2_isr(void) {
 	// Goal: Turn on inj
+	debug_variable++;
 	if (is_inj) {
 		startInj();
 		TeensyDelay::trigger(time_injection_is_active, INJECTION_CHANNEL); // time_injection_is_active is a global variable, 
@@ -151,7 +158,7 @@ int altEncoderPosition_B()
 	return encoder_B;
 }
 
-int altEncoderPosition_Z()
+int EncoderPosition_Z()
 {
 	return encoder_Z;
 }

@@ -98,7 +98,7 @@ static uint16_t rioHasStopped = 0;
 uint32_t blueSyncTiming = 0;
 uint32_t rs232SyncTiming = 0;
 uint32_t CANSyncTiming = 0;
-int encoder_calibration_variable = 360; // Is set from labview
+int encoder_calibration_variable = 0; // Is set from labview
 
 
 //emergency
@@ -120,7 +120,7 @@ float potentiometer = 2;
 int startInjection = 0;
 
 //Postion variables used for ign and inj
-char startAngle_inj = 20;
+int startAngle_inj = 20;
 double  time_inj = 10;
 int startAngle_ign = 0;
 char stopAngle_ign = 0;
@@ -316,10 +316,13 @@ void loop() {
 	RPM = encoderRPM();
 
 	if (getzPulseFlag()) {
-		ignAngle = ignition_time_angle(RPM);
-		dwellAngle = ignition_dwell_angle(RPM);
-		startAngle_ign =  ignAngle - dwellAngle;
-		time_inj = findTime_injection(RPM, potentiometer);//CAN.getMeasurement(RIO_POTENTIOMETER));
+		//ignAngle = ignition_time_angle(RPM);
+		//dwellAngle = ignition_dwell_angle(RPM);
+		//startAngle_ign =  ignAngle - dwellAngle;
+		ignAngle = -5;
+		startAngle_ign = -20;
+		//time_inj = findTime_injection(RPM, potentiometer);//CAN.getMeasurement(RIO_POTENTIOMETER));
+		time_inj = 100000;
 		fuelMass = fuelMass + calcMass(time_inj);
 		Serial.print("Fuel burned: ");
 		Serial.print(fuelMass);
@@ -349,14 +352,16 @@ void loop() {
 	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
-		display.print("start angle:  ");
+		//display.print("start angle:  ");
 		display.println(startAngle_ign);
 		display.print("ign: ");
-		display.println(ignAngle);
-		display.print("inj start: ");
-		display.println((int)startAngle_inj);
+		display.print(ignAngle);
+		display.print(" RPM: ");
+		display.println(RPM);
+		display.print("pos: ");
+		display.println(posAngle);
 		display.print("inj stop: ");
-		display.println((time_inj*720*RPM)/60000000);
+		display.println((720*RPM*time_inj) / 60000000);
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();

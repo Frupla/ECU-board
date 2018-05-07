@@ -312,28 +312,28 @@ void loop() {
 
 	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
 
-	posAngle = encoderPositionEngine();
+	//posAngle = encoderPositionEngine();
 	RPM = encoderRPM();
 
 	if (getzPulseFlag()) {
 		//ignAngle = ignition_time_angle(RPM);
 		//dwellAngle = ignition_dwell_angle(RPM);
 		//startAngle_ign =  ignAngle - dwellAngle;
-		ignAngle = -5;
-		startAngle_ign = -20;
+		//ignAngle = -5;
+		//startAngle_ign = -20;
 		//time_inj = findTime_injection(RPM, potentiometer);//CAN.getMeasurement(RIO_POTENTIOMETER));
-		time_inj = 100000;
+		//time_inj = 100000;
 		fuelMass = fuelMass + calcMass(time_inj);
-		Serial.print("Fuel burned: ");
-		Serial.print(fuelMass);
-		Serial.print(" units\n");
+		//Serial.print("Fuel burned: ");
+		//Serial.print(fuelMass);
+		//Serial.print(" units\n");
 		setzPulseFlag(false);
-		ignition_flag = true;
-		injection_flag = true;
+		//ignition_flag = true;
+		//injection_flag = true;
 	}
 
 
-	if (canRun(RPM) && injection_flag){
+	/*if (canRun(RPM) && injection_flag){
 		injection_flag = injectionCheck(startAngle_inj, time_inj, posAngle);
 		if (!injection_flag) {
 			injDebug++;
@@ -345,11 +345,11 @@ void loop() {
 		if (!ignition_flag) {
 			ignDebug++;
 		}
-	}
+	}*/
 	
 	loopsSinceOutput++;
 	forMeasuringLoopTime += (micros() - loopBeganAtMicros);
-	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
+	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) { // TODO: Fix if overflow
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
 		//display.print("start angle:  ");

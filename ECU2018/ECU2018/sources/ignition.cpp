@@ -6,14 +6,14 @@
 
 
 #define ignition_pin 21 //Under antagelsen at "tænding" er ignition
-#define IGNITION_CHANNEL 0
+
 /*
 Name:		Sketch2.ino
 Created:	4/16/2018 9:50:54 AM
 Author:	Ejer
 */
 
-double DWELL_TIME = 3000;
+
 
 
 void initializeIgnition() {

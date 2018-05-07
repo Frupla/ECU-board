@@ -12,6 +12,8 @@
 #include "ingAndinjArray.h"
 #include "TeensyDelay.h"
 
+#define INJECTION_CHANNEL 1
+
 //functioner
 void initializeInjection();
 int canRun(double RPM);

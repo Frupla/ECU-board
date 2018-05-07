@@ -150,7 +150,7 @@ public:
 		//FTM2_C0V = (360 - degree_the_ignition_should_activate) + calibration_variable; // Initial Compare Interrupt Value // Shot in the dark
 
 		FTM2_C1SC = 0x10;
-		FTM2_C1V = 360 + 20 + calibration_variable;//startAngle_inj;
+		FTM2_C1V = 360 + 20;//startAngle_inj;
 
 												   //  Set channel interrupt
 		FTM2_C0SC = 0x50;     // Enable Channel interrupt and Mode 

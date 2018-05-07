@@ -18,6 +18,8 @@
 //double IGNITION_TIMING;
 //double IGNITION_DWELL;
 //double START_TIME; //asger - Was defined multiple times
+#define DWELL_TIME 3000
+#define IGNITION_CHANNEL 0
 
 void initializeIgnition();
 double ignition_time_angle(double rpm);

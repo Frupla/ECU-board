@@ -82,16 +82,16 @@ void encoderInterrupthandlerZ() {
 	zPulseFlag = true;
 
 	float local_RPM = encoderRPM();
-	time_injection_is_active = findTime_injection(local_RPM, 1);
-	int32_t degree_the_ignition_should_activate = ignition_time_angle(local_RPM);
+	time_injection_is_active = 100000;// findTime_injection(local_RPM, 1);
+	//int32_t degree_the_ignition_should_activate = ignition_time_angle(local_RPM);
 
 	//Set Registers for output compare mode - for IRQ? - See ftm2_isr(void)
 	FTM2_COMBINE = 0;	    // Reset value, make sure
 	FTM2_C0SC = 0x10;	      // Bit 4 Channel Mode
-	FTM2_C0V = (360 - degree_the_ignition_should_activate) + calibration_variable; // Initial Compare Interrupt Value // Shot in the dark
+	FTM2_C0V = 340 * 4;//Ticks //(360 - degree_the_ignition_should_activate); // Initial Compare Interrupt Value // Shot in the dark
 
 	FTM2_C1SC = 0x10;
-	FTM2_C1V = 360+20 + calibration_variable;//startAngle_inj;
+	FTM2_C1V = (360 + 20) * 4;//Ticks //startAngle_inj;
 
 							//  Set channel interrupt
 	FTM2_C0SC = 0x50;     // Enable Channel interrupt and Mode 

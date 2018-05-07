@@ -3,7 +3,7 @@
 // 
 
 #include "injection.h"
-#define INJECTION_CHANNEL 1
+
 
 #define inject_pin 20//Might be 20, if it is "dyse" which I'm assuming it is
 //Constants

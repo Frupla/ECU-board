@@ -85,11 +85,9 @@ void io_init() {
 	// Starter as output
 	pinMode(STARTER_PIN, OUTPUT);
 	setStarterLow();
-	// Horn as output
+	// Extra out as output
 	pinMode(HORN_PIN, OUTPUT);
 	setHornLow();
-	// Gear sensor as input
-	pinMode(GEAR_SENSOR_PIN, INPUT);
 	// Onboard LED
 	pinMode(ONBOARD_LED, OUTPUT);
 	myTimer.begin(timerCallback, 10000);

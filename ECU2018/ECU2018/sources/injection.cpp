@@ -11,11 +11,11 @@
 // Mass i calculated like this: m = slope * t + interjection
 
 void initializeInjection() {
+	digitalWriteFast(INJECTION_PIN, LOW);
 	pinMode(INJECTION_PIN, OUTPUT);
-	TeensyDelay::addDelayChannel(stopInjection, INJECTION_CHANNEL);
-	stopInjection();
 }
 
+// Calculates injection duration in us
 double calculateInjectionDurationTime(double RPM, float potentiometer) {
 	INTERPOL_t injection = calculateInterpolation(RPM);
 	double xhigh = injectionArray[injection.upper];
@@ -26,23 +26,17 @@ double calculateInjectionDurationTime(double RPM, float potentiometer) {
 }
 
 inline void startInjection(){
-	digitalWriteFast(INJECTION_PIN, HIGH); // Sends signal to start injection
+	//digitalWriteFast(INJECTION_PIN, HIGH); // Sends signal to start injection
 }
 
 inline void stopInjection() {
-	digitalWriteFast(INJECTION_PIN, LOW); // Sends signal to stop injection
+	//digitalWriteFast(INJECTION_PIN, LOW); // Sends signal to stop injection
 }
 
-float calculateConsumedFuelMass(double injectionTime) {
-	return (SLOPE * injectionTime + INTERJECTION)/(1000000); // Calculate mass of fuel based on time, in grams
+float calculateConsumedFuelMass(double injectionDurationTime) {
+	return (SLOPE * injectionDurationTime + INTERJECTION)/(1000000); // Calculate mass of fuel based on time, in grams
 }
 
-bool injectionCheck(int injectionStartAngle, double  injectionTime, int currentAngle) {
-	if(!digitalReadFast(INJECTION_PIN) && (currentAngle >= injectionStartAngle && currentAngle <= injectionStartAngle + 10)) {
-		startInjection();
-		TeensyDelay::trigger(injectionTime, INJECTION_CHANNEL);
-		return false;
-	} else {
-		return true;
-	}
+bool injectionCheck(int injectionStartAngle, double  injectionDurationTime, int currentAngle) {
+
 } 

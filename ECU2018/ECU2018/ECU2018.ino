@@ -101,8 +101,17 @@ uint32_t speedTiming = 0;
 float lastDist = 0;
 
 ////////// ECU ////////////
+// Timer
+IntervalTimer ecuTimer;
 // Max RPM
 #define MAX_RPM 4000.0
+
+#define INJECTION_PIN 20
+#define IGNITION_PIN 21
+#define DWELL_TIME_US 3000
+
+elapsedMicros injectionElapsed;
+elapsedMicros ignitionElapsed;
 
 // Fuel consumption
 float consumedFuelMass = 0;
@@ -110,14 +119,17 @@ float potentiometer = 2;
 
 // Postion variables used for ignition and injection
 int injectionStartAngle = 20;
-double injectionDurationTime = 10;
+float injectionDurationTime = 10;	// [us]
 int ignitionStartAngle = 0;
 int igntionStopAngle = 0;
-int currentAngle = 0;
+volatile int currentAngle = 0;
+uint32_t stopInjectionTime = 0;
+uint32_t stopIgnitionTime = 0;
 
 // More ignition and injection variables
-bool ignitionFlag = false;		// Has ignition run since last Z-Pulse
-bool injectionFlag = false;	// Has injection run since last Z-Pulse
+volatile bool performIgnitionAndInjectionCalculationsFlag = false;
+volatile bool ignitionFlag = false;		// Has ignition run since last Z-Pulse
+volatile bool injectionFlag = false;	// Has injection run since last Z-Pulse
 int dwellAngle = 0;
 float RPM = 0;
 
@@ -159,10 +171,10 @@ B00000000, B00110000 };
 // SETUP //
 void setup() {
 	/* Initializations */
-	// Initialize USB communication
-	Serial.begin(9600);
 	initializeIgnition();
 	initializeInjection();
+	// Initialize USB communication
+	Serial.begin(9600);
 	// Initialize IO Pins
 	io_init();
 	// Initialize ADC
@@ -191,7 +203,8 @@ void setup() {
 	display.setCursor(0, 0);
 
 	// Set up timer for injection and ignition
-	TeensyDelay::begin();
+	ecuTimer.begin(ignitionAndInjectionTimerHandler, 5);
+	ecuTimer.priority(1);
 
 	// Wheelsensor
 	//attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
@@ -230,7 +243,7 @@ void loop() {
 	// Annoy everyone until everything is restarted
 	if (rioHasStopped > RIO_STOPPED_GRACE_VALUE) {
 		if (tunes_is_ready()) {
-			sing(SWEET_HOME_MELODY_ID);
+			sing(SAX_MELODY_ID);
 		}
 		rioHasStopped = 0;
 
@@ -297,33 +310,23 @@ void loop() {
 	LED_toggle(LED3);
 
 	// Ignition and Injection
-	// Her prøver Frederik så småt at tilføje de nye funktioner, kommer det til at gå galt? Ja.
-	currentAngle = encoderPositionEngine();
-	RPM = encoderRPM();
-	if(getZPulseFlag()) {
+	if(performIgnitionAndInjectionCalculationsFlag) {
+		performIgnitionAndInjectionCalculationsFlag = false;
+		RPM = encoderRPM();
 		igntionStopAngle = -calculateIgnitionStopAngle(RPM);
 		dwellAngle = calculateDwellAngle(RPM);
-		ignitionStartAngle =  igntionStopAngle - dwellAngle;
+		ignitionStartAngle = igntionStopAngle - dwellAngle;
 		injectionDurationTime = calculateInjectionDurationTime(RPM, potentiometer); // TODO: Make potentiometer variable: CAN.getMeasurement(RIO_POTENTIOMETER));
 		consumedFuelMass += calculateConsumedFuelMass(injectionDurationTime);
-		setZPulseFlag(false);
-		ignitionFlag = true;
-		injectionFlag = true;
-	}
-	if(injectionFlag && (RPM > MAX_RPM || RPM == -1)){
-		injectionFlag = injectionCheck(injectionStartAngle, injectionDurationTime, currentAngle);
-	}
-	if(ignitionFlag && (RPM > MAX_RPM || RPM == -1)) {
-		ignitionFlag = ignitionCheck(ignitionStartAngle, currentAngle);
 	}
 	
 	// Debugging for Ignition and Injection
 	loopsSinceOutput++;
 	forMeasuringLoopTime += (micros() - loopBeganAtMicros);
 	if (loopBeganAtMicros - timeAtLastDisplayOutput >= 100000) {
-		Serial.print("Fuel burned: ");
-		Serial.print(consumedFuelMass);
-		Serial.print(" gram\n");
+		//Serial.print("Fuel burned: ");
+		//Serial.print(consumedFuelMass);
+		//Serial.print(" gram\n");
 		timeAtLastDisplayOutput = loopBeganAtMicros;
 		forMeasuringLoopTime /= loopsSinceOutput;
 		display.print("loop time:  ");
@@ -331,7 +334,7 @@ void loop() {
 		display.print("pos: ");
 		display.println(currentAngle);
 		display.print("inj stop: ");
-		display.println((720*RPM*injectionDurationTime) / 60000000);
+		display.println((720 * RPM * injectionDurationTime) / 60000000);
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();
@@ -407,4 +410,39 @@ float getSpeedv2() {
 	Serial.println(speed);
 
 	return speed;
+}
+
+// Interrupt handler takes about 1 us (TODO optimize)
+void ignitionAndInjectionTimerHandler() {
+	if(getZPulseFlag()) {
+		performIgnitionAndInjectionCalculationsFlag = true;
+		setZPulseFlag(false);
+		ignitionFlag = true;
+		injectionFlag = true;
+	}
+	if(injectionFlag && (RPM < MAX_RPM || RPM == -1)) {
+		currentAngle = encoderPositionEngine();
+		if(!digitalReadFast(INJECTION_PIN) && (currentAngle >= injectionStartAngle/* && currentAngle <= injectionStartAngle + 10*/)) {
+			digitalWriteFast(INJECTION_PIN, HIGH);
+			injectionElapsed = 0;
+			injectionFlag = false;
+		} else {
+			injectionFlag = true;
+		}
+	} else if(injectionElapsed > injectionDurationTime) {
+		digitalWriteFast(INJECTION_PIN, LOW);
+	}
+	if(ignitionFlag && (RPM < MAX_RPM || RPM == -1)) {
+		currentAngle = encoderPositionEngine();
+		ignitionFlag = ignitionCheck(ignitionStartAngle, currentAngle);
+		if(!digitalReadFast(IGNITION_PIN) && (currentAngle >= ignitionStartAngle/* && currentAngle <= ignitionStartAngle + 5*/)) {
+			digitalWriteFast(IGNITION_PIN, HIGH);
+			ignitionElapsed = 0;
+			ignitionFlag = false;
+		} else {
+			ignitionFlag = true;
+		}
+	} else if (ignitionElapsed > DWELL_TIME_US) {
+		digitalWriteFast(IGNITION_PIN, LOW);
+	}
 }

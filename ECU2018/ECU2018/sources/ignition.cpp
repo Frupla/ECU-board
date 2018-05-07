@@ -10,9 +10,8 @@
 #define DWELL_TIME 3000	// [us]
 
 void initializeIgnition() {
+	digitalWriteFast(IGNITION_PIN, LOW);
 	pinMode(IGNITION_PIN, OUTPUT);
-	TeensyDelay::addDelayChannel(stopIgnition, IGNITION_CHANNEL);
-	stopIgnition();
 }
 
 double calculateIgnitionStopAngle(double rpm) {
@@ -29,23 +28,16 @@ double calculateDwellAngle(double rpm) {
 }
 
 inline void startIgnition() {
-	digitalWriteFast(IGNITION_PIN, HIGH); //Sends signal to start ignition
+	//digitalWriteFast(IGNITION_PIN, HIGH); //Sends signal to start ignition
 }
 
 inline void stopIgnition() {
-	digitalWriteFast(IGNITION_PIN, LOW); //Sends signal to stop ignition
+	//digitalWriteFast(IGNITION_PIN, LOW); //Sends signal to stop ignition
 }
 
 bool ignitionCheck(int ignitionStartAngle, int currentAngle) {
 	// Check if we've reached the start angle, where we start charging the coil
-	if (!digitalReadFast(IGNITION_PIN) && (currentAngle >= ignitionStartAngle && currentAngle <= ignitionStartAngle + 5)) {
-		startIgnition();
-		TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL); 
-		return false;
-	}
-	else {
-		return true;
-	}
+	
 }
 
 

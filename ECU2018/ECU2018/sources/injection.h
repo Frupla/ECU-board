@@ -14,11 +14,11 @@
 
 //functioner
 void initializeInjection();
-bool injectionCheck(int injectionStartAngle, double  injectionTime, int currentAngle);
+bool injectionCheck(int injectionStartAngle, double  injectionDurationTime, int currentAngle);
 double calculateInjectionDurationTime(double RPM, float potentiometer);
 inline void startInjection();
 inline void stopInjection();
-float calculateConsumedFuelMass(double injectionTime);
+float calculateConsumedFuelMass(double injectionDurationTime);
 
 #endif
 

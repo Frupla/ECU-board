@@ -8,13 +8,11 @@
 //#define B_PULSE 30 // B pulse (set in QuadDecode)
 #define Z_PULSE_PIN 28 // Z pulse
 
-uint32_t zPulseCount;
-
 int encoderTdcOffset;
-bool zPulseFlag;
-
-uint32_t zPulseTime;
-uint32_t previousZPulseTime;
+volatile uint32_t zPulseCount;
+volatile bool zPulseFlag;
+volatile uint32_t zPulseTime;
+volatile uint32_t previousZPulseTime;
 
 QuadDecode_t QuadDecode;
 // Encoder 1 er wheelsensor
@@ -33,7 +31,6 @@ void initializeEncoder(int _encoderTdcOffset) {
 	// Attach interrupt
 	attachInterrupt(digitalPinToInterrupt(Z_PULSE_PIN), zPulseInterruptHandler, RISING);
 }
-
 
 int encoderPositionEngine() {
 	if (QuadDecode.getCounter2() - encoderTdcOffset  < 0) {

@@ -64,6 +64,9 @@ float encoderRPM() { // Returns the RPM. Returns -1 if fail, so every ~70min and
 	if (zPulseTime - previousZPulseTime <= 0) {
 		return -1;
 	}
+	if (micros() - previousZPulseTime >= 2000) { // If the motor hasn't spun for 2 second, we assume that rpm = 0
+		return 0;
+	}
 	float RPM = (120000000 / (float)(zPulseTime - previousZPulseTime));
 	// T = encoder_Z_time - encoder_Z_time_old // How many µs between 2 ticks
 	// 60 s/min * 10e6 µs/s  /  T µs   =  60000000 / T  rounds/min

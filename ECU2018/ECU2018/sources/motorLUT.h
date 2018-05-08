@@ -13,12 +13,12 @@
 typedef struct INTERPOL {
 	int lower;
 	int upper;
-	double increment;
+	float increment;
 } INTERPOL_t;
 
-extern uint32_t ignitionArray[25];
-extern uint32_t injectionArray[25];
-INTERPOL_t calculateInterpolation(double rpm);
+extern const uint32_t ignitionArray[25];
+extern const uint32_t injectionArray[25];
+INTERPOL_t calculateInterpolation(float rpm);
 
 #endif
 

@@ -52,7 +52,6 @@ static volatile uint64_t rightDistanceCount = 0;    // Accumulate 32-bit int
 static volatile double speed = 0;
 MyQueue speedQueue(CAPACITY);
 MyQueue timeDifferenceQueue(SPEED_TIME_TICK_DIFFERENCE_CAPACITY);
-IntervalTimer myTimer;
 
 double distance = 0;
 double previousDistanceCount = 0;
@@ -90,7 +89,6 @@ void io_init() {
 	setHornLow();
 	// Onboard LED
 	pinMode(ONBOARD_LED, OUTPUT);
-	myTimer.begin(timerCallback, 10000);
 }
 
 void ISR_WHEEL_0() {
@@ -151,7 +149,7 @@ uint16_t getWheelSensorPeriod() {
 }
 
 // Every 10 ms
-inline void timerCallback() {
+void ioTimerCallback() {
 	/*double distanceCountDifference = distanceCount - previousDistanceCount;
 	if(fabsf(distanceCountDifference) > DISTANCE_COUNT_TOLERANCE) {
 		distanceCount = previousDistanceCount;

@@ -1,0 +1,17 @@
+///Calibration constants\\\
+//potentiometer
+1
+//injectionStartAngle [degrees]
+20
+//Max_rpm [rot/min]
+4000
+//slope [µg/µs]
+0.78
+//interjection [µg]
+810.0
+//dwell time [µs]
+3000
+//Interpolation ignition [degrees] 0 -> 25
+20, 20,	20,	20,	20,	20, 20,	25,	25,	25,	30,	30,	30,	30,	35,	35,	35,	35,	35,	40,	40,	40,	40,	40,	45
+//Interpolation injection [µs] 0 -> 25
+6000, 4967, 5214, 6000, 6000, 4932, 6000, 4867, 4526, 4597, 4592, 4536, 4365, 4289, 4421, 4446, 4384, 4306, 4460, 4528, 4500, 4500, 4500, 4500, 4500

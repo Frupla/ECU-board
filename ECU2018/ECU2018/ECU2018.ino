@@ -1,24 +1,18 @@
 /*
  Name:		ECU2018.ino
+ Description: Main ino file for funning the ECU 2018
  Created:	4/16/2018 9:52:09 AM
  Author:	Asger, Frederik, Irene og Berk
  Based on
  * MotorDynamo2017.ino
- *
- * Description: Main ino file for running the motorboard 2017
- * Author: Håkon Westh-Hansen
- * Created: 10/4/2017
- *
  */
-
 
 /*==========*/
 /* Includes */
 /*==========*/
 
 #include "sources/motorLUT.h"
-#include "sources/ignition.h"
-#include "sources/injection.h"
+#include "sources/ecu.h"
 #include <canbus.h>
 #include <tunes.h>
 #include <ArduinoJson.h>
@@ -56,6 +50,8 @@
 #define CANBUS_RX_PIN 34
 // OLED display reset pin
 #define OLED_RESET_PIN 4
+// On board button
+#define BUTTON_PIN 2
 
 // For party
 #define PARTY_ANIMATION_SPEED 400
@@ -100,40 +96,9 @@ volatile uint32_t wheelcountv2 = 0;
 uint32_t speedTiming = 0;
 float lastDist = 0;
 
-////////// ECU ////////////
-// Timer
-IntervalTimer ecuTimer;
-// Max RPM
-#define MAX_RPM 4000.0
-
-#define INJECTION_PIN 20
-#define IGNITION_PIN 21
-#define DWELL_TIME_US 3000
-
-elapsedMicros injectionElapsed;
-elapsedMicros ignitionElapsed;
-
-// Fuel consumption
-float consumedFuelMass = 0;
-float potentiometer = 2;
-
-// Postion variables used for ignition and injection
-int injectionStartAngle = 20;
-float injectionDurationTime = 10;	// [us]
-int ignitionStartAngle = 0;
-int igntionStopAngle = 0;
-volatile int currentAngle = 0;
-uint32_t stopInjectionTime = 0;
-uint32_t stopIgnitionTime = 0;
-
-// More ignition and injection variables
-volatile bool performIgnitionAndInjectionCalculationsFlag = false;
-volatile bool ignitionFlag = false;		// Has ignition run since last Z-Pulse
-volatile bool injectionFlag = false;	// Has injection run since last Z-Pulse
-int dwellAngle = 0;
-float RPM = 0;
-
-/////// ECU END ///////
+// Ms Timer
+IntervalTimer myTimer;
+elapsedMillis ioElapsed;
 
 // Variables for tests
 int lastRPMprint = 0;
@@ -171,8 +136,7 @@ B00000000, B00110000 };
 // SETUP //
 void setup() {
 	/* Initializations */
-	initializeIgnition();
-	initializeInjection();
+	initializeEcu();
 	// Initialize USB communication
 	Serial.begin(9600);
 	// Initialize IO Pins
@@ -202,10 +166,13 @@ void setup() {
 	display.clearDisplay();
 	display.setCursor(0, 0);
 
+<<<<<<< HEAD
 	// Set up timer for injection and ignition
 	ecuTimer.begin(ignitionAndInjectionTimerHandler, 5); //5µs resolution for both ignition and injection
 	ecuTimer.priority(1);
 
+=======
+>>>>>>> 316ee48c7bfd969203d624945a9b6652236943f8
 	// Wheelsensor
 	//attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
 
@@ -213,8 +180,14 @@ void setup() {
 	int encoderTdcOffset = 0;	// TODO Get from somewhere
 	initializeEncoder(encoderTdcOffset);
 
+	// Set up main timer
+	myTimer.begin(timerCallback, 1000);
+
 	// Enable global interrupts
 	sei();
+
+	// TODO Debug:
+	attachInterrupt(BUTTON_PIN, buttonInterruptHandler, RISING);
 
 	// Play a song so we know we have started
 	sing(STARTUP_MELODY_ID);
@@ -308,17 +281,6 @@ void loop() {
 	}
 
 	LED_toggle(LED3);
-
-	// Ignition and Injection
-	if(performIgnitionAndInjectionCalculationsFlag) {
-		performIgnitionAndInjectionCalculationsFlag = false;
-		RPM = encoderRPM();
-		igntionStopAngle = -calculateIgnitionStopAngle(RPM);
-		dwellAngle = calculateDwellAngle(RPM);
-		ignitionStartAngle = igntionStopAngle - dwellAngle;
-		injectionDurationTime = calculateInjectionDurationTime(RPM, potentiometer); // TODO: Make potentiometer variable: CAN.getMeasurement(RIO_POTENTIOMETER));
-		consumedFuelMass += calculateConsumedFuelMass(injectionDurationTime);
-	}
 	
 	// Debugging for Ignition and Injection
 	loopsSinceOutput++;
@@ -331,10 +293,10 @@ void loop() {
 		forMeasuringLoopTime /= loopsSinceOutput;
 		display.print("loop time:  ");
 		display.println(forMeasuringLoopTime);
-		display.print("pos: ");
-		display.println(currentAngle);
-		display.print("inj stop: ");
-		display.println((720 * RPM * injectionDurationTime) / 60000000);
+		//display.print("pos: ");
+		//display.println(currentAngle);
+		//display.print("inj stop: ");
+		//display.println((720 * RPM * injectionDurationTime) / 60000000);
 		forMeasuringLoopTime = 0;
 		loopsSinceOutput = 0;
 		display.display();
@@ -447,5 +409,15 @@ void ignitionAndInjectionTimerHandler() {
 		}
 	} else if (ignitionElapsed > DWELL_TIME_US) {
 		digitalWriteFast(IGNITION_PIN, LOW);
+inline void timerCallback() {
+	ecuTimerCallback();
+	if(ioElapsed > 10) {
+		ioTimerCallback();
+		ioElapsed = 0;
 	}
+}
+
+void buttonInterruptHandler() {
+	if(!isEngineRunning()) startEngine();
+	else stopEngine();
 }

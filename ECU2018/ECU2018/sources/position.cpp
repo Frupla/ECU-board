@@ -79,7 +79,7 @@ void ftm1_isr(void) {
 
 
 
-int16_t encoderPositionEngine() {
+int encoderPositionEngine() {
 	if ((QuadDecode.getCounter2() / 4 - encoderTdcOffset < 0)) {
 		return (QuadDecode.getCounter2() / 4) - encoderTdcOffset + 360;
 	}
@@ -91,7 +91,7 @@ int16_t encoderPositionEngine() {
 }
 
 
-int16_t encoderPositionWheel() {
+int encoderPositionWheel() {
 	return QuadDecode.getCounter1()/4;
 	// Divide by 4, because the hardware encoder counts on change on both channels. (4 counts per pulse)
 }

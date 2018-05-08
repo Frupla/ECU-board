@@ -78,16 +78,18 @@ void ftm1_isr(void) {
 
 
 
-int16_t encoderPositionEngine() { // TODO - find ud af om det her virker, design en test & udfoer
-	if (QuadDecode.getCounter2() - calibration_variable  < 0) {
-		return (QuadDecode.getCounter2() / 4) + 360 - calibration_variable; 
+
+int16_t encoderPositionEngine() {
+	if ((QuadDecode.getCounter2() / 4 - encoderTdcOffset < 0)) {
+		return (QuadDecode.getCounter2() / 4) - encoderTdcOffset + 360;
 	}
 	else {
-		return (QuadDecode.getCounter2() / 4) - 360 - calibration_variable;
+		return (QuadDecode.getCounter2() / 4) - encoderTdcOffset - 360;
 	}
 	// Divide by 4, because the hardware encoder counts on change on both channels. (4 counts per pulse)
-	// % by 720 for the calibration variable.
+	// -envoderTdcOffset +/- 360 to keep the ticks at 0 for TDC.
 }
+
 
 int16_t encoderPositionWheel() {
 	return QuadDecode.getCounter1()/4;

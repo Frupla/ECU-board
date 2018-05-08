@@ -24,7 +24,7 @@ void initializeEncoder(uint8_t encoder_pin_Z, int calib_var);
 int altEncoderPosition_A();
 int altEncoderPosition_B();
 int EncoderPosition_Z();
-int16_t encoderPositionEngine();
+int encoderPositionEngine();
 float encoderRPM();
 int altEncoderErrorCheck();
 void altEncoderInterrupthandlerA();
@@ -32,7 +32,7 @@ void altEncoderInterrupthandlerB();
 void altEncoderInterrupthandlerZ();
 void encoderInterrupthandlerZ();
 
-int16_t encoderPositionWheel();
+int encoderPositionWheel();
 void resetEncoderWheel(int16_t reset_to);
 
 bool getzPulseFlag();

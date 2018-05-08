@@ -1,5 +1,6 @@
 /*
  Name:		ECU2018.ino
+ Description: Main ino file for funning the ECU 2018
  Created:	4/16/2018 9:52:09 AM
  Author:	Asger, Frederik, Irene og Berk
  Based on
@@ -16,6 +17,7 @@
 /* Includes */
 /*==========*/
 
+#include "calibrationConstants.h"
 #include "sources/motorLUT.h"
 #include "sources/ignition.h"
 #include "sources/injection.h"

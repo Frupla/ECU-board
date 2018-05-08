@@ -7,6 +7,7 @@
 #include <avr\interrupt.h>
 #include "injection.h"
 #include "ignition.h"
+#include "QuadDecodeSimple.h"
 
 u_int encoder_A, encoder_B, encoder_Z;
 
@@ -35,10 +36,29 @@ int32_t return_debug_variable() {
 }
 
 // Interrups service routine for compare interrupt på ftm2
+/*Theory as to why we don't exit, taken from the datasheet, p 107 (though it does seem kinda like that's what we're already doing, so idk)
+In some situations, a write to a peripheral must be completed fully before a subsequent
+action can occur. Examples of such situations include:
+• Exiting an interrupt service routine (ISR)
+• Changing a mode
+• Configuring a function
+
+In these situations, the application software must perform a read-after-write sequence to
+guarantee the required serialization of the memory operations:
+1. Write the peripheral register.
+2. Read the written peripheral register to verify the write.
+3. Continue with subsequent operations.
+*/
 void ftm2_isr(void) {
 	// Goal: Turn on inj
 	debug_variable++;
 	Serial.println("FTM2_ISR");
+
+	FTM2_C0SC = 0x50;    // Clear Channel Flag, leave CHIE set
+	int v_read = FTM2_C0SC;   // Read to clear CHF Channel Flag
+
+	FTM2_C0V = 340;
+
 	//
 	//if (is_inj) {
 	//	startInj();
@@ -80,11 +100,11 @@ void ftm1_isr(void) {
 
 
 int encoderPositionEngine() {
-	if ((QuadDecode.getCounter2() / 4 - encoderTdcOffset < 0)) {
-		return (QuadDecode.getCounter2() / 4) - encoderTdcOffset + 360;
+	if ((QuadDecode.getCounter2() / 4 - calibration_variable < 0)) {
+		return (QuadDecode.getCounter2() / 4) - calibration_variable + 360;
 	}
 	else {
-		return (QuadDecode.getCounter2() / 4) - encoderTdcOffset - 360;
+		return (QuadDecode.getCounter2() / 4) - calibration_variable - 360;
 	}
 	// Divide by 4, because the hardware encoder counts on change on both channels. (4 counts per pulse)
 	// -envoderTdcOffset +/- 360 to keep the ticks at 0 for TDC.

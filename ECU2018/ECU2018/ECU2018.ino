@@ -166,13 +166,6 @@ void setup() {
 	display.clearDisplay();
 	display.setCursor(0, 0);
 
-<<<<<<< HEAD
-	// Set up timer for injection and ignition
-	ecuTimer.begin(ignitionAndInjectionTimerHandler, 5); //5µs resolution for both ignition and injection
-	ecuTimer.priority(1);
-
-=======
->>>>>>> 316ee48c7bfd969203d624945a9b6652236943f8
 	// Wheelsensor
 	//attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
 
@@ -374,41 +367,6 @@ float getSpeedv2() {
 	return speed;
 }
 
-// Interrupt handler takes about 1 us (TODO optimize)
-void ignitionAndInjectionTimerHandler() {
-	//Z pulse calculations
-	if(getZPulseFlag()) {
-		performIgnitionAndInjectionCalculationsFlag = true;
-		setZPulseFlag(false);
-		ignitionFlag = true;
-		injectionFlag = true;
-	}
-	//Injection
-	if(injectionFlag && (RPM < MAX_RPM || RPM == -1)) {
-		currentAngle = encoderPositionEngine();
-		if(!digitalReadFast(INJECTION_PIN) && (currentAngle >= injectionStartAngle/* && currentAngle <= injectionStartAngle + 10*/)) {
-			digitalWriteFast(INJECTION_PIN, HIGH);
-			injectionElapsed = 0;
-			injectionFlag = false;
-		} else {
-			injectionFlag = true;
-		}
-	} else if(injectionElapsed > injectionDurationTime) {
-		digitalWriteFast(INJECTION_PIN, LOW);
-	}
-	//Ignition
-	if(ignitionFlag && (RPM < MAX_RPM || RPM == -1)) {
-		currentAngle = encoderPositionEngine();
-		ignitionFlag = ignitionCheck(ignitionStartAngle, currentAngle);
-		if(!digitalReadFast(IGNITION_PIN) && (currentAngle >= ignitionStartAngle/* && currentAngle <= ignitionStartAngle + 5*/)) {
-			digitalWriteFast(IGNITION_PIN, HIGH);
-			ignitionElapsed = 0;
-			ignitionFlag = false;
-		} else {
-			ignitionFlag = true;
-		}
-	} else if (ignitionElapsed > DWELL_TIME_US) {
-		digitalWriteFast(IGNITION_PIN, LOW);
 inline void timerCallback() {
 	ecuTimerCallback();
 	if(ioElapsed > 10) {

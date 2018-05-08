@@ -18,10 +18,10 @@
 #define STARTER_RPM_CUTOFF 1100
 // Gear values
 #define FORCE_NEUTRAL 1 // TODO <- should be set by CAN steering wheel
-#define GEAR_PWM_NEUTRAL 0	// TODO set to correct value
-#define GEAR_PWM_FIRST	1	// TODO set to correct value
-#define GEAR_PWM_SECOND	2	// TODO set to correct value
-#define GEAR_UP_SPEED_THRESHOLD 15	  // [km/h]
+#define GEAR_PWM_NEUTRAL 178	// TODO set to correct value
+#define GEAR_PWM_FIRST	200	// TODO set to correct value
+#define GEAR_PWM_SECOND	150	// TODO set to correct value
+#define GEAR_UP_SPEED_THRESHOLD 18	  // [km/h]
 #define GEAR_DOWN_SPEED_THRESHOLD 13  // [km/h]
 
 #if DWELL_TIME_US > 9000

@@ -104,7 +104,7 @@ public:
 		// FTM1 Pins
 		// K20 pin 3,4
 		// Bit 8-10 is Alt Assignment
-		PORTA_PCR12 = 0x00000710;   //Alt7-QD_FTM1,FilterEnable,Pulldown
+		PORTA_PCR12 = 0x00000710;   //Alt7-QD_FTM1,FilterEnable,No_No_Pulldown
 		PORTA_PCR13 = 0x00000710;   //Alt7-QD_FTM1,FilterEnable,Pulldown
 
 		// FTM2 Pins
@@ -147,7 +147,7 @@ public:
 										//Set Registers for output compare mode - for IRQ? - See ftm2_isr(void)
 		FTM2_COMBINE = 0;	    // Reset value, make sure
 		FTM2_C0SC = 0x10;	      // Bit 4 Channel Mode
-		//FTM2_C0V = (360 - degree_the_ignition_should_activate) + calibration_variable; // Initial Compare Interrupt Value // Shot in the dark
+		FTM2_C0V = 340;//(360 - degree_the_ignition_should_activate) + calibration_variable; // Initial Compare Interrupt Value // Shot in the dark
 
 		FTM2_C1SC = 0x10;
 		FTM2_C1V = 360 + 20;//startAngle_inj;

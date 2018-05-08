@@ -38,6 +38,31 @@ int32_t return_debug_variable() {
 void ftm2_isr(void) {
 	// Goal: Turn on inj
 	debug_variable++;
+	Serial.println("FTM2_ISR");
+	//
+	//if (is_inj) {
+	//	startInj();
+	//	TeensyDelay::trigger(time_injection_is_active, INJECTION_CHANNEL); // time_injection_is_active is a global variable, 
+	//																	   // and is the delay before the set function activates. 
+	//	is_inj = false;
+	//}
+	//else {
+	//	startIgnition();
+	//	TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL);
+	//	is_inj = true;
+	//}
+}
+/*
+void ftm1_isr(void) {
+	// Goal: Turn on inj
+	debug_variable++;
+	FTM1_SC = 64U;
+
+	int v_read = FTM1_C0SC;   // Read to clear CHF Channel Flag
+	FTM1_C0SC = 0x50;    // Clear Channel Flag, leave CHIE set
+
+	FTM1_C0V = 340;
+
 	if (is_inj) {
 		startInj();
 		TeensyDelay::trigger(time_injection_is_active, INJECTION_CHANNEL); // time_injection_is_active is a global variable, 
@@ -49,7 +74,8 @@ void ftm2_isr(void) {
 		TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL);
 		is_inj = true;
 	}
-}
+}*/
+
 
 
 int16_t encoderPositionEngine() { // TODO - find ud af om det her virker, design en test & udfoer
@@ -123,6 +149,8 @@ void initializeEncoder(uint8_t encoder_pin_Z, int calib_var)
 	zPulseFlag = false;
 	// Attach interrupts
 	attachInterrupt(digitalPinToInterrupt(encoder_pin_Z), encoderInterrupthandlerZ, RISING);
+	NVIC_ENABLE_IRQ(IRQ_FTM2);
+
 }
 
 void altInitializeEncoder(uint8_t encoder_pin_A, uint8_t encoder_pin_B, uint8_t encoder_pin_Z, int calib_var)

@@ -55,10 +55,12 @@ void ftm2_isr(void) {
 	Serial.println("FTM2_ISR");
 
 	FTM2_C0SC = 0x50;    // Clear Channel Flag, leave CHIE set
-	int v_read = FTM2_C0SC;   // Read to clear CHF Channel Flag
-
-	FTM2_C0V = 340;
-
+	int FAULT = FTM2_FMS; // Fault bits, not used as of 11/05/2018
+	int TOF = FTM2_SC & (1 << 7); // Timer overflow bit, 1 if overflow
+	int channel_flags = FTM2_STATUS; // reads all the CHnF flags, in our case, compare interrupts
+	// bit 0 is from CH0 and so on
+	FTM2_STATUS = 0x00; // Reset flags, to get out of interrupt
+	
 	//
 	//if (is_inj) {
 	//	startInj();
@@ -72,32 +74,6 @@ void ftm2_isr(void) {
 	//	is_inj = true;
 	//}
 }
-/*
-void ftm1_isr(void) {
-	// Goal: Turn on inj
-	debug_variable++;
-	FTM1_SC = 64U;
-
-	int v_read = FTM1_C0SC;   // Read to clear CHF Channel Flag
-	FTM1_C0SC = 0x50;    // Clear Channel Flag, leave CHIE set
-
-	FTM1_C0V = 340;
-
-	if (is_inj) {
-		startInj();
-		TeensyDelay::trigger(time_injection_is_active, INJECTION_CHANNEL); // time_injection_is_active is a global variable, 
-																		   // and is the delay before the set function activates. 
-		is_inj = false;
-	}
-	else {
-		startIgnition();
-		TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL);
-		is_inj = true;
-	}
-}*/
-
-
-
 
 int encoderPositionEngine() {
 	if ((QuadDecode.getCounter2() / 4 - calibration_variable < 0)) {

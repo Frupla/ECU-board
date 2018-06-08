@@ -61,18 +61,18 @@ void ftm2_isr(void) {
 	// bit 0 is from CH0 and so on
 	FTM2_STATUS = 0x00; // Reset flags, to get out of interrupt
 	
-	//
-	//if (is_inj) {
-	//	startInj();
-	//	TeensyDelay::trigger(time_injection_is_active, INJECTION_CHANNEL); // time_injection_is_active is a global variable, 
-	//																	   // and is the delay before the set function activates. 
-	//	is_inj = false;
-	//}
-	//else {
-	//	startIgnition();
-	//	TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL);
-	//	is_inj = true;
-	//}
+	
+	if (is_inj) {
+		startInj();
+		TeensyDelay::trigger(time_injection_is_active, INJECTION_CHANNEL); // time_injection_is_active is a global variable, 
+																		   // and is the delay before the set function activates. 
+		is_inj = false;
+	}
+	else {
+		startIgnition();
+		TeensyDelay::trigger(DWELL_TIME, IGNITION_CHANNEL);
+		is_inj = true;
+	}
 }
 
 int encoderPositionEngine() {

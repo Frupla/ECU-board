@@ -206,6 +206,7 @@ void setup() {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	// Set up timer for injection and ignition
 	ecuTimer.begin(ignitionAndInjectionTimerHandler, 5); //5µs resolution for both ignition and injection
 	ecuTimer.priority(1);
@@ -218,6 +219,8 @@ void setup() {
 	ecuTimer.priority(1);
 
 >>>>>>> parent of 92f656f... Hennings totale makeover
+=======
+>>>>>>> 2f613659c7127d4e12e6517ac0f67610d0966480
 	// Wheelsensor
 	//attachInterrupt(digitalPinToInterrupt(WHEEL_SENSOR_PIN_V_2), ISR_WHEEL, CHANGE);
 
@@ -424,6 +427,7 @@ float getSpeedv2() {
 	return speed;
 }
 
+<<<<<<< HEAD
 // Interrupt handler takes about 1 us (TODO optimize)
 void ignitionAndInjectionTimerHandler() {
 	if(getZPulseFlag()) {
@@ -459,6 +463,8 @@ void ignitionAndInjectionTimerHandler() {
 	else if (ignitionElapsed > DWELL_TIME_US) {
 		digitalWriteFast(IGNITION_PIN, LOW);
 	}
+=======
+>>>>>>> 2f613659c7127d4e12e6517ac0f67610d0966480
 inline void timerCallback() {
 	ecuTimerCallback();
 	if(ioElapsed > 10) {

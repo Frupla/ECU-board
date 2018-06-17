@@ -33,7 +33,7 @@ void initializeEncoder(int _encoderTdcOffset) {
 }
 
 int encoderPositionEngine() {
-	if (QuadDecode.getCounter2() - encoderTdcOffset  < 0) {
+	if (QuadDecode.getCounter2()/4 - encoderTdcOffset  < 0) {
 		return (QuadDecode.getCounter2() / 4) + 360 - encoderTdcOffset; 
 	}
 	else {

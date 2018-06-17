@@ -96,9 +96,6 @@
     <ClInclude Include="sources\motorLUT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sources\ecu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="sources\adc.cpp">
@@ -147,9 +144,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sources\motorLUT.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sources\ecu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

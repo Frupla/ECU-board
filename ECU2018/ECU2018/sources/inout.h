@@ -21,7 +21,7 @@ void SetPWMDutyGear(uint16_t duty);
 void pwm_init();
 uint8_t digitalReadGSensor();
 uint16_t getWheelSensorPeriod();
-void ioTimerCallback();
+inline void timerCallback();
 double getDistance();
 double getSpeed();
 void speedSort();
